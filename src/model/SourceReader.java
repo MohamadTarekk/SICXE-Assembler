@@ -28,46 +28,72 @@ public class SourceReader {
         }
         return null;
     }
-    public CommandInfo processFile(ArrayList<String> fileInfo){
+    public CommandInfo processFile(ArrayList<String> fileInfo) {
         //need to match for commands , labels , ...
-        CommandInfo CI=new CommandInfo();
-        CI.setCommands(getCommands(fileInfo));
-        CI.setLabels(getLabels(fileInfo));
+        CommandInfo CI = new CommandInfo();
+        String regex = "(.+)[ |\\t]+(.{3,6})[ |\\t]+([@#]?)([a-zA-Z0-9_]+),?([XC]?)([a-zA-Z0-9_]+)?";
+        Pattern reg = Pattern.compile(regex);
+        int len = fileInfo.size();
+        for (int i = 0; i < len; i++) {
+            Matcher m = reg.matcher(fileInfo.get(i));
+            if(!m.find())continue;
+            CI.addWholeInstruction(m.group(0));
+            CI.addLabel(m.group(1));
+            CI.addCommand(m.group(2));
+            CI.addaddressMode(m.group(3));
+            CI.addOperand1(m.group(4));
+            CI.addOperand2(m.group(6));
+            CI.addType(m.group(5));
+        }
+
         return CI;
-    }
-    private ArrayList<String> getCommands(ArrayList<String> fileInfo){
-        ArrayList<String> commands=new ArrayList<>();
-        String regex="";
-        Pattern reg=Pattern.compile(regex);
-        Matcher m ;
-
-        return commands;
-    }
-    private ArrayList<String> getLabels(ArrayList<String> fileInfo){
-        ArrayList<String> commands=new ArrayList<>();
-        String regex="";
-        Pattern reg=Pattern.compile(regex);
-        Matcher m ;
-
-        return commands;
     }
 
     public class CommandInfo{//info for each line command
 
         public ArrayList<String> getCommands() {
-            return commands;
+            return command;
         }
         public void setCommands(ArrayList<String> commands) {
-            this.commands = commands;
+            this.command = commands;
         }
         public ArrayList<String> getLabels() {
-            return labels;
+            return label;
         }
         public void setLabels(ArrayList<String> labels) {
-            this.labels = labels;
+            this.label = labels;
         }
-        private ArrayList<String> commands;
-        private ArrayList<String> labels;
+        public ArrayList<String> getCommand() { return command; }
+        public void setCommand(ArrayList<String> command) { this.command = command;}
+        public ArrayList<String> getLabel() { return label; }
+        public void setLabel(ArrayList<String> label) { this.label = label; }
+        public ArrayList<String> getOperand1() { return operand1; }
+        public void setOperand1(ArrayList<String> operand1) { this.operand1 = operand1; }
+        public ArrayList<String> getOperand2() { return operand2; }
+        public void setOperand2(ArrayList<String> operand2) { this.operand2 = operand2; }
+        public ArrayList<String> getAddressMode() { return addressMode; }
+        public void setAddressMode(ArrayList<String> addressMode) { this.addressMode = addressMode; }
+        public ArrayList<String> getTypeOperand() { return typeOperand;}
+        public void setTypeOperand(ArrayList<String> typeOperand) { this.typeOperand = typeOperand; }
+        public ArrayList<String> getWholeInstruction() { return wholeInstruction; }
+        public void setWholeInstruction(ArrayList<String> wholeInstruction) { this.wholeInstruction = wholeInstruction; }
+
+        public void addWholeInstruction(String s){wholeInstruction.add(s);}
+        public void addLabel(String s){label.add(s);}
+        public void addCommand(String s){command.add(s);}
+        public void addaddressMode(String s){addressMode.add(s);}
+        public void addOperand1(String s){operand1.add(s);}
+        public void addOperand2(String s){operand2.add(s);}
+        public void addType(String s){typeOperand.add(s);};
+
+        private ArrayList<String> wholeInstruction=new ArrayList<>();
+        private ArrayList<String> label=new ArrayList<>();
+        private ArrayList<String> command=new ArrayList<>();
+        private ArrayList<String> addressMode=new ArrayList<>();
+        private ArrayList<String> operand1=new ArrayList<>();
+        private ArrayList<String> operand2=new ArrayList<>();
+        private ArrayList<String> typeOperand=new ArrayList<>();//hexa , char ,whatever
+
 
     }
 

@@ -23,6 +23,17 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
+        SourceReader.CommandInfo CI=SourceReader.getInstance().processFile(SourceReader.getInstance().readFile("src/SIC files/SIC_1.txt"));
+        int len=CI.getWholeInstruction().size();
+        for(int i=0;i<len;i++){
+                System.out.println(CI.getWholeInstruction().get(i));
+                System.out.println(CI.getLabel().get(i));
+                System.out.println(CI.getCommand().get(i));
+                System.out.println(CI.getAddressMode().get(i));
+                System.out.println(CI.getOperand1().get(i));
+                System.out.println(CI.getTypeOperand().get(i));
+                System.out.println(CI.getOperand2().get(i));
+        }
     }
 
 
