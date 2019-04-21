@@ -41,7 +41,7 @@ public class SourceReader {
             CI.addWholeInstruction(m.group(0));
             CI.addLabel(m.group(1));
             CI.addCommand(m.group(2));
-            CI.addaddressMode(m.group(3));
+            CI.addAddressMode(m.group(3));
             CI.addOperand1(m.group(4));
             CI.addOperand2(m.group(6));
             CI.addType(m.group(5));
@@ -81,7 +81,7 @@ public class SourceReader {
         public void addWholeInstruction(String s){wholeInstruction.add(s);}
         public void addLabel(String s){label.add(s);}
         public void addCommand(String s){command.add(s);}
-        public void addaddressMode(String s){addressMode.add(s);}
+        public void addAddressMode(String s){addressMode.add(s);}
         public void addOperand1(String s){operand1.add(s);}
         public void addOperand2(String s){operand2.add(s);}
         public void addType(String s){typeOperand.add(s);};
