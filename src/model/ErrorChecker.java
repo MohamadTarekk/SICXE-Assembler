@@ -52,7 +52,7 @@ public class ErrorChecker {
         if(checkIfMisplaced(label,ci.getLabels().get(lineNum)))return MISPLACED_LABEL;
         if(checkIfMisplaced(command,ci.getCommands().get(lineNum)))return MISSING_MISPLACED_OPERATION_MNEMONIC;
         String op1op2=ci.getAddressMode().get(lineNum)+ci.getOperand1().get(lineNum)+','+ci.getTypeOperand()+ci.getOperand2().get(lineNum);
-        if(checkIfMisplaced(operand,op1op2))return MISSING_MISPLACED_OPERATION_MNEMONIC;
+        if(checkIfMisplaced(operand,op1op2))return MISSING_MISPLACED_OPERAND_FIELD;
         if(labelTable.get(label)!=null)return DUPLICATE_LABEL_DEFINITION;
         //9spaces
         if(!label.equals("         ")&&!checkCanHaveLabel(label))return STATEMENT_CANT_HAVE_LABEL;
