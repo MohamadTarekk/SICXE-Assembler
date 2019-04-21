@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +32,7 @@ public class SourceReader {
     public CommandInfo processFile(ArrayList<String> fileInfo) {
         //need to match for commands , labels , ...
         CommandInfo CI = new CommandInfo();
-        String regex = "(.+)[ |\\t]+(.{3,6})[ |\\t]+([@#]?)([a-zA-Z0-9_]+),?([XC]?)([a-zA-Z0-9_]+)?";
+        String regex = "(.+)[ |\\t]+(.+)[ |\\t]+([@#]?)([a-zA-Z0-9_]+)?,?([XC]?)([a-zA-Z0-9_]+)?";
         Pattern reg = Pattern.compile(regex);
         int len = fileInfo.size();
         for (int i = 0; i < len; i++) {
@@ -48,7 +49,6 @@ public class SourceReader {
 
         return CI;
     }
-
     public class CommandInfo{//info for each line command
 
         public ArrayList<String> getCommands() {
@@ -96,6 +96,19 @@ public class SourceReader {
 
 
     }
+    public HashMap<String,Integer> getInstructionOpCodeTable(String filePath){
+        ArrayList<String> fileInfo=readFile(filePath);
+        HashMap<String,Integer> opcodeTable=new HashMap<>();
+        String regex = "(.+)[ |\\t]+([a-fA-F0-9]+)";
+        Pattern reg = Pattern.compile(regex);
+        int len = fileInfo.size();
+        for (int i = 0; i < len; i++) {
+            Matcher m = reg.matcher(fileInfo.get(i));
+            if(!m.find())continue;
+            opcodeTable.put(m.group(1),Integer.parseInt(m.group(2),16));
+        }
 
+        return opcodeTable;
+    }
 
 }
