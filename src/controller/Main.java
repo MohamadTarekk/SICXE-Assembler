@@ -20,7 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Path currentRelativePath = Paths.get("");
         //TODO DELETE THE FOLLOWING LINE
-        String path = currentRelativePath.toAbsolutePath().toString() + "/src/view/Editor.fxml";
+        //String path = currentRelativePath.toAbsolutePath().toString() + "/src/view/Editor.fxml";
 
         Parent root = FXMLLoader.load(new File("src/view/Editor.fxml").toURI().toURL());
         primaryStage.setTitle("SIC/XE Assembler");
