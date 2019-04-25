@@ -32,7 +32,6 @@ public class Main extends Application {
                System.out.print("\t"+CI.getCommand().get(i));
                System.out.print("\t"+CI.getAddressMode().get(i));
                System.out.print("\t"+CI.getOperand1().get(i));
-               System.out.print("\t"+CI.getTypeOperand().get(i));
                System.out.print("\t"+CI.getOperand2().get(i));
                System.out.println();
         }

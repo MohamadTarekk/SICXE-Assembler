@@ -54,8 +54,7 @@ public class ErrorChecker {
 			return MISPLACED_LABEL;
 		if (checkIfMisplaced(command, ci.getCommands().get(lineNum)))
 			return MISSING_MISPLACED_OPERATION_MNEMONIC;
-		String op1op2 = ci.getAddressMode().get(lineNum) + ci.getOperand1().get(lineNum) + ',' + ci.getTypeOperand()
-				+ ci.getOperand2().get(lineNum);
+		String op1op2 = ci.getAddressMode().get(lineNum) + ci.getOperand1().get(lineNum) + ',' + ci.getOperand2().get(lineNum);
 		if (checkIfMisplaced(operand, op1op2))
 			return MISSING_MISPLACED_OPERAND_FIELD;
 		if (labelTable.get(label) != null)
@@ -72,7 +71,7 @@ public class ErrorChecker {
 			return UNRECOGNIZED_OPERATION_CODE;
 		if (checkIfUndefinedSymbolInOperand(operand))
 			return UNDEFINED_SYMBOL_IN_OPERAND;
-		if (ci.getTypeOperand().get(lineNum).equals("X") && !checkIfHexadecimalString(ci.getOperand2().get(lineNum)))
+		if (ci.getOperand2().get(lineNum).charAt(0)=='X' && !checkIfHexadecimalString(ci.getOperand2().get(lineNum)))
 			return NOT_HEXADECIMAL_STRING;
 		// TODO ? SHOULD IT BE OPERAND ?
 		if (checkIfIllegalAddressForRegister(operand))

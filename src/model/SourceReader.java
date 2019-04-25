@@ -39,20 +39,33 @@ public class SourceReader {
 	public CommandInfo processFile(ArrayList<String> fileInfo) {
 		// need to match for commands , labels , ...
 		CommandInfo CI = new CommandInfo();
-		String regex = "(.+)[ |\\t]+(.+)[ |\\t]+([@#]?)([a-zA-Z0-9_]+)?,?([XC]?)([a-zA-Z0-9_]+)?";
+		String regex = "(?:[\\s|\\t]+)?([a-zA-Z0-9_]+)?(?:[\\s|\\t]+)([a-zA-Z0-9_']+)(?:[ |\\t]+)?([@#]?)([a-zA-Z0-9_']+)?,?([a-zA-Z0-9_]+)?";
 		Pattern reg = Pattern.compile(regex);
 		int len = fileInfo.size();
 		for (int i = 0; i < len; i++) {
+
 			Matcher m = reg.matcher(fileInfo.get(i));
-			if (!m.find())
-				continue;
-			CI.addWholeInstruction(m.group(0));
-			CI.addLabel(m.group(1));
-			CI.addCommand(m.group(2));
-			CI.addAddressMode(m.group(3));
-			CI.addOperand1(m.group(4));
-			CI.addOperand2(m.group(6));
-			CI.addType(m.group(5));
+			CI.addWholeInstruction(fileInfo.get(i));
+			if (m.find()){
+				if(m.group(4)==null){
+					CI.addMatchedInstruction(m.group(0));
+					CI.addLabel("");
+					CI.addCommand(m.group(1));
+					CI.addOperand1(m.group(2));
+					CI.addAddressMode("");
+					CI.addOperand2("");
+				}else{
+					CI.addLabel(m.group(1));
+					CI.addCommand(m.group(2));
+					CI.addAddressMode(m.group(3));
+					CI.addOperand1(m.group(4));
+					CI.addOperand2(m.group(5));
+				}
+			}else{
+				CI.addDefaults();
+			}
+
+
 		}
 
 		return CI;
@@ -116,13 +129,6 @@ public class SourceReader {
 			this.addressMode = addressMode;
 		}
 
-		public ArrayList<String> getTypeOperand() {
-			return typeOperand;
-		}
-
-		public void setTypeOperand(ArrayList<String> typeOperand) {
-			this.typeOperand = typeOperand;
-		}
 
 		public ArrayList<String> getWholeInstruction() {
 			return wholeInstruction;
@@ -132,41 +138,88 @@ public class SourceReader {
 			this.wholeInstruction = wholeInstruction;
 		}
 
+		public ArrayList<String> getMatchedInstruction() {
+			return matchedInstruction;
+		}
+
+		public void setMatchedInstruction(ArrayList<String> matchedInstruction) {
+			this.matchedInstruction = matchedInstruction;
+		}
+
+
 		public void addWholeInstruction(String s) {
+			if(s==null){
+				wholeInstruction.add("");
+				return;
+			}
 			wholeInstruction.add(s);
 		}
 
+		public void addMatchedInstruction(String s) {
+			if(s==null){
+				matchedInstruction.add("");
+				return;
+			}
+			matchedInstruction.add(s);
+		}
+
 		public void addLabel(String s) {
+			if(s==null){
+				label.add("");
+				return;
+			}
 			label.add(s);
 		}
 
 		public void addCommand(String s) {
+			if(s==null){
+				command.add("");
+				return;
+			}
 			command.add(s);
 		}
 
 		public void addAddressMode(String s) {
+			if(s==null){
+				addressMode.add("");
+				return;
+			}
 			addressMode.add(s);
 		}
 
 		public void addOperand1(String s) {
+			if(s==null){
+				operand1.add("");
+				return;
+			}
 			operand1.add(s);
 		}
 
 		public void addOperand2(String s) {
+
+			if(s==null){
+				operand2.add("");
+				return;
+			}
 			operand2.add(s);
 		}
 
-		public void addType(String s) {
-			typeOperand.add(s);
-		};
+		public void addDefaults(){
+			addMatchedInstruction("");
+			addLabel("");
+			addCommand("");
+			addOperand1("");
+			addOperand2("");
+			addAddressMode("");
+		}
 
 		private ArrayList<String> wholeInstruction = new ArrayList<>();
+		private ArrayList<String> matchedInstruction=new ArrayList<>();
 		private ArrayList<String> label = new ArrayList<>();
 		private ArrayList<String> command = new ArrayList<>();
 		private ArrayList<String> addressMode = new ArrayList<>();
 		private ArrayList<String> operand1 = new ArrayList<>();
 		private ArrayList<String> operand2 = new ArrayList<>();
-		private ArrayList<String> typeOperand = new ArrayList<>();// hexa , char ,whatever
 
 	}
 
