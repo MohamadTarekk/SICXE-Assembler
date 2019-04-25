@@ -9,10 +9,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SourceReader {
-	private static SourceReader instance = null;
 
-	private SourceReader() {
-	}
+	private static SourceReader instance = null;
 
 	public static SourceReader getInstance() {
 		if (instance == null)
@@ -20,6 +18,7 @@ public class SourceReader {
 		return instance;
 	}
 
+	@SuppressWarnings("resource")
 	public ArrayList<String> readFile(String filePath) {
 		File file = new File(filePath);
 

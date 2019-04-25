@@ -4,13 +4,16 @@ public class Line {
 
 	private String label;
 	private String mnemonic;
+	private String addressingMode;
 	private String firstOperand;
 	private String secondOperand;
 	private String comment;
 
-	public Line(String label, String mnemonic, String firstOperand, String secondOperand, String comment) {
+	public Line(String label, String mnemonic, String addressingMode, String firstOperand, String secondOperand,
+			String comment) {
 		this.label = label;
 		this.mnemonic = mnemonic;
+		this.addressingMode = addressingMode;
 		this.firstOperand = firstOperand;
 		this.secondOperand = secondOperand;
 		this.comment = comment;
@@ -30,6 +33,14 @@ public class Line {
 
 	public void setMnemonic(String mnemonic) {
 		this.mnemonic = mnemonic;
+	}
+
+	public String getAddressingMode() {
+		return addressingMode;
+	}
+
+	public void setAddressingMode(String addressingMode) {
+		this.addressingMode = addressingMode;
 	}
 
 	public String getFirstOperand() {
@@ -54,6 +65,12 @@ public class Line {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	@Override
+	public String toString() {
+		return "Line [label=" + label + ", mnemonic=" + mnemonic + ", addressingMode=" + addressingMode
+				+ ", firstOperand=" + firstOperand + ", secondOperand=" + secondOperand + ", comment=" + comment + "]";
 	}
 
 }

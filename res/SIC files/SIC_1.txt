@@ -1,6 +1,16 @@
-.2345678901234567890123456789
-START LDA @55,X33
-Hey   YOU #OUT,THERE
-IN    THE COLD,GETTING_LONELY
-GETTING OLD             CAN,YOU
-FEEL ME?
+         START   1000
+Q1       HELLO   BETA
+         LDS     GAMMA
+         SHERIF  S,A
+         STA     ALPHA
+         MULR    A,S
+         LDA     BETA
+         SUBR    S,A
+         STA     DELTA
+         
+          
+BETA     WORD    39
+GAMMA    WORD    6
+ALPHA    RESW    1
+DELTA    RESW    1
+         END     Q1
