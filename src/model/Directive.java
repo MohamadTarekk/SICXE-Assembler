@@ -4,7 +4,7 @@ public class Directive {
 
 	private String directive;
 	private int length;
-	
+
 	public Directive(String directive, int length) {
 		this.directive = directive;
 		this.length = length;

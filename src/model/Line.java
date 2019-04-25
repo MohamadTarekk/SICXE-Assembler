@@ -1,13 +1,13 @@
 package model;
 
 public class Line {
-	
+
 	private String label;
 	private String mnemonic;
 	private String firstOperand;
 	private String secondOperand;
 	private String comment;
-	
+
 	public Line(String label, String mnemonic, String firstOperand, String secondOperand, String comment) {
 		this.label = label;
 		this.mnemonic = mnemonic;
@@ -55,5 +55,5 @@ public class Line {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+
 }
