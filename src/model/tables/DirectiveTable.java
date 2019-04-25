@@ -5,9 +5,9 @@ import java.util.HashMap;
 import model.Directive;
 
 public class DirectiveTable {
-	
-	private HashMap<String,Directive> directiveTable = new HashMap<>();
-	
+
+	private HashMap<String, Directive> directiveTable = new HashMap<>();
+
 	public void loadDirectiveTable() {
 		directiveTable.put("START", new Directive("START", 0));
 		directiveTable.put("END", new Directive("END", 0));
@@ -21,10 +21,17 @@ public class DirectiveTable {
 		directiveTable.put("NOBASE", new Directive("NOBASE", 0));
 		directiveTable.put("LTORG", new Directive("START", 0));
 	}
-	
+
+	public HashMap<String, Directive> getDirectiveTable() {
+		return directiveTable;
+	}
+
+	public void setDirectiveTable(HashMap<String, Directive> directiveTable) {
+		this.directiveTable = directiveTable;
+	}
+
 	/*
-	 * Length = 0 -> NONE
-	 * Length = -1 -> Variable Length
+	 * Length = 0 -> NONE Length = -1 -> Variable Length
 	 */
-	
+
 }
