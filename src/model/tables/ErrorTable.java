@@ -18,7 +18,7 @@ public class ErrorTable {
 	public final int LABEL_STARTING_WITH_DIGIT = 13;
 	public final int LABELS_CANT_HAVE_SPACES = 14;
 
-	private String[] errorList = new String[16];
+	private static String[] errorList = new String[16];
 
 	public void loadErrorList() {
 		errorList[MISPLACED_LABEL] = "ERROR: Misplaced label";

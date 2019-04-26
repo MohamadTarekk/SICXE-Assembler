@@ -1,5 +1,5 @@
 package model.enums;
 
 public enum Format {
-	ONE, TWO, HREE, FOUR
+	ONE, TWO, THREE, FOUR
 }

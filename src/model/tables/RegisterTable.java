@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class RegisterTable {
 
-	private HashMap<String, Integer> registerTable = new HashMap<>();
+	private static HashMap<String, Integer> registerTable = new HashMap<>();
 
 	public void loadRegisterTabkle() {
 		registerTable.put("A", 0);
@@ -23,7 +23,7 @@ public class RegisterTable {
 	}
 
 	public void setRegisterTable(HashMap<String, Integer> registerTable) {
-		this.registerTable = registerTable;
+		RegisterTable.registerTable = registerTable;
 	}
 
 }

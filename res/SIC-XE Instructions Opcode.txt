@@ -1,60 +1,102 @@
-INSTRUCTION    OPCODE(HEX)
-ADD               18
-ADDF              58
-ADDR              90
-AND               40
-CLEAR             B4
-COMP              28
-COMPF             88
-COMPR             A0
-DIV               24
-DIVF              64
-DIVR              9C
-FIX               C4
-FLOAT             C0
-HIO               F4
-J                 3C
-JEQ               30
-JGT               34
-JLT               38
-JSUB              48
-LDA               00
-LDB               68
-LDCH              50
-LDF               70
-LDL               08
-LDS               6C
-LDT               74
-LDX               04
-LPS               D0
-MUL               20
-MULF              60
-MULR              98
-NORM              C8
-OR                44
-RD                D8
-RMO               AC
-RSUB              4C
-SHIFTL            A4
-SHIFTR            A8
-SIO               F0
-SSK               EC
-STA               0C
-STB               78
-STCH              54
-STF               80
-STI               D4
-STL               14
-STS               7C
-STSW              E8
-STT               84
-STX               10
-SUB               1C
-SUBF              5C
-SUBR              94
-SVC               B0
-TD                E0
-TIO               F8
-TIX               2C
-TIXR              B8
-WD                DC 
+INSTRUCTION    OPCODE(HEX)    FIRSTOPERAND    SECONDOPERAND	FORMAT
+ADD               18		VALUE    	NONE   		 THREE
++ADD              18        	VALUE       	NONE         	 FOUR
+ADDF              58		VALUE		NONE     	 THREE
++ADDF             58        	VALUE       	NONE         	 FOUR
+ADDR              90		REGISTER	REGISTER 	 TWO
+AND               40		VALUE		NONE		 THREE
++AND              40        	VALUE       	NONE         	 FOUR
+CLEAR             B4		REGISTER	NONE		 TWO
+COMP              28		VALUE		NONE	 	 THREE
++COMP             28        	VALUE       	NONE         	 FOUR
+COMPF             88		VALUE     	NONE    	 THREE
++COMPF            88        	VALUE       	NONE         	 FOUR
+COMPR             A0		REGISTER	REGISTER 	 TWO
+DIV               24		VALUE     	NONE    	 THREE
++DIV              24        	VALUE       	NONE         	 FOUR
+DIVF              64		VALUE    	NONE     	 THREE
++DIVF             64        	VALUE       	NONE         	 FOUR
+DIVR              9C		REGISTER	REGISTER 	 TWO
+FIX               C4		VALUE	    	NONE		 ONE
+FLOAT             C0		VALUE     	NONE		 ONE
+HIO               F4		REGISTER	NONE		 ONE
+J                 3C		VALUE		NONE		 THREE
++J                3C		VALUE		NONE		 FOUR
+JEQ               30		VALUE		NONE		 THREE
++JEQ              30		VALUE		NONE		 FOUR
+JGT               34		VALUE		NONE		 THREE
++JGT              34		VALUE		NONE		 FOUR
+JLT               38		VALUE		NONE		 THREE
++JLT              38		VALUE		NONE		 FOUR
+JSUB              48		VALUE		NONE		 THREE
++JSUB             48		VALUE		NONE		 FOUR
+LDA               00		VALUE		NONE		 THREE
++LDA              00		VALUE		NONE		 FOUR
+LDB               68		VALUE		NONE		 THREE
++LDB              68		VALUE		NONE		 FOUR
+LDCH              50		VALUE		NONE		 THREE
++LDCH             50		VALUE		NONE		 FOUR
+LDF               70		VALUE		NONE		 THREE
++LDF              70		VALUE		NONE		 FOUR
+LDL               08		VALUE		NONE		 THREE
++LDL              08		VALUE		NONE		 FOUR
+LDS               6C		VALUE		NONE		 THREE
++LDS              6C		VALUE		NONE		 FOUR
+LDT               74		VALUE		NONE		 THREE
++LDT              74		VALUE		NONE		 FOUR
+LDX               04		VALUE		NONE		 THREE
++LDX              04		VALUE		NONE		 FOUR
+LPS               D0		VALUE		NONE		 THREE
++LPS              D0		VALUE		NONE		 FOUR
+MUL               20		VALUE		NONE		 THREE
++MUL              20		VALUE		NONE		 FOUR
+MULF              60		VALUE		NONE		 THREE
++MULF             60		VALUE		NONE		 FOUR
+MULR              98		REGISTER	REGISTER 	 TWO
+NORM              C8		NONE		NONE		 ONE
+OR                44		VALUE		NONE		 THREE
++OR               44		VALUE		NONE		 FOUR
+RD                D8		VALUE		NONE		 THREE
++RD               D8		VALUE		NONE		 FOUR
+RMO               AC		REGISTER	REGISTER 	 TWO
+RSUB              4C		NONE		NONE		 THREE
++RSUB             4C		NONE		NONE		 THREE
+SHIFTL            A4		REGISTER	VALUE		 TWO
+SHIFTR            A8		REGISTER	VALUE		 TWO
+SIO               F0		NONE		NONE		 ONE
+SSK               EC		VALUE		NONE		 THREE
++SSK              EC		VALUE		NONE		 FOUR
+STA               0C		VALUE		NONE		 THREE
++STA              0C		VALUE		NONE		 FOUR
+STB               78		VALUE		NONE		 THREE
++STB              78		VALUE		NONE		 FOUR
+STCH              54		VALUE		NONE		 THREE
++STCH             54		VALUE		NONE		 FOUR
+STF               80		VALUE		NONE		 THREE
++STF              80		VALUE		NONE		 FOUR
+STI               D4		VALUE		NONE		 THREE
++STI              D4		VALUE		NONE		 FOUR
+STL               14		VALUE		NONE		 THREE
++STL              14		VALUE		NONE		 FOUR
+STS               7C		VALUE		NONE		 THREE
++STS              7C		VALUE		NONE		 FOUR
+STSW              E8		VALUE		NONE		 THREE
++STSW             E8		VALUE		NONE		 FOUR
+STT               84		VALUE		NONE		 THREE
++STT              84		VALUE		NONE		 FOUR
+STX               10		VALUE		NONE		 THREE
++STX              10		VALUE		NONE		 FOUR
+SUB               1C		VALUE		NONE		 THREE
++SUB              1C		VALUE		NONE		 FOUR
+SUBF              5C		VALUE		NONE		 THREE
++SUBF             5C		VALUE		NONE		 FOUR
+SUBR              94		REGISTER	REGISTER 	 TWO
+SVC               B0		VALUE		NONE		 TWO
+TD                E0		VALUE		NONE		 THREE
++TD               E0		VALUE		NONE		 FOUR
+TIO               F8		NONE		NONE		 ONE
+TIX               2C		VALUE		NONE		 THREE
++TIX              2C		VALUE		NONE		 FOUR
+TIXR              B8		REGISTER	NONE		 TWO
+WD                DC 		VALUE		NONE		 THREE
++WD               DC 		VALUE		NONE		 FOUR

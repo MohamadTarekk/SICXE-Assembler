@@ -6,7 +6,7 @@ import model.Directive;
 
 public class DirectiveTable {
 
-	private HashMap<String, Directive> directiveTable = new HashMap<>();
+	private static HashMap<String, Directive> directiveTable = new HashMap<>();
 
 	public void loadDirectiveTable() {
 		directiveTable.put("START", new Directive("START", 0));
@@ -27,7 +27,7 @@ public class DirectiveTable {
 	}
 
 	public void setDirectiveTable(HashMap<String, Directive> directiveTable) {
-		this.directiveTable = directiveTable;
+		DirectiveTable.directiveTable = directiveTable;
 	}
 
 	/*

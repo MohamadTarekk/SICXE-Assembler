@@ -30,11 +30,11 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	private ErrorChecker() {
+	/*private ErrorChecker() {
 		commandsMap = SourceReader.getInstance().getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt");
-	};
+	};*/
 
-	public int verifyInstructionsRestricted(SourceReader.CommandInfo commandInfo) {
+	public int verifyInstructionsRestricted(CommandInfo commandInfo) {
 		labelTable = new HashMap<>();
 		int len = commandInfo.getWholeInstruction().size();
 		for (int i = 0; i < len; i++) {
@@ -45,16 +45,16 @@ public class ErrorChecker {
 		return NO_ERROR;
 	}
 
-	private int checkInstructionRestricted(SourceReader.CommandInfo ci, int lineNum) {
+	private int checkInstructionRestricted(CommandInfo ci, int lineNum) {
 		String label = ci.getWholeInstruction().get(lineNum).substring(0, 9);
 		String command = ci.getWholeInstruction().get(lineNum).substring(10, 16);
 		String operand = ci.getWholeInstruction().get(lineNum).substring(18, 36);
 
-		if (checkIfMisplaced(label, ci.getLabels().get(lineNum)))
+		if (checkIfMisplaced(label, ci.getLabelList().get(lineNum)))
 			return MISPLACED_LABEL;
-		if (checkIfMisplaced(command, ci.getCommands().get(lineNum)))
+		if (checkIfMisplaced(command, ci.getMnemonicList().get(lineNum)))
 			return MISSING_MISPLACED_OPERATION_MNEMONIC;
-		String op1op2 = ci.getAddressMode().get(lineNum) + ci.getOperand1().get(lineNum) + ',' + ci.getOperand2().get(lineNum);
+		String op1op2 = ci.getAddressingModeList().get(lineNum) + ci.getOperand1List().get(lineNum) + ',' + ci.getOperand2List().get(lineNum);
 		if (checkIfMisplaced(operand, op1op2))
 			return MISSING_MISPLACED_OPERAND_FIELD;
 		if (labelTable.get(label) != null)
@@ -71,7 +71,7 @@ public class ErrorChecker {
 			return UNRECOGNIZED_OPERATION_CODE;
 		if (checkIfUndefinedSymbolInOperand(operand))
 			return UNDEFINED_SYMBOL_IN_OPERAND;
-		if (ci.getOperand2().get(lineNum).charAt(0)=='X' && !checkIfHexadecimalString(ci.getOperand2().get(lineNum)))
+		if (ci.getOperand2List().get(lineNum).charAt(0)=='X' && !checkIfHexadecimalString(ci.getOperand2List().get(lineNum)))
 			return NOT_HEXADECIMAL_STRING;
 		// TODO ? SHOULD IT BE OPERAND ?
 		if (checkIfIllegalAddressForRegister(operand))

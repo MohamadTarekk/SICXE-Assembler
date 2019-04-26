@@ -5,10 +5,24 @@ import model.enums.*;
 public class Instruction {
 
 	private String name;
-	private String opcode;
+	private int opcode;
 	private OperandType firstOperand;
 	private OperandType secondOperand;
 	private Format format;
+	
+	public Instruction(String name, int opcode) {
+		super();
+		this.name = name;
+		this.opcode = opcode;
+	}
+
+	public Instruction(String name, int opcode, OperandType firstOperand, OperandType secondOperand, Format format) {
+		this.name = name;
+		this.opcode = opcode;
+		this.firstOperand = firstOperand;
+		this.secondOperand = secondOperand;
+		this.format = format;
+	}
 
 	public String getName() {
 		return name;
@@ -18,11 +32,11 @@ public class Instruction {
 		this.name = name;
 	}
 
-	public String getOpcode() {
+	public int getOpcode() {
 		return opcode;
 	}
 
-	public void setOpcode(String opcode) {
+	public void setOpcode(int opcode) {
 		this.opcode = opcode;
 	}
 
@@ -49,5 +63,13 @@ public class Instruction {
 	public void setFormat(Format format) {
 		this.format = format;
 	}
+
+	@Override
+	public String toString() {
+		return "Instruction [name=" + name + ", opcode=" + opcode + ", firstOperand=" + firstOperand
+				+ ", secondOperand=" + secondOperand + ", format=" + format + "]";
+	}
+	
+	
 
 }
