@@ -36,12 +36,12 @@ public class CommandInfo {
 	public void addToLineList() {
 		int length = wholeInstruction.size();
 		for (int i = 0; i < length; i++) {
-			Line line = new Line(labelList.get(i), mnemonicList.get(i), addressingModeList.get(i),operand1List.get(i)
-					,operand2List.get(i),null);
+			Line line = new Line(labelList.get(i), mnemonicList.get(i), addressingModeList.get(i), operand1List.get(i),
+					operand2List.get(i), null);
 			linesList.add(line);
 		}
 	}
-	
+
 	public ArrayList<String> getLabelList() {
 		return labelList;
 	}

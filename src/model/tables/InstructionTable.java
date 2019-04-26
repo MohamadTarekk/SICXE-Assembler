@@ -21,7 +21,7 @@ public class InstructionTable {
 	public void setInstructionTable(HashMap<String, Instruction> instructionTable) {
 		InstructionTable.instructionTable = instructionTable;
 	}
-	
+
 	public static void getInstructionOpCodeTable(String filePath) {
 		ArrayList<String> fileInfo = SourceReader.getInstance().readFile(filePath);
 		String regex = "(.+)[ |\\t]+([a-fA-F0-9]+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)";
@@ -39,10 +39,10 @@ public class InstructionTable {
 			instructionTable.put(m.group(1), instruction);
 		}
 	}
-	
-	
-	private static void setInstruction(Instruction instruction, String firstOperand, String secondOperand, String format) {
-		switch(firstOperand) {
+
+	private static void setInstruction(Instruction instruction, String firstOperand, String secondOperand,
+			String format) {
+		switch (firstOperand) {
 		case "REGISTER":
 			instruction.setFirstOperand(OperandType.REGISTER);
 			break;
@@ -53,8 +53,8 @@ public class InstructionTable {
 			instruction.setFirstOperand(OperandType.NONE);
 			break;
 		}
-	
-		switch(secondOperand) {
+
+		switch (secondOperand) {
 		case "REGISTER":
 			instruction.setSecondOperand(OperandType.REGISTER);
 			break;
@@ -65,8 +65,8 @@ public class InstructionTable {
 			instruction.setSecondOperand(OperandType.NONE);
 			break;
 		}
-		
-		switch(format) {
+
+		switch (format) {
 		case "ONE":
 			instruction.setFormat(Format.ONE);
 			break;

@@ -29,18 +29,18 @@ public class Main extends Application {
 		CommandInfo CI = CommandInfo.getInstance()
 				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"));
 		CI.addToLineList();
-		/*int len = CI.getLinesList().size();
-		for (int i = 0; i < len; i++) {
-			System.out.println(CI.getLinesList().get(i).toString());
-		}*/
-		
+		/*
+		 * int len = CI.getLinesList().size(); for (int i = 0; i < len; i++) {
+		 * System.out.println(CI.getLinesList().get(i).toString()); }
+		 */
+
 		InstructionTable.getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt");
 		InstructionTable it = new InstructionTable();
-		for ( String name: it.getInstructionTable().keySet()){
-            String key = name.toString();
-            String value = it.getInstructionTable().get(name).toString();  
-            System.out.println(key + " " + value);  
-} 
+		for (String name : it.getInstructionTable().keySet()) {
+			String key = name.toString();
+			String value = it.getInstructionTable().get(name).toString();
+			System.out.println(key + " " + value);
+		}
 		ErrorChecker.getInstance();
 	}
 

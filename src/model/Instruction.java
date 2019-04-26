@@ -9,7 +9,7 @@ public class Instruction {
 	private OperandType firstOperand;
 	private OperandType secondOperand;
 	private Format format;
-	
+
 	public Instruction(String name, int opcode) {
 		super();
 		this.name = name;
@@ -69,7 +69,5 @@ public class Instruction {
 		return "Instruction [name=" + name + ", opcode=" + opcode + ", firstOperand=" + firstOperand
 				+ ", secondOperand=" + secondOperand + ", format=" + format + "]";
 	}
-	
-	
 
 }

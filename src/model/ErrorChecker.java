@@ -30,9 +30,10 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	/*private ErrorChecker() {
-		commandsMap = SourceReader.getInstance().getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt");
-	};*/
+	/*
+	 * private ErrorChecker() { commandsMap = SourceReader.getInstance().
+	 * getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt"); };
+	 */
 
 	public int verifyInstructionsRestricted(CommandInfo commandInfo) {
 		labelTable = new HashMap<>();
@@ -54,7 +55,8 @@ public class ErrorChecker {
 			return MISPLACED_LABEL;
 		if (checkIfMisplaced(command, ci.getMnemonicList().get(lineNum)))
 			return MISSING_MISPLACED_OPERATION_MNEMONIC;
-		String op1op2 = ci.getAddressingModeList().get(lineNum) + ci.getOperand1List().get(lineNum) + ',' + ci.getOperand2List().get(lineNum);
+		String op1op2 = ci.getAddressingModeList().get(lineNum) + ci.getOperand1List().get(lineNum) + ','
+				+ ci.getOperand2List().get(lineNum);
 		if (checkIfMisplaced(operand, op1op2))
 			return MISSING_MISPLACED_OPERAND_FIELD;
 		if (labelTable.get(label) != null)
@@ -71,7 +73,8 @@ public class ErrorChecker {
 			return UNRECOGNIZED_OPERATION_CODE;
 		if (checkIfUndefinedSymbolInOperand(operand))
 			return UNDEFINED_SYMBOL_IN_OPERAND;
-		if (ci.getOperand2List().get(lineNum).charAt(0)=='X' && !checkIfHexadecimalString(ci.getOperand2List().get(lineNum)))
+		if (ci.getOperand2List().get(lineNum).charAt(0) == 'X'
+				&& !checkIfHexadecimalString(ci.getOperand2List().get(lineNum)))
 			return NOT_HEXADECIMAL_STRING;
 		// TODO ? SHOULD IT BE OPERAND ?
 		if (checkIfIllegalAddressForRegister(operand))
