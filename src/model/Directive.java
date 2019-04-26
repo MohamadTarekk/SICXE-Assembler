@@ -1,11 +1,13 @@
 package model;
 
+import model.enums.Format;
+
 public class Directive {
 
 	private String directive;
-	private int length;
+	private Format length;
 
-	public Directive(String directive, int length) {
+	public Directive(String directive, Format length) {
 		this.directive = directive;
 		this.length = length;
 	}
@@ -18,12 +20,16 @@ public class Directive {
 		this.directive = directive;
 	}
 
-	public int getLength() {
+	public Format getLength() {
 		return length;
 	}
 
-	public void setLength(int length) {
+	public void setLength(Format length) {
 		this.length = length;
 	}
 
+	@Override
+	public String toString() {
+		return "Directive [directive=" + directive + ", length=" + length + "]";
+	}
 }

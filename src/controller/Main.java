@@ -8,8 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.CommandInfo;
-import model.ErrorChecker;
 import model.SourceReader;
+import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 
 public class Main extends Application {
@@ -26,24 +26,29 @@ public class Main extends Application {
 		primaryStage.setScene(new Scene(root, 300, 275));
 		primaryStage.show();
 
+
+		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
+		DirectiveTable.loadDirectiveTable();
 		CommandInfo CI = SourceReader.getInstance()
 				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"));
 		CI.addToLineList();
-
+		
 		int len = CI.getLinesList().size();
 		for (int i = 0; i < len; i++) {
 			System.out.println(CI.getLinesList().get(i).toString());
 		}
-		System.out.println();
-		InstructionTable.getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt");
-		InstructionTable it = new InstructionTable();
-		for (String name : it.getInstructionTable().keySet()) {
+		
+		/*for (String name : InstructionTable.instructionTable.keySet()) {
 			String key = name.toString();
-			String value = it.getInstructionTable().get(name).toString();
+			String value = InstructionTable.instructionTable.get(name).toString();
 			System.out.println(key + " " + value);
 		}
-
-		ErrorChecker.getInstance();
+		
+		for (String name : DirectiveTable.directiveTable.keySet()) {
+			String key = name.toString();
+			String value = DirectiveTable.directiveTable.get(name).toString();
+			System.out.println(key + " " + value);
+		}*/
 	}
 
 	public static void main(String[] args) {

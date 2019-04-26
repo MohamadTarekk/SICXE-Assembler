@@ -14,6 +14,8 @@ public class CommandInfo {
 			instance = new CommandInfo();
 		return instance;
 	}
+	
+	ProgramCounter pc = ProgramCounter.getInstance();
 
 	// info for each line command
 	private ArrayList<String> wholeInstruction = new ArrayList<>();
@@ -39,8 +41,10 @@ public class CommandInfo {
 	public void addToLineList() {
 		int length = wholeInstruction.size();
 		for (int i = 0; i < length; i++) {
-			Line line = new Line(labelList.get(i), mnemonicList.get(i), addressingModeList.get(i), operand1List.get(i),
-					operand2List.get(i), null);
+			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(), 
+					addressingModeList.get(i).toUpperCase(),operand1List.get(i).toUpperCase(),
+					operand2List.get(i).toUpperCase(), null);
+			pc.updateCounters(line);
 			linesList.add(line);
 		}
 	}

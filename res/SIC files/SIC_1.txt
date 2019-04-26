@@ -1,14 +1,13 @@
          START   1000
-Q1       HELLO   BETA
+Q1       LDA     BETA
          LDS     GAMMA
-         SHERIF  S,A
+         ADD     S,A
          STA     ALPHA
          MULR    A,S
          LDA     BETA
          SUBR    S,A
          STA     DELTA
-         
-          
+.This is a comment         
 BETA     WORD    39
 GAMMA    WORD    6
 ALPHA    RESW    1

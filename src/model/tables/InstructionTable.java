@@ -12,7 +12,7 @@ import model.enums.OperandType;
 
 public class InstructionTable {
 
-	private static HashMap<String, Instruction> instructionTable = new HashMap<>();
+	public static HashMap<String, Instruction> instructionTable = new HashMap<>();
 
 	public HashMap<String, Instruction> getInstructionTable() {
 		return instructionTable;
@@ -22,7 +22,7 @@ public class InstructionTable {
 		InstructionTable.instructionTable = instructionTable;
 	}
 
-	public static void getInstructionOpCodeTable(String filePath) {
+	public static void loadInstructionTable(String filePath) {
 		ArrayList<String> fileInfo = SourceReader.getInstance().readFile(filePath);
 		String regex = "(.+)[ |\\t]+([a-fA-F0-9]+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)";
 		Pattern reg = Pattern.compile(regex);
@@ -31,12 +31,12 @@ public class InstructionTable {
 			Matcher m = reg.matcher(fileInfo.get(i));
 			if (!m.find())
 				continue;
-			Instruction instruction = new Instruction(m.group(1), Integer.parseInt(m.group(2), 16));
-			String firstOperand = m.group(3);
-			String secondOperand = m.group(4);
-			String format = m.group(5);
+			Instruction instruction = new Instruction(m.group(1).replaceAll("\\s+",""), Integer.parseInt(m.group(2), 16));
+			String firstOperand = m.group(3).replaceAll("\\s+","");
+			String secondOperand = m.group(4).replaceAll("\\s+","");
+			String format = m.group(5).replaceAll("\\s+","");
 			setInstruction(instruction, firstOperand, secondOperand, format);
-			instructionTable.put(m.group(1), instruction);
+			instructionTable.put(m.group(1).replaceAll("\\s+",""), instruction);
 		}
 	}
 

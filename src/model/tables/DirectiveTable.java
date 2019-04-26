@@ -3,23 +3,24 @@ package model.tables;
 import java.util.HashMap;
 
 import model.Directive;
+import model.enums.Format;
 
 public class DirectiveTable {
 
-	private static HashMap<String, Directive> directiveTable = new HashMap<>();
+	public static HashMap<String, Directive> directiveTable = new HashMap<>();
 
-	public void loadDirectiveTable() {
-		directiveTable.put("START", new Directive("START", 0));
-		directiveTable.put("END", new Directive("END", 0));
-		directiveTable.put("BYTE", new Directive("BYTE", 1));
-		directiveTable.put("WORD", new Directive("WORD", 3));
-		directiveTable.put("RESB", new Directive("RESB", -1));
-		directiveTable.put("RESW", new Directive("RESW", -1));
-		directiveTable.put("EQU", new Directive("EQU", 0));
-		directiveTable.put("ORG", new Directive("ORG", 0));
-		directiveTable.put("BASE", new Directive("BASE", 0));
-		directiveTable.put("NOBASE", new Directive("NOBASE", 0));
-		directiveTable.put("LTORG", new Directive("START", 0));
+	public static void loadDirectiveTable() {
+		directiveTable.put("START", new Directive("START", Format.NONE));
+		directiveTable.put("END", new Directive("END", Format.NONE));
+		directiveTable.put("BYTE", new Directive("BYTE", Format.VARIABLE));
+		directiveTable.put("WORD", new Directive("WORD", Format.THREE));
+		directiveTable.put("RESB", new Directive("RESB", Format.VARIABLE));
+		directiveTable.put("RESW", new Directive("RESW", Format.VARIABLE));
+		directiveTable.put("EQU", new Directive("EQU", Format.NONE));
+		directiveTable.put("ORG", new Directive("ORG", Format.NONE));
+		directiveTable.put("BASE", new Directive("BASE", Format.NONE));
+		directiveTable.put("NOBASE", new Directive("NOBASE", Format.NONE));
+		directiveTable.put("LTORG", new Directive("START", Format.NONE));
 	}
 
 	public HashMap<String, Directive> getDirectiveTable() {

@@ -1,7 +1,8 @@
 package model;
 
 public class Line {
-
+	
+	private String location;
 	private String label;
 	private String mnemonic;
 	private String addressingMode;
@@ -67,10 +68,19 @@ public class Line {
 		this.comment = comment;
 	}
 
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	@Override
 	public String toString() {
-		return "Line [label=" + label + ", mnemonic=" + mnemonic + ", addressingMode=" + addressingMode
-				+ ", firstOperand=" + firstOperand + ", secondOperand=" + secondOperand + ", comment=" + comment + "]";
+		return "Line [location=" + location + ", label=" + label + ", mnemonic=" + mnemonic + ", addressingMode="
+				+ addressingMode + ", firstOperand=" + firstOperand + ", secondOperand=" + secondOperand + ", comment="
+				+ comment + "]";
 	}
 
 }
