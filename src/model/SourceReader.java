@@ -54,7 +54,7 @@ public class SourceReader {
 					CI.addCommand(m.group(1));
 					CI.addOperand1(m.group(2));
 					CI.addAddressMode("");
-					CI.addOperand2("");
+					CI.addOperand2(m.group(5));
 				}else{
 					CI.addLabel(m.group(1));
 					CI.addCommand(m.group(2));
