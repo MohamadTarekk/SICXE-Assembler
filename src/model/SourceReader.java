@@ -44,6 +44,7 @@ public class SourceReader {
 		int len = fileInfo.size();
 		for (int i = 0; i < len; i++) {
 
+			if(fileInfo.get(i).charAt(0)=='.')continue;
 			Matcher m = reg.matcher(fileInfo.get(i));
 			CI.addWholeInstruction(fileInfo.get(i));
 			if (m.find()){
