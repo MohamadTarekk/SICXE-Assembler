@@ -24,7 +24,7 @@ public class InstructionTable {
 	
 	public static void getInstructionOpCodeTable(String filePath) {
 		ArrayList<String> fileInfo = SourceReader.getInstance().readFile(filePath);
-		String regex = "(.+)[ |\\t]+([a-fA-F0-9]+)[ |\\t]+(\\S+)[ |\\t]+(.+)[ |\\t]+(.+)";
+		String regex = "(.+)[ |\\t]+([a-fA-F0-9]+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)";
 		Pattern reg = Pattern.compile(regex);
 		int len = fileInfo.size();
 		for (int i = 0; i < len; i++) {

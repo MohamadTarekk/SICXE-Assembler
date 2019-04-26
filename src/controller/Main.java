@@ -29,8 +29,8 @@ public class Main extends Application {
 		CommandInfo CI = CommandInfo.getInstance()
 				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"));
 		CI.addToLineList();
-		int len = CI.getLinesList().size();
-		/*for (int i = 0; i < len; i++) {
+		/*int len = CI.getLinesList().size();
+		for (int i = 0; i < len; i++) {
 			System.out.println(CI.getLinesList().get(i).toString());
 		}*/
 		
