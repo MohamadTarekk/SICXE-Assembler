@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class CommandInfo {
 
-	private static SourceReader instance = null;
+	private static CommandInfo instance = null;
 
-	public static SourceReader getInstance() {
+	public static CommandInfo getInstance() {
 		if (instance == null)
-			instance = new SourceReader();
+			instance = new CommandInfo();
 		return instance;
 	}
 
@@ -90,7 +90,7 @@ public class CommandInfo {
 		this.linesList = linesList;
 	}
 
-	public static void setInstance(SourceReader instance) {
+	public static void setInstance(CommandInfo instance) {
 		CommandInfo.instance = instance;
 	}
 

@@ -26,14 +26,15 @@ public class Main extends Application {
 		primaryStage.setScene(new Scene(root, 300, 275));
 		primaryStage.show();
 
-		CommandInfo CI = CommandInfo.getInstance()
+		CommandInfo CI = SourceReader.getInstance()
 				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"));
 		CI.addToLineList();
-		/*
-		 * int len = CI.getLinesList().size(); for (int i = 0; i < len; i++) {
-		 * System.out.println(CI.getLinesList().get(i).toString()); }
-		 */
 
+		int len = CI.getLinesList().size();
+		for (int i = 0; i < len; i++) {
+			System.out.println(CI.getLinesList().get(i).toString());
+		}
+		System.out.println();
 		InstructionTable.getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt");
 		InstructionTable it = new InstructionTable();
 		for (String name : it.getInstructionTable().keySet()) {
@@ -41,6 +42,7 @@ public class Main extends Application {
 			String value = it.getInstructionTable().get(name).toString();
 			System.out.println(key + " " + value);
 		}
+
 		ErrorChecker.getInstance();
 	}
 
