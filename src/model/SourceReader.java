@@ -11,6 +11,9 @@ public class SourceReader {
 
 	private static SourceReader instance = null;
 
+	private SourceReader() {
+	}
+
 	public static SourceReader getInstance() {
 		if (instance == null)
 			instance = new SourceReader();
@@ -37,7 +40,7 @@ public class SourceReader {
 
 	public CommandInfo processFile(ArrayList<String> fileInfo) {
 		// need to match for commands , labels , ...
-		CommandInfo CI = new CommandInfo();
+		CommandInfo CI = CommandInfo.getInstance();
 		String regex = "(?:[\\s|\\t]+)?([a-zA-Z0-9_]+)?(?:[\\s|\\t]+)([a-zA-Z0-9_']+)(?:[ |\\t]+)?([@#]?)([a-zA-Z0-9_']+)?,?([a-zA-Z0-9_]+)?";
 		Pattern reg = Pattern.compile(regex);
 		int len = fileInfo.size();

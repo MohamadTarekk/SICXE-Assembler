@@ -6,6 +6,9 @@ public class CommandInfo {
 
 	private static CommandInfo instance = null;
 
+	private CommandInfo() {
+	}
+
 	public static CommandInfo getInstance() {
 		if (instance == null)
 			instance = new CommandInfo();
