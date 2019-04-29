@@ -1,28 +1,14 @@
 package model;
 
-import java.util.HashMap;
+import model.enums.OperandType;
+import model.tables.DirectiveTable;
+import model.tables.ErrorTable;
+import model.tables.InstructionTable;
+import model.utility.Utility;
 
 public class ErrorChecker {
-
-	public final int NO_ERROR = 0;
-	public final int MISPLACED_LABEL = 1;
-	public final int MISSING_MISPLACED_OPERATION_MNEMONIC = 2;
-	public final int MISSING_MISPLACED_OPERAND_FIELD = 3;
-	public final int DUPLICATE_LABEL_DEFINITION = 4;
-	public final int STATEMENT_CANT_HAVE_LABEL = 5;
-	public final int STATEMENT_CANT_HAVE_OPERAND = 6;
-	public final int WRONG_OPERATION_PREFIX = 7;
-	public final int UNRECOGNIZED_OPERATION_CODE = 8;
-	public final int UNDEFINED_SYMBOL_IN_OPERAND = 9;
-	public final int NOT_HEXADECIMAL_STRING = 10;
-	public final int CANT_BE_FORTMAT4_INSTRUCTION = 11;
-	public final int ILLEGAL_ADDRESS_FOR_REGISTER = 12;
-	public final int MISSING_END_STATEMENT = 13;
-
 	private static ErrorChecker instance = null;
-
-	private HashMap<String, Integer> commandsMap;
-	private HashMap<String, Boolean> labelTable;
+	private String error;
 
 	public static ErrorChecker getInstance() {
 		if (instance == null)
@@ -30,101 +16,218 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	/*
-	 * private ErrorChecker() { commandsMap = SourceReader.getInstance().
-	 * getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt"); };
-	 */
-
-	public int verifyInstructionsRestricted(CommandInfo commandInfo) {
-		labelTable = new HashMap<>();
-		int len = commandInfo.getWholeInstruction().size();
-		for (int i = 0; i < len; i++) {
-			int errVal = checkInstructionRestricted(commandInfo, i);
-			if (errVal != 0)
-				return errVal;
-		}
-		return NO_ERROR;
+	public void verifyLine(String instruction, Line line) {
+		//verifyIfMisplaced(instruction, line);
+		verifyLabel(line);
+		verifyMnemonic(line);
+		verifyAddressingMode(line);
+		verifyOperands(line);
+		verifyEndStatement(line);
+		setLineError(line);
 	}
 
-	private int checkInstructionRestricted(CommandInfo ci, int lineNum) {
-		String label = ci.getWholeInstruction().get(lineNum).substring(0, 9);
-		String command = ci.getWholeInstruction().get(lineNum).substring(10, 16);
-		String operand = ci.getWholeInstruction().get(lineNum).substring(18, 36);
+	private void verifyIfMisplaced(String instruction, Line line) {
+		String label = instruction.substring(0, 9);
+		String mnemonic = instruction.substring(10, 16);
+		/*
+		 * String operand = instruction.substring(18, 36); 
+		 * String comment = instruction.substring(36,67);
+		 */
+		if (checkIfMisplaced(label, line.getLabel()))
+			error = ErrorTable.errorList[ErrorTable.MISPLACED_LABEL];
+		if (checkIfMisplaced(mnemonic, line.getMnemonic()))
+			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
 
-		if (checkIfMisplaced(label, ci.getLabelList().get(lineNum)))
-			return MISPLACED_LABEL;
-		if (checkIfMisplaced(command, ci.getMnemonicList().get(lineNum)))
-			return MISSING_MISPLACED_OPERATION_MNEMONIC;
-		String op1op2 = ci.getAddressingModeList().get(lineNum) + ci.getOperand1List().get(lineNum) + ','
-				+ ci.getOperand2List().get(lineNum);
-		if (checkIfMisplaced(operand, op1op2))
-			return MISSING_MISPLACED_OPERAND_FIELD;
-		if (labelTable.get(label) != null)
-			return DUPLICATE_LABEL_DEFINITION;
-		// 9spaces
-		if (!label.equals("         ") && !checkCanHaveLabel(label))
-			return STATEMENT_CANT_HAVE_LABEL;
-		// 18 spaces
-		if (!operand.equals("                  ") && !checkCanHaveOperand(operand))
-			return STATEMENT_CANT_HAVE_OPERAND;
-		if (checkIfWrongOperationPrefix(command))
-			return WRONG_OPERATION_PREFIX;
-		if (commandsMap.get(command) == null)
-			return UNRECOGNIZED_OPERATION_CODE;
-		if (checkIfUndefinedSymbolInOperand(operand))
-			return UNDEFINED_SYMBOL_IN_OPERAND;
-		if (ci.getOperand2List().get(lineNum).charAt(0) == 'X'
-				&& !checkIfHexadecimalString(ci.getOperand2List().get(lineNum)))
-			return NOT_HEXADECIMAL_STRING;
-		// TODO ? SHOULD IT BE OPERAND ?
-		if (checkIfIllegalAddressForRegister(operand))
-			return ILLEGAL_ADDRESS_FOR_REGISTER;
-		if (checkIfItsFormat4Instruction(command))
-			return CANT_BE_FORTMAT4_INSTRUCTION;
+		/*
+		 * TODO: MISSING_MISPLACED_OPERAND_FIELD
+		 */
+	}
 
-		if (lineNum == ci.getWholeInstruction().size() && !command.equals("END"))
-			return MISSING_END_STATEMENT;
+	private void verifyLabel(Line line) {
+		/*
+		 * DUPLICATE_LABEL_DEFINITION 
+		 * LABEL_STARTING_WITH_DIGIT
+		 */
+	}
 
-		labelTable.put(label, true);
-		return NO_ERROR;
+	private void verifyMnemonic(Line line) {
+		String mnemonic = line.getMnemonic();
+		String label = line.getLabel();
+		// UNRECOGNIZED_OPERATION_CODE
+		if(!Utility.isInstruction(mnemonic) && !Utility.isDirective(mnemonic)) {
+			error = ErrorTable.errorList[ErrorTable.UNRECOGNIZED_OPERATION_CODE];
+			return;
+		}
+		// WRONG_OPERATION_PREFIX - CANT_BE_FORTMAT4_INSTRUCTION
+		if(Utility.isInstruction(mnemonic)) {
+			switch(InstructionTable.instructionTable.get(mnemonic).getFormat()) {
+			case FOUR:
+				if(!mnemonic.startsWith("+")) {
+					error = ErrorTable.errorList[ErrorTable.WRONG_OPERATION_PREFIX];
+					return;
+				}
+			default:
+				if(mnemonic.startsWith("+")) {
+					error = ErrorTable.errorList[ErrorTable.CANT_BE_FORTMAT4_INSTRUCTION];
+					return;
+				}
+			}
+		}
+		//STATEMENT_CANT_HAVE_LABEL
+		if(Utility.isDirective(mnemonic)) {
+			switch(DirectiveTable.directiveTable.get(mnemonic).getDirective()) {
+			case "END":
+			case "ORG":
+			case "BASE":
+			case "NOBASE":
+			case "LTORG":
+				if(!label.equals("")) {
+					error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_LABEL];
+					return;
+				}
+			}
+		}
+		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+	}
+
+	private void verifyOperands(Line line) {
+		String mnemonic = line.getMnemonic();
+		/*
+		 * MISSING_MISPLACED_OPERAND_FIELD
+		 * UNDEFINED_SYMBOL_IN_OPERAND 
+		 * NOT_HEXADECIMAL_STRING
+		 * ILLEGAL_ADDRESS_FOR_REGISTER 
+		 * WRONG_OPERAND_TYPE
+		 * STATEMENT_CANT_HAVE_OPERAND
+		 */
+		if(Utility.isDirective(mnemonic)) {
+			verifyDirectiveOperands(line);
+		}else {
+			verifyInstructionOperands(line);
+		}
+	}
+	
+	private void verifyInstructionOperands(Line line) {
+		String mnemonic = line.getMnemonic();
+		if(InstructionTable.instructionTable.get(mnemonic).hasFirstOperand()) {
+			if(line.getFirstOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				return;
+			}
+			if(InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.REGISTER) {
+				if(!Utility.isRegister(line.getFirstOperand())) {
+					error = ErrorTable.errorList[ErrorTable.ILLEGAL_ADDRESS_FOR_REGISTER];
+					return;
+				}
+			}else if(InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
+				if(!Utility.isLabel(line.getFirstOperand())) {
+					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
+					return;
+				}
+			}
+		}else {
+			if(!line.getFirstOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
+				return;
+			}
+		}
+		
+		if(InstructionTable.instructionTable.get(mnemonic).hasSecondOperand()) {
+			if(line.getSecondOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				return;
+			}
+			if(InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.REGISTER) {
+				if(!Utility.isRegister(line.getSecondOperand())) {
+					error = ErrorTable.errorList[ErrorTable.ILLEGAL_ADDRESS_FOR_REGISTER];
+					return;
+				}
+			}else if(InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.VALUE) {
+				if(!Utility.isLabel(line.getSecondOperand())) {
+					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
+					return;
+				}
+			}
+		}else {
+			if(!line.getSecondOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
+				return;
+			}
+		}
+		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+	}
+	
+	private void verifyDirectiveOperands(Line line) {
+		String mnemonic = line.getMnemonic();
+		switch(DirectiveTable.directiveTable.get(mnemonic).getDirective()) {
+		case "NOBASE":
+		case "LTORG":
+			if(!line.getFirstOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
+				return;
+			}
+		case "BYTE":	
+			if(line.getFirstOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				return;
+			}
+			if(!isHexa(line.getFirstOperand().substring(2,line.getFirstOperand().length() - 1))) {
+				error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
+				return;
+			}
+		default:
+			if(line.getFirstOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				return;
+			}
+		}
+		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+	}
+	
+	private void verifyAddressingMode(Line line) {
+		switch(line.getAddressingMode()) {
+		case "":
+		case "@":
+		case "#":
+			error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+			break;
+		default:
+			error = ErrorTable.errorList[ErrorTable.WRONG_ADDRESSING_MODE];
+			break;
+		}
+	}
+
+	private void verifyEndStatement(Line line) {
+		/*
+		 * MISSING_END_STATEMENT
+		 */
+	}
+	
+	
+	private static boolean isHexa(String value) {
+		try {
+		    Long.parseLong(value, 16);
+		    return true;
+		}catch(NumberFormatException ex) {
+		    return false;
+		}
+	}
+	
+	private void setLineError(Line line) {
+		line.setError(error);
 	}
 
 	private boolean checkIfMisplaced(String input, String correctVal) {
 		return !input.equals(correctVal);
 	}
 
-	// TODO IMPLEMENT ANY FUNCTION THAT IS NOT IMPLEMENTED YET
-	private boolean checkCanHaveLabel(String input) {
-		return true;
+	public String getError() {
+		return error;
 	}
 
-	private boolean checkCanHaveOperand(String input) {
-		return true;
+	public void setError(String error) {
+		this.error = error;
 	}
 
-	private boolean checkIfWrongOperationPrefix(String input) {
-		return true;
-	}
-
-	private boolean checkIfUndefinedSymbolInOperand(String input) {
-		return true;
-	}
-
-	private boolean checkIfHexadecimalString(String input) {
-		try {
-			Integer.parseInt(input, 16);
-		} catch (Exception e) {
-			// exception then not hexa string
-			return false;
-		}
-		return true;
-	}
-
-	private boolean checkIfIllegalAddressForRegister(String input) {
-		return true;
-	}
-
-	private boolean checkIfItsFormat4Instruction(String input) {
-		return true;
-	}
 }

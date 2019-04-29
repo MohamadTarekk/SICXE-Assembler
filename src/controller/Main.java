@@ -9,7 +9,9 @@ import javafx.stage.Stage;
 import model.CommandInfo;
 import model.SourceReader;
 import model.tables.DirectiveTable;
+import model.tables.ErrorTable;
 import model.tables.InstructionTable;
+import model.tables.RegisterTable;
 
 public class Main extends Application {
 
@@ -27,6 +29,8 @@ public class Main extends Application {
 
 		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
 		DirectiveTable.loadDirectiveTable();
+		ErrorTable.loadErrorList();
+		RegisterTable.loadRegisterTabkle();
 		CommandInfo CI = SourceReader.getInstance()
 				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"),true);
 		CI.addToLineList();
@@ -40,9 +44,9 @@ public class Main extends Application {
 			String key = name.toString();
 			String value = InstructionTable.instructionTable.get(name).toString();
 			System.out.println(key + " " + value);
-		}
+		}*/
 		
-		for (String name : DirectiveTable.directiveTable.keySet()) {
+		/*for (String name : DirectiveTable.directiveTable.keySet()) {
 			String key = name.toString();
 			String value = DirectiveTable.directiveTable.get(name).toString();
 			System.out.println(key + " " + value);

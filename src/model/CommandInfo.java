@@ -20,7 +20,7 @@ public class CommandInfo {
 	// info for each line command
 	private ArrayList<String> wholeInstruction = new ArrayList<>();
 	private ArrayList<String> matchedInstruction = new ArrayList<>();
-	private ArrayList<String> labelList = new ArrayList<>();
+	public static ArrayList<String> labelList = new ArrayList<>();
 	private ArrayList<String> mnemonicList = new ArrayList<>();
 	private ArrayList<String> addressingModeList = new ArrayList<>();
 	private ArrayList<String> operand1List = new ArrayList<>();
@@ -46,6 +46,7 @@ public class CommandInfo {
 			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(), 
 					addressingModeList.get(i).toUpperCase(),operand1List.get(i).toUpperCase(),
 					operand2List.get(i).toUpperCase(), commentList.get(i));
+			ErrorChecker.getInstance().verifyLine(wholeInstruction.get(i), line);
 			pc.updateCounters(line);
 			linesList.add(line);
 		}
@@ -64,7 +65,7 @@ public class CommandInfo {
 	}
 
 	public void setLabelList(ArrayList<String> labelList) {
-		this.labelList = labelList;
+		CommandInfo.labelList = labelList;
 	}
 
 	public ArrayList<String> getMnemonicList() {
