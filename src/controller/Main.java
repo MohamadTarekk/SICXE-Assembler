@@ -28,7 +28,7 @@ public class Main extends Application {
 		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
 		DirectiveTable.loadDirectiveTable();
 		CommandInfo CI = SourceReader.getInstance()
-				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"));
+				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"),true);
 		CI.addToLineList();
 		
 		int len = CI.getLinesList().size();

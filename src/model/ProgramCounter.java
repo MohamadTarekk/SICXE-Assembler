@@ -25,7 +25,7 @@ public class ProgramCounter {
 
 	public void updateCounters(Line line) {
 		String mnemonic = line.getMnemonic();
-		if (mnemonic == null)
+		if (mnemonic == null||mnemonic=="")
 			return;
 		String hexaValue = convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
