@@ -1,6 +1,6 @@
 package model;
 
-import javax.swing.plaf.synth.SynthSpinnerUI;
+import java.util.ArrayList;
 
 import model.enums.OperandType;
 import model.tables.DirectiveTable;
@@ -17,14 +17,28 @@ public class ErrorChecker {
 			instance = new ErrorChecker();
 		return instance;
 	}
+	
+	private ArrayList<String> labelList = new ArrayList<>();
 
 	public void verifyLine(String instruction, Line line) {
 		//verifyIfMisplaced(instruction, line);
-		verifyLabel(line);
-		verifyMnemonic(line);
-		verifyAddressingMode(line);
-		verifyOperands(line);
-		verifyEndStatement(line);
+		if(verifyLabel(line)) {
+			setLineError(line);
+			return;
+		}
+		if(verifyMnemonic(line)) {
+			setLineError(line);
+			return;
+		}
+		if(verifyAddressingMode(line)) {
+			setLineError(line);
+			return;
+		}
+		if(verifyOperands(line)) {
+			setLineError(line);
+			return;
+		}
+		//verifyEndStatement(line);
 		setLineError(line);
 	}
 
@@ -46,159 +60,176 @@ public class ErrorChecker {
 		 */
 	}
 
-	private void verifyLabel(Line line) {
+	private boolean verifyLabel(Line line) {
 		/*
 		 * DUPLICATE_LABEL_DEFINITION 
 		 * LABEL_STARTING_WITH_DIGIT
 		 */
+		String label = line.getLabel();
+		if(!label.equals("") && !label.equals("NOLABEL")) {
+			if(labelList.contains(label)) {
+				error = ErrorTable.errorList[ErrorTable.DUPLICATE_LABEL_DEFINITION];
+				return true;
+			}else {
+				labelList.add(label);
+				return false;
+			}
+		}
+		return false;
 	}
 
-	private void verifyMnemonic(Line line) {
+	private boolean verifyMnemonic(Line line) {
 		String mnemonic = line.getMnemonic();
 		String label = line.getLabel();
+		if (mnemonic.equals("NOP"))
+			return false;
 		// UNRECOGNIZED_OPERATION_CODE
-		if(!Utility.isInstruction(mnemonic) && !Utility.isDirective(mnemonic)) {
+		if (!Utility.isInstruction(mnemonic) && !Utility.isDirective(mnemonic)) {
 			error = ErrorTable.errorList[ErrorTable.UNRECOGNIZED_OPERATION_CODE];
-			return;
+			return true;
 		}
 		// WRONG_OPERATION_PREFIX - CANT_BE_FORTMAT4_INSTRUCTION
-		if(Utility.isInstruction(mnemonic)) {
-			switch(InstructionTable.instructionTable.get(mnemonic).getFormat()) {
+		if (Utility.isInstruction(mnemonic)) {
+			switch (InstructionTable.instructionTable.get(mnemonic).getFormat()) {
 			case FOUR:
-				if(!mnemonic.startsWith("+")) {
+				if (!mnemonic.startsWith("+")) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERATION_PREFIX];
-					return;
+					return true;
 				}
 			default:
-				if(mnemonic.startsWith("+")) {
+				if (mnemonic.startsWith("+")) {
 					error = ErrorTable.errorList[ErrorTable.CANT_BE_FORTMAT4_INSTRUCTION];
-					return;
+					return true;
 				}
 			}
 		}
-		//STATEMENT_CANT_HAVE_LABEL
-		if(Utility.isDirective(mnemonic)) {
-			switch(DirectiveTable.directiveTable.get(mnemonic).getDirective()) {
+		// STATEMENT_CANT_HAVE_LABEL
+		if (Utility.isDirective(mnemonic)) {
+			switch (DirectiveTable.directiveTable.get(mnemonic).getDirective()) {
 			case "END":
 			case "ORG":
 			case "BASE":
 			case "NOBASE":
 			case "LTORG":
-				if(!label.equals("")) {
+				if (!label.equals("")) {
 					error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_LABEL];
-					return;
+					return true;
 				}
 			}
 		}
 		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+		return false;
 	}
 
-	private void verifyOperands(Line line) {
+	private boolean verifyOperands(Line line) {
 		String mnemonic = line.getMnemonic();
 		/*
-		 * MISSING_MISPLACED_OPERAND_FIELD
-		 * UNDEFINED_SYMBOL_IN_OPERAND 
-		 * NOT_HEXADECIMAL_STRING
+		 * MISSING_MISPLACED_OPERAND_FIELD UNDEFINED_SYMBOL_IN_OPERAND
+		 * NOT_HEXADECIMAL_STRING 
 		 * ILLEGAL_ADDRESS_FOR_REGISTER 
 		 * WRONG_OPERAND_TYPE
 		 * STATEMENT_CANT_HAVE_OPERAND
 		 */
-		if(Utility.isDirective(mnemonic)) {
-			verifyDirectiveOperands(line);
-		}else {
-			verifyInstructionOperands(line);
+		if (Utility.isDirective(mnemonic)) {
+			boolean temp = verifyDirectiveOperands(line);
+			return temp;
+		} else {
+			boolean temp =verifyInstructionOperands(line);
+			return temp;
 		}
 	}
-	
-	private void verifyInstructionOperands(Line line) {
+
+	private boolean verifyInstructionOperands(Line line) {
 		String mnemonic = line.getMnemonic();
-		if(mnemonic.equals("NOP"))
-			return;
-			if(InstructionTable.instructionTable.get(mnemonic).hasFirstOperand()) {
-			if(line.getFirstOperand().equals("")) {
+		if (mnemonic.equals("NOP"))
+			return false;
+		if (InstructionTable.instructionTable.get(mnemonic).hasFirstOperand()) {
+			if (line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_FIRST_OPERAND];
-				return;
+				return true;
 			}
-			if(InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.REGISTER) {
-				if(!Utility.isRegister(line.getFirstOperand())) {
+			if (InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.REGISTER) {
+				if (!Utility.isRegister(line.getFirstOperand())) {
 					error = ErrorTable.errorList[ErrorTable.ILLEGAL_ADDRESS_FOR_REGISTER];
-					return;
+					return true;
 				}
-			}else if(InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
-				if(!Utility.isLabel(line.getFirstOperand())) {
+			} else if (InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
+				if (!Utility.isLabel(line.getFirstOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
-					return;
+					return true;
 				}
 			}
-		}else {
-			if(!line.getFirstOperand().equals("")) {
+		} else {
+			if (!line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
-				return;
+				return true;
 			}
 		}
-		
-		if(InstructionTable.instructionTable.get(mnemonic).hasSecondOperand()) {
-			if(line.getSecondOperand().equals("")) {
+
+		if (InstructionTable.instructionTable.get(mnemonic).hasSecondOperand()) {
+			if (line.getSecondOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_SECOND_OPERAND];
-				return;
+				return true;
 			}
-			if(InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.REGISTER) {
-				if(!Utility.isRegister(line.getSecondOperand())) {
+			if (InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.REGISTER) {
+				if (!Utility.isRegister(line.getSecondOperand())) {
 					error = ErrorTable.errorList[ErrorTable.ILLEGAL_ADDRESS_FOR_REGISTER];
-					return;
+					return true;
 				}
-			}else if(InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.VALUE) {
-				if(!Utility.isLabel(line.getSecondOperand())) {
+			} else if (InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.VALUE) {
+				if (!Utility.isLabel(line.getSecondOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
-					return;
+					return true;
 				}
 			}
-		}else {
-			if(!line.getSecondOperand().equals("")) {
+		} else {
+			if (!line.getSecondOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
-				return;
+				return true;
 			}
 		}
 		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+		return false;
 	}
-	
-	private void verifyDirectiveOperands(Line line) {
+
+	private boolean verifyDirectiveOperands(Line line) {
 		String mnemonic = line.getMnemonic();
-		switch(DirectiveTable.directiveTable.get(mnemonic).getDirective()) {
+		switch (DirectiveTable.directiveTable.get(mnemonic).getDirective()) {
 		case "NOBASE":
 		case "LTORG":
-			if(!line.getFirstOperand().equals("")) {
+			if (!line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
-				return;
+				return true;
 			}
-		case "BYTE":	
-			if(line.getFirstOperand().equals("")) {
+		case "BYTE":
+			if (line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
-				return;
+				return true;
 			}
-			if(!isHexa(line.getFirstOperand().substring(2,line.getFirstOperand().length() - 1))) {
+			if (!isHexa(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
 				error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
-				return;
+				return true;
 			}
 		default:
-			if(line.getFirstOperand().equals("")) {
+			if (line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
-				return;
+				return true;
 			}
 		}
 		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
+		return false;
 	}
-	
-	private void verifyAddressingMode(Line line) {
-		switch(line.getAddressingMode()) {
+
+	private boolean verifyAddressingMode(Line line) {
+		switch (line.getAddressingMode()) {
 		case "":
 		case "@":
 		case "#":
 			error = ErrorTable.errorList[ErrorTable.NO_ERROR];
-			break;
+			return false;
 		default:
 			error = ErrorTable.errorList[ErrorTable.WRONG_ADDRESSING_MODE];
-			break;
+			return true;
 		}
 	}
 
@@ -207,17 +238,16 @@ public class ErrorChecker {
 		 * MISSING_END_STATEMENT
 		 */
 	}
-	
-	
+
 	private static boolean isHexa(String value) {
 		try {
-		    Long.parseLong(value, 16);
-		    return true;
-		}catch(NumberFormatException ex) {
-		    return false;
+			Long.parseLong(value, 16);
+			return true;
+		} catch (NumberFormatException ex) {
+			return false;
 		}
 	}
-	
+
 	private void setLineError(Line line) {
 		line.setError(error);
 	}
