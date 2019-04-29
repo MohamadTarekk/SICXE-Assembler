@@ -4,7 +4,7 @@ Q1       LDA     BETA              comment
          LDS     GAMMA
 SSSS     ADD     S,A               comment
          STA     ALPHA
-         MULR    A,
+         MULR    A
          LDA     BETA
          SUBR    S,A
          STA     DELTA              mmm
