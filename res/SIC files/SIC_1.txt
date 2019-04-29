@@ -1,13 +1,14 @@
-         START   1000
-Q1       LDA     BETA
+.23456789012345678901234567890123456
+         START   1000              comment
+Q1       LDA     BETA              comment
          LDS     GAMMA
-         ADD     BETA
+SSSS     ADD     S,A               comment
          STA     ALPHA
          MULR    A,
          LDA     BETA
          SUBR    S,A
-         STA     DELTA
-.This is a comment         
+         STA     DELTA              mmm
+.This is a comment
 BETA     WORD    39
 TEST	 BYTE	 X'ABCDFEFGH'
 GAMMA    WORD    6

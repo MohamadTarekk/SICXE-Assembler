@@ -32,7 +32,7 @@ public class Main extends Application {
 		ErrorTable.loadErrorList();
 		RegisterTable.loadRegisterTabkle();
 		CommandInfo CI = SourceReader.getInstance()
-				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"));
+				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"),true);
 		CI.addToLineList();
 		
 		int len = CI.getLinesList().size();

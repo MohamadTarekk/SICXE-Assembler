@@ -25,17 +25,19 @@ public class CommandInfo {
 	private ArrayList<String> addressingModeList = new ArrayList<>();
 	private ArrayList<String> operand1List = new ArrayList<>();
 	private ArrayList<String> operand2List = new ArrayList<>();
+	private ArrayList<String> commentList = new ArrayList<>();
 
 	// All of the lines
 	private ArrayList<Line> linesList = new ArrayList<Line>();
 
 	public void addDefaults() {
-		addMatchedInstruction("");
-		addLabel("");
-		addCommand("");
+		addMatchedInstruction("NOMATCH");
+		addLabel("NOLABEL");
+		addCommand("NOP");
 		addOperand1("");
-		addOperand2("");
 		addAddressMode("");
+		addOperand2("");
+
 	}
 
 	public void addToLineList() {
@@ -43,11 +45,19 @@ public class CommandInfo {
 		for (int i = 0; i < length; i++) {
 			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(), 
 					addressingModeList.get(i).toUpperCase(),operand1List.get(i).toUpperCase(),
-					operand2List.get(i).toUpperCase(), null);
+					operand2List.get(i).toUpperCase(), commentList.get(i));
 			ErrorChecker.getInstance().verifyLine(wholeInstruction.get(i), line);
 			pc.updateCounters(line);
 			linesList.add(line);
 		}
+	}
+
+	public ArrayList<String> getCommentList() {
+		return commentList;
+	}
+
+	public void setCommentList(ArrayList<String> commentList) {
+		this.commentList = commentList;
 	}
 
 	public ArrayList<String> getLabelList() {
@@ -173,6 +183,13 @@ public class CommandInfo {
 			return;
 		}
 		operand2List.add(s);
+	}
+	public void addComment(String s){
+		if(s==null){
+			commentList.add("");
+		    return;
+		}
+	    commentList.add(s);
 	}
 
 }

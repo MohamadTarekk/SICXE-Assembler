@@ -39,4 +39,12 @@ public class Utility {
 			return true;
 		return false;	
 	}
+	public static String removeExtraSpaces(String input){
+		String s="";
+		for(int i=0;i<input.length();i++){
+			if(input.charAt(i)==' ')return s;
+			s+=input.charAt(i);
+		}
+		return s;
+	}
 }

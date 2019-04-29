@@ -85,10 +85,36 @@ public class Line {
 		this.error = error;
 	}
 
+	public String getSpaces(int count){
+		String s=new String();
+		for(int i=0;i<count;i++)s+=" ";
+		return s;
+	}
 	@Override
 	public String toString() {
-		return "Line [location=" + location + ", label=" + label + ", mnemonic=" + mnemonic + ", addressingMode="
-				+ addressingMode + ", firstOperand=" + firstOperand + ", secondOperand=" + secondOperand + ", comment="
-				+ comment + ", error=" + error + "]";
+		final int maxSizePerInfo=20;
+		int maxSize=maxSizePerInfo;
+		String lineInfo=location;
+
+		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		maxSize+=maxSizePerInfo;
+		lineInfo+=label;
+		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		maxSize+=maxSizePerInfo;
+		lineInfo+=mnemonic;
+		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		maxSize+=maxSizePerInfo;
+		lineInfo+=addressingMode;
+		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		maxSize+=maxSizePerInfo;
+		lineInfo+=firstOperand;
+		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		maxSize+=maxSizePerInfo;
+		lineInfo+=secondOperand;
+		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		maxSize+=maxSizePerInfo;
+		lineInfo+=comment;
+
+	return lineInfo;
 	}
 }
