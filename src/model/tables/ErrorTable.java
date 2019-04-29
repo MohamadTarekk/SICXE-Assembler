@@ -15,7 +15,7 @@ public class ErrorTable {
 	public static final int CANT_BE_FORTMAT4_INSTRUCTION = 10;
 	public static final int ILLEGAL_ADDRESS_FOR_REGISTER = 11;
 	public static final int MISSING_END_STATEMENT = 12;
-	public static final int LABEL_STARTING_WITH_DIGIT = 13;
+	public static final int LABEL_CANT_START_WITH_DIGIT = 13;
 	public static final int WRONG_OPERAND_TYPE = 14;
 	public static final int WRONG_ADDRESSING_MODE = 15;
 	public static final int MISSING_FIRST_OPERAND = 16;
@@ -40,7 +40,7 @@ public class ErrorTable {
 		errorList[CANT_BE_FORTMAT4_INSTRUCTION] = "ERROR: Can’t be format 4 instruction \n"; //DONE
 		errorList[ILLEGAL_ADDRESS_FOR_REGISTER] = "ERROR: Illegal address for a register \n"; //DONE
 		errorList[MISSING_END_STATEMENT] = "ERROR: Missing END statement \n";
-		errorList[LABEL_STARTING_WITH_DIGIT] = "ERROR: Labels can't start with a digit \n";
+		errorList[LABEL_CANT_START_WITH_DIGIT] = "ERROR: Label can't start with a digit \n";
 		errorList[WRONG_OPERAND_TYPE] = "ERROR: Wrong operand type \n"; //DONE
 		errorList[WRONG_ADDRESSING_MODE] = "ERROR: Wrong addressing Mode \n"; //DONE
 		errorList[MISSING_FIRST_OPERAND] = "ERROR: Missing first operand \n"; //DONE

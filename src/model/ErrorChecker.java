@@ -70,11 +70,18 @@ public class ErrorChecker {
 			if(labelList.contains(label)) {
 				error = ErrorTable.errorList[ErrorTable.DUPLICATE_LABEL_DEFINITION];
 				return true;
-			}else {
+			}
+			else if (Character.isDigit(label.charAt(0))){
+				error = ErrorTable.errorList[ErrorTable.LABEL_CANT_START_WITH_DIGIT];
+				return true;
+			}
+			else {
 				labelList.add(label);
 				return false;
 			}
+			
 		}
+
 		return false;
 	}
 
