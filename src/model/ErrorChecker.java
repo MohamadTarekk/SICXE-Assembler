@@ -112,7 +112,9 @@ public class ErrorChecker {
 	
 	private void verifyInstructionOperands(Line line) {
 		String mnemonic = line.getMnemonic();
-		if(InstructionTable.instructionTable.get(mnemonic).hasFirstOperand()) {
+		if(mnemonic.equals("NOP"))
+			return;
+			if(InstructionTable.instructionTable.get(mnemonic).hasFirstOperand()) {
 			if(line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_FIRST_OPERAND];
 				return;
@@ -137,8 +139,6 @@ public class ErrorChecker {
 		
 		if(InstructionTable.instructionTable.get(mnemonic).hasSecondOperand()) {
 			if(line.getSecondOperand().equals("")) {
-				if(mnemonic.equals("MULR"))
-					System.out.println("ana hena");
 				error = ErrorTable.errorList[ErrorTable.MISSING_SECOND_OPERAND];
 				return;
 			}
