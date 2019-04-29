@@ -31,7 +31,7 @@ public class ProgramCounter {
 		line.setLocation(hexaValue);
 
 		if (mnemonic.equals("Start".toUpperCase())) {
-			locationCounter = Integer.parseInt(line.getFirstOperand());
+			locationCounter = hexToDecimal(line.getFirstOperand());
 			hexaValue = convertToHexa(locationCounter);
 			line.setLocation(hexaValue);
 		}
@@ -81,6 +81,10 @@ public class ProgramCounter {
 		}
 	}
 
+	private int hexToDecimal(String hex) {
+		return Integer.parseInt(hex, 16);
+	}
+	
 	private String convertToHexa(int address) {
 		String hexadecimalValue = String.format("%1$04X", address);
 		return hexadecimalValue;

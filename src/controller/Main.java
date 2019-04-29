@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.File;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,7 +25,6 @@ public class Main extends Application {
 		primaryStage.setScene(new Scene(root, 300, 275));
 		primaryStage.show();
 
-
 		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
 		DirectiveTable.loadDirectiveTable();
 		CommandInfo CI = SourceReader.getInstance()
@@ -49,6 +47,7 @@ public class Main extends Application {
 			String value = DirectiveTable.directiveTable.get(name).toString();
 			System.out.println(key + " " + value);
 		}*/
+
 	}
 
 	public static void main(String[] args) {
