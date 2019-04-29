@@ -1,28 +1,10 @@
 package model;
 
-import java.util.HashMap;
+import model.tables.ErrorTable;
 
 public class ErrorChecker {
-
-	public final int NO_ERROR = 0;
-	public final int MISPLACED_LABEL = 1;
-	public final int MISSING_MISPLACED_OPERATION_MNEMONIC = 2;
-	public final int MISSING_MISPLACED_OPERAND_FIELD = 3;
-	public final int DUPLICATE_LABEL_DEFINITION = 4;
-	public final int STATEMENT_CANT_HAVE_LABEL = 5;
-	public final int STATEMENT_CANT_HAVE_OPERAND = 6;
-	public final int WRONG_OPERATION_PREFIX = 7;
-	public final int UNRECOGNIZED_OPERATION_CODE = 8;
-	public final int UNDEFINED_SYMBOL_IN_OPERAND = 9;
-	public final int NOT_HEXADECIMAL_STRING = 10;
-	public final int CANT_BE_FORTMAT4_INSTRUCTION = 11;
-	public final int ILLEGAL_ADDRESS_FOR_REGISTER = 12;
-	public final int MISSING_END_STATEMENT = 13;
-
 	private static ErrorChecker instance = null;
-
-	private HashMap<String, Integer> commandsMap;
-	private HashMap<String, Boolean> labelTable;
+	private String error;
 
 	public static ErrorChecker getInstance() {
 		if (instance == null)
@@ -30,101 +12,76 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	/*
-	 * private ErrorChecker() { commandsMap = SourceReader.getInstance().
-	 * getInstructionOpCodeTable("res/SIC-XE Instructions Opcode.txt"); };
-	 */
-
-	public int verifyInstructionsRestricted(CommandInfo commandInfo) {
-		labelTable = new HashMap<>();
-		int len = commandInfo.getWholeInstruction().size();
-		for (int i = 0; i < len; i++) {
-			int errVal = checkInstructionRestricted(commandInfo, i);
-			if (errVal != 0)
-				return errVal;
-		}
-		return NO_ERROR;
+	public int verifyLine(String instruction, Line line) {
+		verifyIfMisplaced(instruction, line);
+		verifyLabel(line);
+		verifyMnemonic(line);
+		verifyOperands(line);
+		verifyEndStatement(line);
+		return 0;
 	}
 
-	private int checkInstructionRestricted(CommandInfo ci, int lineNum) {
-		String label = ci.getWholeInstruction().get(lineNum).substring(0, 9);
-		String command = ci.getWholeInstruction().get(lineNum).substring(10, 16);
-		String operand = ci.getWholeInstruction().get(lineNum).substring(18, 36);
+	private void verifyIfMisplaced(String instruction, Line line) {
+		String label = instruction.substring(0, 9);
+		String mnemonic = instruction.substring(10, 16);
+		/*
+		 * String operand = instruction.substring(18, 36); String comment =
+		 * instruction.substring(36,67);
+		 */
+		if (checkIfMisplaced(label, line.getLabel()))
+			error = ErrorTable.errorList[ErrorTable.MISPLACED_LABEL];
+		if (checkIfMisplaced(mnemonic, line.getMnemonic()))
+			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
 
-		if (checkIfMisplaced(label, ci.getLabelList().get(lineNum)))
-			return MISPLACED_LABEL;
-		if (checkIfMisplaced(command, ci.getMnemonicList().get(lineNum)))
-			return MISSING_MISPLACED_OPERATION_MNEMONIC;
-		String op1op2 = ci.getAddressingModeList().get(lineNum) + ci.getOperand1List().get(lineNum) + ','
-				+ ci.getOperand2List().get(lineNum);
-		if (checkIfMisplaced(operand, op1op2))
-			return MISSING_MISPLACED_OPERAND_FIELD;
-		if (labelTable.get(label) != null)
-			return DUPLICATE_LABEL_DEFINITION;
-		// 9spaces
-		if (!label.equals("         ") && !checkCanHaveLabel(label))
-			return STATEMENT_CANT_HAVE_LABEL;
-		// 18 spaces
-		if (!operand.equals("                  ") && !checkCanHaveOperand(operand))
-			return STATEMENT_CANT_HAVE_OPERAND;
-		if (checkIfWrongOperationPrefix(command))
-			return WRONG_OPERATION_PREFIX;
-		if (commandsMap.get(command) == null)
-			return UNRECOGNIZED_OPERATION_CODE;
-		if (checkIfUndefinedSymbolInOperand(operand))
-			return UNDEFINED_SYMBOL_IN_OPERAND;
-		if (ci.getOperand2List().get(lineNum).charAt(0) == 'X'
-				&& !checkIfHexadecimalString(ci.getOperand2List().get(lineNum)))
-			return NOT_HEXADECIMAL_STRING;
-		// TODO ? SHOULD IT BE OPERAND ?
-		if (checkIfIllegalAddressForRegister(operand))
-			return ILLEGAL_ADDRESS_FOR_REGISTER;
-		if (checkIfItsFormat4Instruction(command))
-			return CANT_BE_FORTMAT4_INSTRUCTION;
+		/*
+		 * TODO: MISSING_MISPLACED_OPERAND_FIELD
+		 */
+	}
 
-		if (lineNum == ci.getWholeInstruction().size() && !command.equals("END"))
-			return MISSING_END_STATEMENT;
+	private void verifyLabel(Line line) {
+		/*
+		 * DUPLICATE_LABEL_DEFINITION 
+		 * LABEL_STARTING_WITH_DIGIT
+		 */
+	}
 
-		labelTable.put(label, true);
-		return NO_ERROR;
+	private void verifyMnemonic(Line line) {
+		/*
+		 * WRONG_OPERATION_PREFIX
+		 * UNRECOGNIZED_OPERATION_CODE
+		 * CANT_BE_FORTMAT4_INSTRUCTION
+		 * STATEMENT_CANT_HAVE_LABEL
+		 * STATEMENT_CANT_HAVE_OPERAND
+		 */
+	}
+
+	private void verifyOperands(Line line) {
+		/*
+		 * UNDEFINED_SYMBOL_IN_OPERAND 
+		 * NOT_HEXADECIMAL_STRING
+		 * ILLEGAL_ADDRESS_FOR_REGISTER 
+		 * WRONG_OPERAND
+		 */
+
+	}
+
+	private void verifyEndStatement(Line line) {
+		/*
+		 * MISSING_END_STATEMENT
+		 */
 	}
 
 	private boolean checkIfMisplaced(String input, String correctVal) {
 		return !input.equals(correctVal);
 	}
 
-	// TODO IMPLEMENT ANY FUNCTION THAT IS NOT IMPLEMENTED YET
-	private boolean checkCanHaveLabel(String input) {
-		return true;
+	public String getError() {
+		return error;
 	}
 
-	private boolean checkCanHaveOperand(String input) {
-		return true;
+	public void setError(String error) {
+		this.error = error;
 	}
 
-	private boolean checkIfWrongOperationPrefix(String input) {
-		return true;
-	}
-
-	private boolean checkIfUndefinedSymbolInOperand(String input) {
-		return true;
-	}
-
-	private boolean checkIfHexadecimalString(String input) {
-		try {
-			Integer.parseInt(input, 16);
-		} catch (Exception e) {
-			// exception then not hexa string
-			return false;
-		}
-		return true;
-	}
-
-	private boolean checkIfIllegalAddressForRegister(String input) {
-		return true;
-	}
-
-	private boolean checkIfItsFormat4Instruction(String input) {
-		return true;
-	}
 }

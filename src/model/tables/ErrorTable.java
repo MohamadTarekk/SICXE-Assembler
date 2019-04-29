@@ -16,11 +16,11 @@ public class ErrorTable {
 	public static final int ILLEGAL_ADDRESS_FOR_REGISTER = 11;
 	public static final int MISSING_END_STATEMENT = 12;
 	public static final int LABEL_STARTING_WITH_DIGIT = 13;
-	public static final int LABELS_CANT_HAVE_SPACES = 14;
-	public static final int NO_ERROR = 100;
+	public static final int WRONG_OPERAND = 14;
+	public static final int NO_ERROR = 15;
 
 
-	private static String[] errorList = new String[16];
+	public static String[] errorList = new String[100];
 
 	public void loadErrorList() {
 		errorList[MISPLACED_LABEL] = "ERROR: Misplaced label";
@@ -37,6 +37,8 @@ public class ErrorTable {
 		errorList[ILLEGAL_ADDRESS_FOR_REGISTER] = "ERROR: Illegal address for a register";
 		errorList[MISSING_END_STATEMENT] = "ERROR: Missing END statement";
 		errorList[LABEL_STARTING_WITH_DIGIT] = "ERROR: Labels can't start with a digit";
+		errorList[WRONG_OPERAND] = "ERROR: Wrong operand type"; 
+		errorList[NO_ERROR] = "";
 	}
 
 }

@@ -89,7 +89,6 @@ public class Line {
 	public String toString() {
 		return "Line [location=" + location + ", label=" + label + ", mnemonic=" + mnemonic + ", addressingMode="
 				+ addressingMode + ", firstOperand=" + firstOperand + ", secondOperand=" + secondOperand + ", comment="
-				+ comment + "]";
+				+ comment + ", error=" + error + "]";
 	}
-
 }
