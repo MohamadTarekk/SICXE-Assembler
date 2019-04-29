@@ -30,7 +30,7 @@ public class ErrorTable {
 		errorList[MISPLACED_LABEL] = "ERROR: Misplaced label";
 		errorList[MISSING_MISPLACED_OPERATION_MNEMONIC] = "ERROR: Missing or misplaced operation mnemonic + \n";
 		errorList[MISSING_MISPLACED_OPERAND_FIELD] = "ERROR: Missing or misplaced operand field + \n"; //DONE
-		errorList[DUPLICATE_LABEL_DEFINITION] = "ERROR: Duplicate label definition \n";
+		errorList[DUPLICATE_LABEL_DEFINITION] = "ERROR: Duplicate label definition \n"; //DONE
 		errorList[STATEMENT_CANT_HAVE_LABEL] = "ERROR: This statement can’t have a label \n"; //DONE
 		errorList[STATEMENT_CANT_HAVE_OPERAND] = "ERROR: This statement can’t have an operand \n"; //DONE
 		errorList[WRONG_OPERATION_PREFIX] = "ERROR: Wrong operation prefix \n"; //DONE
@@ -43,8 +43,8 @@ public class ErrorTable {
 		errorList[LABEL_STARTING_WITH_DIGIT] = "ERROR: Labels can't start with a digit \n";
 		errorList[WRONG_OPERAND_TYPE] = "ERROR: Wrong operand type \n"; //DONE
 		errorList[WRONG_ADDRESSING_MODE] = "ERROR: Wrong addressing Mode \n"; //DONE
-		errorList[MISSING_FIRST_OPERAND] = "ERROR: Missing first operand \n";
-		errorList[MISSING_SECOND_OPERAND] = "ERROR: Missing second operand \n";
+		errorList[MISSING_FIRST_OPERAND] = "ERROR: Missing first operand \n"; //DONE
+		errorList[MISSING_SECOND_OPERAND] = "ERROR: Missing second operand \n"; //DONE
 		errorList[NO_ERROR] = "";
 	}
 

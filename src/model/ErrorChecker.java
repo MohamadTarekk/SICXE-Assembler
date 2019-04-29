@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import model.enums.OperandType;
 import model.tables.DirectiveTable;
 import model.tables.ErrorTable;
@@ -15,10 +17,15 @@ public class ErrorChecker {
 			instance = new ErrorChecker();
 		return instance;
 	}
+	
+	private ArrayList<String> labelList = new ArrayList<>();
 
 	public void verifyLine(String instruction, Line line) {
-		// verifyIfMisplaced(instruction, line);
-		//verifyLabel(line);
+		//verifyIfMisplaced(instruction, line);
+		if(verifyLabel(line)) {
+			setLineError(line);
+			return;
+		}
 		if(verifyMnemonic(line)) {
 			setLineError(line);
 			return;
@@ -53,11 +60,22 @@ public class ErrorChecker {
 		 */
 	}
 
-	private void verifyLabel(Line line) {
+	private boolean verifyLabel(Line line) {
 		/*
 		 * DUPLICATE_LABEL_DEFINITION 
 		 * LABEL_STARTING_WITH_DIGIT
 		 */
+		String label = line.getLabel();
+		if(!label.equals("") && !label.equals("NOLABEL")) {
+			if(labelList.contains(label)) {
+				error = ErrorTable.errorList[ErrorTable.DUPLICATE_LABEL_DEFINITION];
+				return true;
+			}else {
+				labelList.add(label);
+				return false;
+			}
+		}
+		return false;
 	}
 
 	private boolean verifyMnemonic(Line line) {
