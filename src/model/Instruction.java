@@ -64,6 +64,18 @@ public class Instruction {
 		this.format = format;
 	}
 
+	public boolean hasFirstOperand() {
+		if (firstOperand == OperandType.REGISTER || firstOperand == OperandType.VALUE)
+			return true;
+		return false;
+	}
+
+	public boolean hasSecondOperand() {
+		if (secondOperand == OperandType.REGISTER || secondOperand == OperandType.VALUE)
+			return true;
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		return "Instruction [name=" + name + ", opcode=" + opcode + ", firstOperand=" + firstOperand

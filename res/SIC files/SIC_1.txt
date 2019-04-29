@@ -1,14 +1,15 @@
          START   1000
 Q1       LDA     BETA
          LDS     GAMMA
-         ADD     S,A
+         ADD     BETA
          STA     ALPHA
-         MULR    A,S
+         MULR    Y,S
          LDA     BETA
          SUBR    S,A
          STA     DELTA
 .This is a comment         
 BETA     WORD    39
+TEST	 BYTE	 X'ABCDFEFGH'
 GAMMA    WORD    6
 ALPHA    RESW    1
 DELTA    RESW    1

@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class RegisterTable {
 
-	private static HashMap<String, Integer> registerTable = new HashMap<>();
+	public static HashMap<String, Integer> registerTable = new HashMap<>();
 
-	public void loadRegisterTabkle() {
+	public static void loadRegisterTabkle() {
 		registerTable.put("A", 0);
 		registerTable.put("X", 1);
 		registerTable.put("L", 2);
