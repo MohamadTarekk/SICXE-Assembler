@@ -10,7 +10,6 @@ SSSS     ADD     S,A               comment
          STA     DELTA              mmm
 .This is a comment
 BETA     WORD    39
-TEST	 BYTE	 X'ABCDFEFGH'
 GAMMA    WORD    6
 ALPHA    RESW    1
 DELTA    RESW    1

@@ -22,10 +22,11 @@
     -fx-opacity: 0.7;
 }
 .text-area {
-    -fx-font-size: 12pt;
+    -fx-font-size: 14pt;
+    -fx-font-weight: 900;
     -fx-font-family: "Century Gothic";
-    -fx-text-fill: blue;
-    -fx-opacity: 0.7;
+    -fx-text-fill: #3f474f;
+    //-fx-opacity: 0.7;
 }
 
 

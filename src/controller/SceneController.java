@@ -27,11 +27,11 @@ public class SceneController implements Initializable {
     @FXML
     private void loadFileOnAction(){
         ArrayList<String> arr=SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt");
-        textArea.setText("");
-        int len=arr.size();
+        String append="";
         for(String s:arr){
-            textArea.setText(textArea.getText()+s);
+            append+=s+"\n";
         }
+        textArea.setText(append);
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
