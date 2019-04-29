@@ -3,7 +3,7 @@ Q1       LDA     BETA
          LDS     GAMMA
          ADD     BETA
          STA     ALPHA
-         MULR    Y,S
+         MULR    A,
          LDA     BETA
          SUBR    S,A
          STA     DELTA

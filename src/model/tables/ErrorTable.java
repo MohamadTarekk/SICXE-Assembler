@@ -18,6 +18,9 @@ public class ErrorTable {
 	public static final int LABEL_STARTING_WITH_DIGIT = 13;
 	public static final int WRONG_OPERAND_TYPE = 14;
 	public static final int WRONG_ADDRESSING_MODE = 15;
+	public static final int MISSING_FIRST_OPERAND = 16;
+	public static final int MISSING_SECOND_OPERAND = 17;
+
 	public static final int NO_ERROR = 90;
 
 
@@ -40,6 +43,8 @@ public class ErrorTable {
 		errorList[LABEL_STARTING_WITH_DIGIT] = "ERROR: Labels can't start with a digit";
 		errorList[WRONG_OPERAND_TYPE] = "ERROR: Wrong operand type"; //DONE
 		errorList[WRONG_ADDRESSING_MODE] = "ERROR: Wrong addressing Mode"; //DONE
+		errorList[MISSING_FIRST_OPERAND] = "ERROR: Missing first operand";
+		errorList[MISSING_SECOND_OPERAND] = "ERROR: Missing second operand";
 		errorList[NO_ERROR] = "";
 	}
 
