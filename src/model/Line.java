@@ -1,7 +1,7 @@
 package model;
 
 public class Line {
-	
+
 	private String location;
 	private String label;
 	private String mnemonic;
@@ -9,6 +9,7 @@ public class Line {
 	private String firstOperand;
 	private String secondOperand;
 	private String comment;
+	private String error;
 
 	public Line(String label, String mnemonic, String addressingMode, String firstOperand, String secondOperand,
 			String comment) {
@@ -74,6 +75,14 @@ public class Line {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 
 	@Override

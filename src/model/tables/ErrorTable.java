@@ -2,21 +2,23 @@ package model.tables;
 
 public class ErrorTable {
 
-	public final int MISPLACED_LABEL = 0;
-	public final int MISSING_MISPLACED_OPERATION_MNEMONIC = 1;
-	public final int MISSING_MISPLACED_OPERAND_FIELD = 2;
-	public final int DUPLICATE_LABEL_DEFINITION = 3;
-	public final int STATEMENT_CANT_HAVE_LABEL = 4;
-	public final int STATEMENT_CANT_HAVE_OPERAND = 5;
-	public final int WRONG_OPERATION_PREFIX = 6;
-	public final int UNRECOGNIZED_OPERATION_CODE = 7;
-	public final int UNDEFINED_SYMBOL_IN_OPERAND = 8;
-	public final int NOT_HEXADECIMAL_STRING = 9;
-	public final int CANT_BE_FORTMAT4_INSTRUCTION = 10;
-	public final int ILLEGAL_ADDRESS_FOR_REGISTER = 11;
-	public final int MISSING_END_STATEMENT = 12;
-	public final int LABEL_STARTING_WITH_DIGIT = 13;
-	public final int LABELS_CANT_HAVE_SPACES = 14;
+	public static final int MISPLACED_LABEL = 0;
+	public static final int MISSING_MISPLACED_OPERATION_MNEMONIC = 1;
+	public static final int MISSING_MISPLACED_OPERAND_FIELD = 2;
+	public static final int DUPLICATE_LABEL_DEFINITION = 3;
+	public static final int STATEMENT_CANT_HAVE_LABEL = 4;
+	public static final int STATEMENT_CANT_HAVE_OPERAND = 5;
+	public static final int WRONG_OPERATION_PREFIX = 6;
+	public static final int UNRECOGNIZED_OPERATION_CODE = 7;
+	public static final int UNDEFINED_SYMBOL_IN_OPERAND = 8;
+	public static final int NOT_HEXADECIMAL_STRING = 9;
+	public static final int CANT_BE_FORTMAT4_INSTRUCTION = 10;
+	public static final int ILLEGAL_ADDRESS_FOR_REGISTER = 11;
+	public static final int MISSING_END_STATEMENT = 12;
+	public static final int LABEL_STARTING_WITH_DIGIT = 13;
+	public static final int LABELS_CANT_HAVE_SPACES = 14;
+	public static final int NO_ERROR = 100;
+
 
 	private static String[] errorList = new String[16];
 
@@ -35,7 +37,6 @@ public class ErrorTable {
 		errorList[ILLEGAL_ADDRESS_FOR_REGISTER] = "ERROR: Illegal address for a register";
 		errorList[MISSING_END_STATEMENT] = "ERROR: Missing END statement";
 		errorList[LABEL_STARTING_WITH_DIGIT] = "ERROR: Labels can't start with a digit";
-		errorList[LABELS_CANT_HAVE_SPACES] = "ERROR: Labels can't have spaces";
 	}
 
 }
