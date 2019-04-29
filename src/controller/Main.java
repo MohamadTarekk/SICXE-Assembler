@@ -22,9 +22,9 @@ public class Main extends Application {
 		// String path = currentRelativePath.toAbsolutePath().toString() +
 		// "/src/view/Editor.fxml";
 
-		Parent root = FXMLLoader.load(new File("src/view/Editor.fxml").toURI().toURL());
+		Parent root = FXMLLoader.load(new File("src/view/scene.fxml").toURI().toURL());
 		primaryStage.setTitle("SIC/XE Assembler");
-		primaryStage.setScene(new Scene(root, 300, 275));
+		primaryStage.setScene(new Scene(root, 800, 600));
 		primaryStage.show();
 
 		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
