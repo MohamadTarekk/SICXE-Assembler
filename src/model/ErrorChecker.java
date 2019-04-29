@@ -18,6 +18,7 @@ public class ErrorChecker {
 		verifyMnemonic(line);
 		verifyOperands(line);
 		verifyEndStatement(line);
+		setLineError(line);
 		return 0;
 	}
 
@@ -70,6 +71,10 @@ public class ErrorChecker {
 		/*
 		 * MISSING_END_STATEMENT
 		 */
+	}
+	
+	private void setLineError(Line line) {
+		line.setError(error);
 	}
 
 	private boolean checkIfMisplaced(String input, String correctVal) {
