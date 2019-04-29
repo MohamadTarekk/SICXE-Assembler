@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 import model.enums.OperandType;
 import model.tables.DirectiveTable;
 import model.tables.ErrorTable;
@@ -112,7 +114,7 @@ public class ErrorChecker {
 		String mnemonic = line.getMnemonic();
 		if(InstructionTable.instructionTable.get(mnemonic).hasFirstOperand()) {
 			if(line.getFirstOperand().equals("")) {
-				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				error = ErrorTable.errorList[ErrorTable.MISSING_FIRST_OPERAND];
 				return;
 			}
 			if(InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.REGISTER) {
@@ -135,7 +137,9 @@ public class ErrorChecker {
 		
 		if(InstructionTable.instructionTable.get(mnemonic).hasSecondOperand()) {
 			if(line.getSecondOperand().equals("")) {
-				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				if(mnemonic.equals("MULR"))
+					System.out.println("ana hena");
+				error = ErrorTable.errorList[ErrorTable.MISSING_SECOND_OPERAND];
 				return;
 			}
 			if(InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.REGISTER) {

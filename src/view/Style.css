@@ -21,6 +21,12 @@
     -fx-text-fill: white;
     -fx-opacity: 0.7;
 }
+.text-area {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Century Gothic";
+    -fx-text-fill: blue;
+    -fx-opacity: 0.7;
+}
 
 
 .text-input:focused {
