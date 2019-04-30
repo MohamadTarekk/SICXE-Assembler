@@ -3,6 +3,7 @@
 Q1       LDA     BETA              comment
          LDS     GAMMA
 SSSS     +ADD    #5                comment
+
          STA     ALPHA
 SSSS     MULR    A
          LDA     BETA

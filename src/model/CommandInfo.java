@@ -6,14 +6,9 @@ public class CommandInfo {
 
 	private static CommandInfo instance = null;
 
-	private CommandInfo() {
+	public CommandInfo() {
 	}
 
-	public static CommandInfo getInstance() {
-		if (instance == null)
-			instance = new CommandInfo();
-		return instance;
-	}
 	
 	ProgramCounter pc = ProgramCounter.getInstance();
 
@@ -46,7 +41,7 @@ public class CommandInfo {
 			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(), 
 					addressingModeList.get(i).toUpperCase(),operand1List.get(i).toUpperCase(),
 					operand2List.get(i).toUpperCase(), commentList.get(i));
-			ErrorChecker.getInstance().verifyLine(wholeInstruction.get(i), line);
+			ErrorChecker.getInstance().verifyLine(line);
 			pc.updateCounters(line);
 			linesList.add(line);
 		}

@@ -1,19 +1,17 @@
-package controller;
+	package controller;
 
-import com.sun.deploy.util.StringUtils;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
-import javafx.scene.shape.Circle;
 import model.CommandInfo;
 import model.SourceReader;
 import model.utility.Utility;
-
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 public class SceneController implements Initializable {
 

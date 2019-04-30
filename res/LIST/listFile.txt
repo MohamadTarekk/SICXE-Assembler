@@ -3,6 +3,7 @@
 Q1       LDA     BETA              comment
          LDS     GAMMA
 SSSS     +ADD    #5                comment
+
          STA     ALPHA
 SSSS     MULR    A
          LDA     BETA
@@ -27,6 +28,7 @@ LINES       ADDRESS     LABEL       MNEMONIC    ADDR_MODE   OPERAND1    OPERAND2
 ERROR: Can�t be format 4 instruction 
 5           100A                    STA                     ALPHA                                                   
 6           100D        SSSS        MULR                    A                                                       
+
 ERROR: Duplicate label definition 
 7           100F                    LDA                     BETA                                                    
 8           1012                    SUBR                    S           A                                           
