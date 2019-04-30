@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 public class CommandInfo {
 
-	private static CommandInfo instance = null;
+	// private static CommandInfo instance = null;
 
 	public CommandInfo() {
 	}
 
-	
 	ProgramCounter pc = ProgramCounter.getInstance();
 
 	// info for each line command
@@ -27,7 +26,7 @@ public class CommandInfo {
 
 	public void addDefaults() {
 		addMatchedInstruction("NOMATCH");
-	    addLabel("(~)");
+		addLabel("(~)");
 		addCommand("NOP");
 		addOperand1("");
 		addAddressMode("");
@@ -38,8 +37,8 @@ public class CommandInfo {
 	public void addToLineList() {
 		int length = wholeInstruction.size();
 		for (int i = 0; i < length; i++) {
-			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(), 
-					addressingModeList.get(i).toUpperCase(),operand1List.get(i).toUpperCase(),
+			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(),
+					addressingModeList.get(i).toUpperCase(), operand1List.get(i).toUpperCase(),
 					operand2List.get(i).toUpperCase(), commentList.get(i));
 			ErrorChecker.getInstance().verifyLine(line);
 			pc.updateCounters(line);
@@ -101,10 +100,6 @@ public class CommandInfo {
 
 	public void setLinesList(ArrayList<Line> linesList) {
 		this.linesList = linesList;
-	}
-
-	public static void setInstance(CommandInfo instance) {
-		CommandInfo.instance = instance;
 	}
 
 	public ArrayList<String> getWholeInstruction() {
@@ -179,12 +174,13 @@ public class CommandInfo {
 		}
 		operand2List.add(s);
 	}
-	public void addComment(String s){
-		if(s==null){
+
+	public void addComment(String s) {
+		if (s == null) {
 			commentList.add("");
-		    return;
+			return;
 		}
-	    commentList.add(s);
+		commentList.add(s);
 	}
 
 }

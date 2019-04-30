@@ -2,9 +2,9 @@
          START   1000              comment
 Q1       LDA     BETA              comment
   ss     LDS     GAMMA
-SSSS     ADD     S,A               comment
+SSSS     ADD     TEST              comment
          STA     ALPHA
-SSSS     MULR    A
+SSS      MULR    A,S
          LDA     BETA
          SUBR    S,A
          STA     DELTA              mmm

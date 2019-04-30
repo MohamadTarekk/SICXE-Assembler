@@ -1,17 +1,22 @@
 package model.utility;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 import model.CommandInfo;
+import model.ErrorChecker;
+import model.ProgramCounter;
 import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.tables.RegisterTable;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
-
 public class Utility {
+	
+	public static void clearAll() {
+		ErrorChecker.getInstance().getLabelList().clear();
+		ProgramCounter.getInstance().resetAddresses();
+	}
 
     public static boolean isDirective(String directiveMnemonic) {
         if (DirectiveTable.directiveTable.containsKey(directiveMnemonic.toUpperCase()))

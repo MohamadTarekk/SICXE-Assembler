@@ -1,13 +1,12 @@
 package controller;
 
 import java.io.File;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.CommandInfo;
-import model.SourceReader;
 import model.tables.DirectiveTable;
 import model.tables.ErrorTable;
 import model.tables.InstructionTable;

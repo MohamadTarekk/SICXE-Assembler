@@ -2,9 +2,9 @@
          START   1000              comment
 Q1       LDA     BETA              comment
   ss     LDS     GAMMA
-SSSS     ADD     S,A               comment
+SSSS     ADD     TEST              comment
          STA     ALPHA
-SSSS     MULR    A
+SSS      MULR    A,S
          LDA     BETA
          SUBR    S,A
          STA     DELTA              mmm
@@ -24,11 +24,10 @@ LINES       ADDRESS     LABEL       MNEMONIC    ADDR_MODE   OPERAND1    OPERAND2
 2           1000        Q1          LDA                     BETA                    comment                         
 3           1003          SS        LDS                     GAMMA                                                   
 ERROR: Misplaced label
-4           1006        SSSS        ADD                     S           A           comment                         
+4           1006        SSSS        ADD                     TEST                    comment                         
 ERROR: Wrong operand type 
 5           1009                    STA                     ALPHA                                                   
-6           100C        SSSS        MULR                    A                                                       
-ERROR: Duplicate label definition 
+6           100C        SSS         MULR                    A           S                                           
 7           100E                    LDA                     BETA                                                    
 8           1011                    SUBR                    S           A                                           
 9           1013                    STA                     DELTA                    mmm                            

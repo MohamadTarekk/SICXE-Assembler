@@ -45,7 +45,7 @@ public class SceneController implements Initializable {
         }
         textArea.setText(toBePrinted);
         Utility.writeFile(toBePrinted,"res/LIST/listFile.txt");
-
+        Utility.clearAll();
     }
     @FXML
     private void loadFileOnAction(){
