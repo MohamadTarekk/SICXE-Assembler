@@ -6,14 +6,9 @@ public class CommandInfo {
 
 	private static CommandInfo instance = null;
 
-	private CommandInfo() {
+	public CommandInfo() {
 	}
 
-	public static CommandInfo getInstance() {
-		if (instance == null)
-			instance = new CommandInfo();
-		return instance;
-	}
 	
 	ProgramCounter pc = ProgramCounter.getInstance();
 
