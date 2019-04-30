@@ -31,12 +31,13 @@ public class InstructionTable {
 			Matcher m = reg.matcher(fileInfo.get(i));
 			if (!m.find())
 				continue;
-			Instruction instruction = new Instruction(m.group(1).replaceAll("\\s+",""), Integer.parseInt(m.group(2), 16));
-			String firstOperand = m.group(3).replaceAll("\\s+","");
-			String secondOperand = m.group(4).replaceAll("\\s+","");
-			String format = m.group(5).replaceAll("\\s+","");
+			Instruction instruction = new Instruction(m.group(1).replaceAll("\\s+", ""),
+					Integer.parseInt(m.group(2), 16));
+			String firstOperand = m.group(3).replaceAll("\\s+", "");
+			String secondOperand = m.group(4).replaceAll("\\s+", "");
+			String format = m.group(5).replaceAll("\\s+", "");
 			setInstruction(instruction, firstOperand, secondOperand, format);
-			instructionTable.put(m.group(1).replaceAll("\\s+",""), instruction);
+			instructionTable.put(m.group(1).replaceAll("\\s+", ""), instruction);
 		}
 	}
 

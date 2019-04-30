@@ -25,7 +25,7 @@ public class ProgramCounter {
 
 	public void updateCounters(Line line) {
 		String mnemonic = line.getMnemonic();
-		if (mnemonic == null||mnemonic=="")
+		if (mnemonic == null || mnemonic == "")
 			return;
 		String hexaValue = convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
@@ -35,7 +35,7 @@ public class ProgramCounter {
 			hexaValue = convertToHexa(locationCounter);
 			line.setLocation(hexaValue);
 		}
-		
+
 		if (Utility.isDirective(mnemonic)) {
 			switch (DirectiveTable.directiveTable.get(mnemonic).getLength()) {
 			case THREE:
@@ -60,9 +60,8 @@ public class ProgramCounter {
 			default:
 				break;
 			}
-		}
-		else if(Utility.isInstruction(mnemonic)) {
-			switch(InstructionTable.instructionTable.get(mnemonic).getFormat()) {
+		} else if (Utility.isInstruction(mnemonic)) {
+			switch (InstructionTable.instructionTable.get(mnemonic).getFormat()) {
 			case ONE:
 				locationCounter += 1;
 				break;
@@ -84,7 +83,7 @@ public class ProgramCounter {
 	private int hexToDecimal(String hex) {
 		return Integer.parseInt(hex, 16);
 	}
-	
+
 	private String convertToHexa(int address) {
 		String hexadecimalValue = String.format("%1$04X", address);
 		return hexadecimalValue;

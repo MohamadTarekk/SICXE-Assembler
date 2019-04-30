@@ -30,26 +30,29 @@ public class Main extends Application {
 		DirectiveTable.loadDirectiveTable();
 		ErrorTable.loadErrorList();
 		RegisterTable.loadRegisterTabkle();
-		//CommandInfo CI = SourceReader.getInstance()
-		//		.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"),true);
-		//CI.addToLineList();
+		// CommandInfo CI = SourceReader.getInstance()
+		// .processFile(SourceReader.getInstance().readFile("res/SIC
+		// files/SIC_1.txt"),true);
+		// CI.addToLineList();
 		//
-		//int len = CI.getLinesList().size();
-		//for (int i = 0; i < len; i++) {
-		//	System.out.println(CI.getLinesList().get(i).toString());
-		//}
-		
-		/*for (String name : InstructionTable.instructionTable.keySet()) {
-			String key = name.toString();
-			String value = InstructionTable.instructionTable.get(name).toString();
-			System.out.println(key + " " + value);
-		}*/
-		
-		/*for (String name : DirectiveTable.directiveTable.keySet()) {
-			String key = name.toString();
-			String value = DirectiveTable.directiveTable.get(name).toString();
-			System.out.println(key + " " + value);
-		}*/
+		// int len = CI.getLinesList().size();
+		// for (int i = 0; i < len; i++) {
+		// System.out.println(CI.getLinesList().get(i).toString());
+		// }
+
+		/*
+		 * for (String name : InstructionTable.instructionTable.keySet()) { String key =
+		 * name.toString(); String value =
+		 * InstructionTable.instructionTable.get(name).toString();
+		 * System.out.println(key + " " + value); }
+		 */
+
+		/*
+		 * for (String name : DirectiveTable.directiveTable.keySet()) { String key =
+		 * name.toString(); String value =
+		 * DirectiveTable.directiveTable.get(name).toString(); System.out.println(key +
+		 * " " + value); }
+		 */
 
 	}
 
