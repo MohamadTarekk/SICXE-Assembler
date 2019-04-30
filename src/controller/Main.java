@@ -31,14 +31,14 @@ public class Main extends Application {
 		DirectiveTable.loadDirectiveTable();
 		ErrorTable.loadErrorList();
 		RegisterTable.loadRegisterTabkle();
-		CommandInfo CI = SourceReader.getInstance()
-				.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"),true);
-		CI.addToLineList();
-		
-		int len = CI.getLinesList().size();
-		for (int i = 0; i < len; i++) {
-			System.out.println(CI.getLinesList().get(i).toString());
-		}
+		//CommandInfo CI = SourceReader.getInstance()
+		//		.processFile(SourceReader.getInstance().readFile("res/SIC files/SIC_1.txt"),true);
+		//CI.addToLineList();
+		//
+		//int len = CI.getLinesList().size();
+		//for (int i = 0; i < len; i++) {
+		//	System.out.println(CI.getLinesList().get(i).toString());
+		//}
 		
 		/*for (String name : InstructionTable.instructionTable.keySet()) {
 			String key = name.toString();

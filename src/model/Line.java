@@ -1,5 +1,7 @@
 package model;
 
+import model.utility.Utility;
+
 public class Line {
 
 	private String location;
@@ -85,38 +87,34 @@ public class Line {
 		this.error = error;
 	}
 
-	public String getSpaces(int count){
-		String s=new String();
-		for(int i=0;i<count;i++)s+=" ";
-		return s;
-	}
+
 	@Override
 	public String toString() {
+		if(label.equals("(~)"))return comment;
 		final int maxSizePerInfo=20;
 		int maxSize=maxSizePerInfo;
 		String lineInfo=location;
 
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		lineInfo+= Utility.getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
 		lineInfo+=label;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		lineInfo+=Utility.getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
 		lineInfo+=mnemonic;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		lineInfo+=Utility.getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
 		lineInfo+=addressingMode;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		lineInfo+=Utility.getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
 		lineInfo+=firstOperand;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		lineInfo+=Utility.getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
 		lineInfo+=secondOperand;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
+		lineInfo+=Utility.getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
 		lineInfo+=comment;
-		lineInfo+=error;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
-		maxSize+=maxSizePerInfo;
+		if(!error.equals(""))
+		lineInfo+="\n"+error;
 
 	return lineInfo;
 	}

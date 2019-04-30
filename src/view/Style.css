@@ -24,7 +24,7 @@
 .text-area {
     -fx-font-size: 14pt;
     -fx-font-weight: 900;
-    -fx-font-family: "Century Gothic";
+    -fx-font-family: monospace;
     -fx-text-fill: #3f474f;
     //-fx-opacity: 0.7;
 }
@@ -38,7 +38,6 @@
         -fx-dark-text-color  59%,
         -fx-mid-text-color   60%
     );
-    -fx-font-family: "Century Gothic";
 }
 
  

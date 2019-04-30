@@ -4,6 +4,11 @@ import model.CommandInfo;
 import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.tables.RegisterTable;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class Utility {
 	
@@ -39,6 +44,11 @@ public class Utility {
 			return true;
 		return false;	
 	}
+	public static String getSpaces(int count){
+		String s=new String();
+		for(int i=0;i<count;i++)s+=" ";
+		return s;
+	}
 	public static String removeExtraSpaces(String input){
 		String s="";
 		for(int i=0;i<input.length();i++){
@@ -46,5 +56,16 @@ public class Utility {
 			s+=input.charAt(i);
 		}
 		return s;
+	}
+	public static void writeFile(String s,String filePath){
+		File file = new File(filePath);
+
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			bw.write(s);
+			bw.close();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
 	}
 }

@@ -48,6 +48,7 @@ public class SourceReader {
             int len = fileInfo.size();
             for (int i = 0; i < len; i++) {
                 String currentLine = fileInfo.get(i);
+                if(currentLine.equals(""))continue;
                 while(currentLine.length()<67)currentLine+=" ";
                 CI.addWholeInstruction(currentLine);
                 if (currentLine.charAt(0) == '.') {

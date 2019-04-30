@@ -5,7 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
+import model.CommandInfo;
 import model.SourceReader;
+import model.utility.Utility;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,6 +25,17 @@ public class SceneController implements Initializable {
     private CheckBox restricted;
     @FXML
     private void assembleOnAction(){
+        Utility.writeFile(textArea.getText(),"res/functionality/ASSEMBLING");
+        CommandInfo CI = SourceReader.getInstance()
+                .processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"),restricted.isSelected());
+        CI.addToLineList();
+
+        int len = CI.getLinesList().size();
+        for (int i = 0; i < len; i++) {
+            System.out.println(CI.getLinesList().get(i).toString());
+        }
+
+
     }
     @FXML
     private void loadFileOnAction(){
@@ -31,11 +44,13 @@ public class SceneController implements Initializable {
         for(String s:arr){
             append+=s+"\n";
         }
+
         textArea.setText(append);
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        restricted.setSelected(true);
+        textArea.setPromptText("Write your code here / load file to load default file.");
     }
 
 

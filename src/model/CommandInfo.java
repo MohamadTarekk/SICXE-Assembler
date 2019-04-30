@@ -32,7 +32,7 @@ public class CommandInfo {
 
 	public void addDefaults() {
 		addMatchedInstruction("NOMATCH");
-		addLabel("الوو");
+	    addLabel("(~)");
 		addCommand("NOP");
 		addOperand1("");
 		addAddressMode("");

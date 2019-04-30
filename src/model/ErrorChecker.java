@@ -66,7 +66,7 @@ public class ErrorChecker {
 		 * LABEL_STARTING_WITH_DIGIT
 		 */
 		String label = line.getLabel();
-		if(!label.equals("") && !label.equals("NOLABEL")) {
+		if(!label.equals("") && !label.equals("(~)")) {
 			if(labelList.contains(label)) {
 				error = ErrorTable.errorList[ErrorTable.DUPLICATE_LABEL_DEFINITION];
 				return true;
