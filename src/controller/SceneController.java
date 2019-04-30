@@ -46,7 +46,7 @@ public class SceneController implements Initializable {
             toBePrinted+= lineCount+Utility.getSpaces(12-lineCount.length())+ CI.getLinesList().get(i).toString()+"\n";
         }
         textArea.setText(toBePrinted);
-
+        Utility.writeFile(toBePrinted,"res/LIST/listFile.txt");
 
     }
     @FXML

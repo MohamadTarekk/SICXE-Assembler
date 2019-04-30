@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f2f4e608-6128-4bb3-bcec-6be1ab885fda" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/SICAssembler/controller/Main.class" afterPath="$PROJECT_DIR$/out/production/SICAssembler/controller/Main.class" />
-      <change beforePath="$PROJECT_DIR$/src/controller/Main.java" afterPath="$PROJECT_DIR$/src/controller/Main.java" />
       <change beforePath="$PROJECT_DIR$/src/controller/SceneController.java" afterPath="$PROJECT_DIR$/src/controller/SceneController.java" />
-      <change beforePath="$PROJECT_DIR$/src/model/Line.java" afterPath="$PROJECT_DIR$/src/model/Line.java" />
-      <change beforePath="$PROJECT_DIR$/src/model/ListGenerator.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/model/SourceReader.java" afterPath="$PROJECT_DIR$/src/model/SourceReader.java" />
-      <change beforePath="$PROJECT_DIR$/src/model/utility/Utility.java" afterPath="$PROJECT_DIR$/src/model/utility/Utility.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,19 +27,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#451#480#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ErrorChecker.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/ErrorChecker.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="193" column="52" lean-forward="false" selection-start-line="193" selection-start-column="52" selection-end-line="193" selection-end-column="52" />
-              <folding>
-                <element signature="e#7339#7340#0" expanded="true" />
-                <element signature="e#7366#7367#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -116,14 +96,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SceneController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SceneController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/controller/SceneController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="38" column="79" lean-forward="false" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
+            <state relative-caret-position="368">
+              <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="listFile.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/res/LIST/listFile.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -220,6 +210,12 @@
               <item name="SICAssembler" type="b2602c69:ProjectViewProjectNode" />
               <item name="SICAssembler" type="462c0819:PsiDirectoryNode" />
               <item name="res" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SICAssembler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SICAssembler" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="LIST" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SICAssembler" type="b2602c69:ProjectViewProjectNode" />
@@ -900,11 +896,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/controller/SceneController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="38" column="79" lean-forward="false" selection-start-line="38" selection-start-column="79" selection-end-line="38" selection-end-column="79" />
+        <state relative-caret-position="368">
+          <caret line="48" column="60" lean-forward="false" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/LIST/listFile.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
