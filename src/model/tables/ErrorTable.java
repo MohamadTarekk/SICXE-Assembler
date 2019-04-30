@@ -40,7 +40,7 @@ public class ErrorTable {
 		errorList[CANT_BE_FORTMAT4_INSTRUCTION] = "ERROR: Can’t be format 4 instruction \n"; //DONE
 		errorList[ILLEGAL_ADDRESS_FOR_REGISTER] = "ERROR: Illegal address for a register \n"; //DONE
 		errorList[MISSING_END_STATEMENT] = "ERROR: Missing END statement \n";
-		errorList[LABEL_CANT_START_WITH_DIGIT] = "ERROR: Label can't start with a digit \n";
+		errorList[LABEL_CANT_START_WITH_DIGIT] = "ERROR: Label can't start with a digit \n"; //DONE
 		errorList[WRONG_OPERAND_TYPE] = "ERROR: Wrong operand type \n"; //DONE
 		errorList[WRONG_ADDRESSING_MODE] = "ERROR: Wrong addressing Mode \n"; //DONE
 		errorList[MISSING_FIRST_OPERAND] = "ERROR: Missing first operand \n"; //DONE

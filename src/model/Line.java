@@ -113,10 +113,6 @@ public class Line {
 		lineInfo+=secondOperand;
 		lineInfo+=getSpaces(maxSize-lineInfo.length());
 		maxSize+=maxSizePerInfo;
-		lineInfo+=comment;
-		lineInfo+=error;
-		lineInfo+=getSpaces(maxSize-lineInfo.length());
-		maxSize+=maxSizePerInfo;
 
 	return lineInfo;
 	}
