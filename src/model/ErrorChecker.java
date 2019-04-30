@@ -48,8 +48,24 @@ public class ErrorChecker {
 
 	private boolean verifyIfMisplaced(Line line) {
 		String label = line.getLabel();
-		if (label.startsWith("  ")) {
+		if (label.startsWith(" ")) {
 			error = ErrorTable.errorList[ErrorTable.MISPLACED_LABEL];
+			return true;
+		}
+		if(Utility.containsMisplacedLetter(label)){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+			return true;
+		}
+		if(line.getMnemonic().startsWith(" ")){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+			return true;
+		}
+		if(Utility.containsMisplacedLetter(line.getMnemonic())){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+			return true;
+		}
+		if(line.getFirstOperand().startsWith(" ")){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 			return true;
 		}
 		return false;

@@ -37,9 +37,9 @@ public class CommandInfo {
 	public void addToLineList() {
 		int length = wholeInstruction.size();
 		for (int i = 0; i < length; i++) {
-			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(),
-					addressingModeList.get(i).toUpperCase(), operand1List.get(i).toUpperCase(),
-					operand2List.get(i).toUpperCase(), commentList.get(i));
+			Line line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
+					addressingModeList.get(i), operand1List.get(i),
+					operand2List.get(i), commentList.get(i));
 			ErrorChecker.getInstance().verifyLine(line);
 			pc.updateCounters(line);
 			linesList.add(line);

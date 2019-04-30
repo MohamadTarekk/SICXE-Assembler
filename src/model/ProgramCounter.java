@@ -25,11 +25,10 @@ public class ProgramCounter {
 
 	public void updateCounters(Line line) {
 		String mnemonic = line.getMnemonic();
-		if (mnemonic == null || mnemonic == "")
-			return;
 		String hexaValue = convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
-
+		if (mnemonic == null || mnemonic == "")
+				return;
 		if (mnemonic.equals("Start".toUpperCase())) {
 			locationCounter = hexToDecimal(line.getFirstOperand());
 			hexaValue = convertToHexa(locationCounter);
