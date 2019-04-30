@@ -2,7 +2,7 @@
          START   1000              comment
 Q1       LDA     BETA              comment
          LDS     GAMMA
-SSSS     ADD     S,A               comment
+SSSS     +ADD    #5                comment
          STA     ALPHA
 SSSS     MULR    A
          LDA     BETA
@@ -23,17 +23,17 @@ LINES       ADDRESS     LABEL       MNEMONIC    ADDR_MODE   OPERAND1    OPERAND2
 1           1000                    START                   1000                    comment                         
 2           1000        Q1          LDA                     BETA                    comment                         
 3           1003                    LDS                     GAMMA                                                   
-4           1006        SSSS        ADD                     S           A           comment                         
-ERROR: Wrong operand type 
-5           1009                    STA                     ALPHA                                                   
-6           100C        SSSS        MULR                    A                                                       
+4           1006        SSSS        +ADD                    #5                      comment                         
+ERROR: Can�t be format 4 instruction 
+5           100A                    STA                     ALPHA                                                   
+6           100D        SSSS        MULR                    A                                                       
 ERROR: Duplicate label definition 
-7           100E                    LDA                     BETA                                                    
-8           1011                    SUBR                    S           A                                           
-9           1013                    STA                     DELTA                    mmm                            
+7           100F                    LDA                     BETA                                                    
+8           1012                    SUBR                    S           A                                           
+9           1014                    STA                     DELTA                    mmm                            
 10          .This is a comment                                                 
-11          1016        BETA        WORD                    39                                                      
-12          1019        GAMMA       WORD                    6                                                       
-13          101C        ALPHA       RESW                    1                                                       
-14          101F        DELTA       RESW                    1                                                       
-15          1022                    END                     Q1                                                      
+11          1017        BETA        WORD                    39                                                      
+12          101A        GAMMA       WORD                    6                                                       
+13          101D        ALPHA       RESW                    1                                                       
+14          1020        DELTA       RESW                    1                                                       
+15          1023                    END                     Q1                                                      
