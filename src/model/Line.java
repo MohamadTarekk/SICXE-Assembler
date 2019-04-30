@@ -90,7 +90,7 @@ public class Line {
 
 	@Override
 	public String toString() {
-		if(label.equals("(~)"))return comment;
+		if(label.contains("(~)"))return comment;
 		final int maxSizePerInfo=20;
 		int maxSize=maxSizePerInfo;
 		String lineInfo=location;

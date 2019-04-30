@@ -77,7 +77,6 @@ public class SourceReader {
                     CI.addOperand2("");
                     CI.addComment("");
                 }
-               CI.addComment(currentLine.substring(35,66));
             }
         } else {
 
