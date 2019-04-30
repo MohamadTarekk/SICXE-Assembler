@@ -1,7 +1,7 @@
 .23456789012345678901234567890123456
          START   1000              comment
 Q1       LDA     BETA              comment
-  ss     LDS     GAMMA
+ss     LDS     GAMMA
 SSSS     ADD     S,A               comment
          STA     ALPHA
 SSSS     MULR    A

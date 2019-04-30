@@ -20,8 +20,12 @@ public class ErrorChecker {
 	
 	private ArrayList<String> labelList = new ArrayList<>();
 
-	public void verifyLine(String instruction, Line line) {
-		//verifyIfMisplaced(instruction, line);
+	public void verifyLine(Line line) {
+		if(verifyIfMisplaced(line)) {
+			setLineError(line);
+			return;
+
+		}
 		if(verifyLabel(line)) {
 			setLineError(line);
 			return;
@@ -42,19 +46,13 @@ public class ErrorChecker {
 		setLineError(line);
 	}
 
-	private void verifyIfMisplaced(String instruction, Line line) {
-		String label = instruction.substring(0, 9);
-		String mnemonic = instruction.substring(10, 16);
-		/*
-		 * String operand = instruction.substring(18, 36); 
-		 * String comment = instruction.substring(36,67);
-		 */
-		if (checkIfMisplaced(label, line.getLabel()))
+	private boolean verifyIfMisplaced(Line line) {
+		String label = line.getLabel();
+		if(label.startsWith("  ")) {
 			error = ErrorTable.errorList[ErrorTable.MISPLACED_LABEL];
-		if (checkIfMisplaced(mnemonic, line.getMnemonic()))
-			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
-		error = ErrorTable.errorList[ErrorTable.NO_ERROR];
-
+			return true;
+		}
+		return false;
 		/*
 		 * TODO: MISSING_MISPLACED_OPERAND_FIELD
 		 */
