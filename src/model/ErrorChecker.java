@@ -101,6 +101,7 @@ public class ErrorChecker {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERATION_PREFIX];
 					return true;
 				}
+				break;
 			default:
 				if (mnemonic.startsWith("+")) {
 					error = ErrorTable.errorList[ErrorTable.CANT_BE_FORTMAT4_INSTRUCTION];
