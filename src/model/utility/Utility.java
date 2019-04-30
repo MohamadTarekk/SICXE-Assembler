@@ -11,38 +11,37 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Utility {
-	
+
 	public static boolean isDirective(String directiveMnemonic) {
-		if(DirectiveTable.directiveTable.containsKey(directiveMnemonic.toUpperCase())) 
+		if (DirectiveTable.directiveTable.containsKey(directiveMnemonic.toUpperCase()))
 			return true;
 		return false;
 	}
-	
+
 	public static boolean isInstruction(String instructionMnemonic) {
-		if(InstructionTable.instructionTable.containsKey(instructionMnemonic.toUpperCase()))
+		if (InstructionTable.instructionTable.containsKey(instructionMnemonic.toUpperCase()))
 			return true;
 		return false;
 	}
-	
+
 	public static boolean isRegister(String registerName) {
-		if(RegisterTable.registerTable.containsKey(registerName.toUpperCase()))
+		if (RegisterTable.registerTable.containsKey(registerName.toUpperCase()))
 			return true;
 		return false;
 
 	}
-	
+
 	public static boolean isLabel(String labelName) {
-		if(CommandInfo.labelList.contains(labelName))
+		if (CommandInfo.labelList.contains(labelName))
 			return true;
 		return false;
 
 	}
 
-	
 	public static boolean isComment(String line) {
-		if(line.startsWith("."))
+		if (line.startsWith("."))
 			return true;
-		return false;	
+		return false;
 	}
 	public static String getSpaces(int count){
 		String s=new String();

@@ -45,6 +45,7 @@ public class ErrorTable {
 		errorList[WRONG_ADDRESSING_MODE] = "ERROR: Wrong addressing Mode "; //DONE
 		errorList[MISSING_FIRST_OPERAND] = "ERROR: Missing first operand "; //DONE
 		errorList[MISSING_SECOND_OPERAND] = "ERROR: Missing second operand "; //DONE
+
 		errorList[NO_ERROR] = "";
 	}
 
