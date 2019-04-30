@@ -24,7 +24,7 @@ public class Main extends Application {
 
 		Parent root = FXMLLoader.load(new File("src/view/scene.fxml").toURI().toURL());
 		primaryStage.setTitle("SIC/XE Assembler");
-		primaryStage.setScene(new Scene(root, 800, 600));
+		primaryStage.setScene(new Scene(root, 1024, 768));
 		primaryStage.show();
 
 		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");

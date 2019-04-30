@@ -49,8 +49,16 @@ public class Utility {
 		return s;
 	}
 	public static String removeExtraSpaces(String input){
-		String s="";
+
+		int firstCharIdx=0;
 		for(int i=0;i<input.length();i++){
+			if(input.charAt(i)==' ')break;
+			firstCharIdx=i;
+		}
+		String s="";
+		if(firstCharIdx>0)
+		s=input.substring(0,firstCharIdx);
+		for(int i=firstCharIdx;i<input.length();i++){
 			if(input.charAt(i)==' ')return s;
 			s+=input.charAt(i);
 		}

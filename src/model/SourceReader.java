@@ -46,10 +46,12 @@ public class SourceReader {
         // need to match for commands , labels , ...
         if (isRestricted) {
             int len = fileInfo.size();
+            String Spaces="";
+            while(Spaces.length()<67)Spaces+=" ";
             for (int i = 0; i < len; i++) {
                 String currentLine = fileInfo.get(i);
-                if(currentLine.equals(""))continue;
                 while(currentLine.length()<67)currentLine+=" ";
+                if(currentLine.equals("")||currentLine.equals(Spaces))continue;
                 CI.addWholeInstruction(currentLine);
                 if (currentLine.charAt(0) == '.') {
                     CI.addDefaults();
@@ -70,13 +72,12 @@ public class SourceReader {
                         CI.addOperand1(op1op2[0]);
                     }
                     CI.addOperand2(op1op2[1]);
-                    CI.addComment("");
                 } else {
                     CI.addOperand1(operand);
                     CI.addAddressMode("");
                     CI.addOperand2("");
-                    CI.addComment("");
                 }
+                CI.addComment(currentLine.substring(35,67));
             }
         } else {
 
