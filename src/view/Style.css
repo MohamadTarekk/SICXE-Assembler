@@ -1,6 +1,6 @@
 .root {
     -fx-base: #3f474f;
-    -fx-accent: #e7eff7 ;
+    -fx-accent: #7f878f ;
     -fx-default-button: #7f878f ;
     -fx-focus-color: #efefef;
     -fx-faint-focus-color: #efefef22;
@@ -25,7 +25,7 @@
     -fx-font-size: 14pt;
     -fx-font-weight: 900;
     -fx-font-family: monospace;
-    -fx-text-fill: #3f474f;
+    -fx-text-fill: #ffffff;
     -fx-opacity: 0.7;
 }
 
