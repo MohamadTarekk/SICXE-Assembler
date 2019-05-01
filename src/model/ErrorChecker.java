@@ -18,10 +18,9 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	private ArrayList<String> labelList ;
+	private ArrayList<String> labelList = new ArrayList<>(); ;
 
 	public void verifyLine(Line line) {
-		labelList = new ArrayList<>();
 		if (verifyIfMisplaced(line)) {
 			setLineError(line);
 			return;
@@ -277,10 +276,6 @@ public class ErrorChecker {
 
 	private void setLineError(Line line) {
 		line.setError(error);
-	}
-
-	private boolean checkIfMisplaced(String input, String correctVal) {
-		return !input.equals(correctVal);
 	}
 
 	public String getError() {

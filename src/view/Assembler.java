@@ -102,7 +102,7 @@ public class Assembler {
 		}
 		textArea.setText(toBePrinted);
 		Utility.writeFile(toBePrinted,"res/LIST/listFile.txt");
-
+		Utility.clearAll();
 	}
 
 	public void loadFileOnAction(){
