@@ -1,6 +1,7 @@
 package view;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javafx.fxml.FXMLLoader;
@@ -110,6 +111,8 @@ public class Assembler {
 		fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
 		fileChooser.getExtensionFilters().add(extFilter);
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/SIC files";
+		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showOpenDialog(window);
 		if(file != null) {
 			path = file.getAbsolutePath();
