@@ -178,7 +178,7 @@ public class ErrorChecker {
 					return true;
 				}
 				if(line.getAddressingMode().equals("#")) {
-					if(!isNumeric(line.getFirstOperand())) {
+					if(!isNumeric(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())) {
 						error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
 						return true;
 					}
