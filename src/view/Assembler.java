@@ -59,6 +59,7 @@ public class Assembler {
     }
 
     public void assembleOnAction() {
+
         Utility.writeFile(textArea.getText(), "res/functionality/ASSEMBLING");
         CommandInfo CI = SourceReader.getInstance()
                 .processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"), restricted.isSelected());
@@ -98,8 +99,8 @@ public class Assembler {
 
 			}
 			Utility.writeFile(address, "res/LIST/symTable.txt");
-            Utility.clearAll();
         }
+        Utility.clearAll();
     }
 
     public void loadFileOnAction() {
