@@ -87,6 +87,12 @@ public class Assembler {
             }
             textArea.setText(toBePrintedInTextArea);
             Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
+            String address = "";
+            for (int i = 0; i < CI.getLinesList().size(); i++) {
+            	address += CI.getLinesList().get(i).getLocation();
+            	address += "\n";
+			}
+			Utility.writeFile(address, "res/LIST/symTable.txt");
             Utility.clearAll();
         }
     }
