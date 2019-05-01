@@ -22,7 +22,13 @@
     </SUITE>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -61,17 +67,17 @@
         <option value="$PROJECT_DIR$/res/SIC files/SIC_2.txt" />
         <option value="$PROJECT_DIR$/res/SIC files/free format mode example.txt" />
         <option value="$PROJECT_DIR$/src/model/Directive.java" />
-        <option value="$PROJECT_DIR$/src/model/ProgramCounter.java" />
         <option value="$PROJECT_DIR$/src/model/ErrorChecker.java" />
         <option value="$PROJECT_DIR$/src/model/CommandInfo.java" />
         <option value="$PROJECT_DIR$/src/model/SourceReader.java" />
         <option value="$PROJECT_DIR$/src/model/utility/Utility.java" />
         <option value="$PROJECT_DIR$/src/view/Assembler.java" />
+        <option value="$PROJECT_DIR$/src/model/ProgramCounter.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
+    <option name="x" value="-10" />
     <option name="width" value="1455" />
     <option name="height" value="865" />
   </component>
@@ -101,7 +107,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556702698570" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556703277546" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15917969" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -363,21 +369,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/ProgramCounter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#434#435#0" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#2071#2072#0" expanded="true" />
-            <element signature="e#2110#2111#0" expanded="true" />
-            <element signature="e#2187#2188#0" expanded="true" />
-            <element signature="e#2233#2234#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/CommandInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
@@ -427,6 +418,21 @@
           <caret lean-forward="true" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/ProgramCounter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2299#2300#0" expanded="true" />
+            <element signature="e#2345#2346#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">

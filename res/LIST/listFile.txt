@@ -1,42 +1,10 @@
-.2345678_0123456_8901234567890123456
-         START   1000              comment
-Q1     LDA      #BETA              comment
-  ss     LDS     GAMMA
-SSSS     ADD     TEST              comment
-         STA     ALPHA
-SSS      MULR    A,S
-         LDA     BETA
-         SUBR    S,A
-         STA     DELTA              mmm
-.This is a comment
-         ORG     2
-BETA     WORD    39
-GAMMA    WORD    6
-ALPHA    RESW    1
-DELTA    RESW    1
-         END     Q1
+
+
+
+
+
 
 -_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-
     S   T   A   R   T      O   F      P   A   S   S   1
 -_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-
 LINES       ADDRESS     LABEL       MNEMONIC    ADDR_MODE   OPERAND1    OPERAND2    COMMENTS
-0           .2345678_0123456_8901234567890123456                               
-1           1000                    START                   1000                    comment                         
-2           1000        Q1     L    A                       BETA                    comment                         
-ERROR: Missing or misplaced operation mnemonic 
-3           1000          ss        LDS                     GAMMA                                                   
-ERROR: Misplaced label
-4           1003        SSSS        ADD                     TEST                    comment                         
-ERROR: Wrong operand type 
-5           1006                    STA                     ALPHA                                                   
-6           1009        SSS         MULR                    A           S                                           
-7           100B                    LDA                     BETA                                                    
-8           100E                    SUBR                    S           A                                           
-9           1010                    STA                     DELTA                    mmm                            
-10          .This is a comment                                                 
-11          1013                    ORG                     2                                                       
-12          0002        BETA        WORD                    39                                                      
-13          0005        GAMMA       WORD                    6                                                       
-14          0008        ALPHA       RESW                    1                                                       
-15          000B        DELTA       RESW                    1                                                       
-16          000E                    END                     Q1                                                      
