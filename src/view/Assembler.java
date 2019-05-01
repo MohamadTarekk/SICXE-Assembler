@@ -89,8 +89,13 @@ public class Assembler {
             Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
             String address = "";
             for (int i = 0; i < CI.getLinesList().size(); i++) {
-            	address += CI.getLinesList().get(i).getLocation();
-            	address += "\n";
+                if(!CI.getLinesList().get(i).getLabel().equals("")&&!CI.getLinesList().get(i).getLabel().equals("(~)")){
+                    address +=CI.getLinesList().get(i).getLabel();
+                    address +=Utility.getSpaces(12-CI.getLinesList().get(i).getLabel().length());
+                    address +=CI.getLinesList().get(i).getLocation();
+                    address += "\n";
+                }
+
 			}
 			Utility.writeFile(address, "res/LIST/symTable.txt");
             Utility.clearAll();

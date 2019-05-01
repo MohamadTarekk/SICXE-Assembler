@@ -138,14 +138,14 @@ public class Utility {
 		}
 	}
 
-	public static void extractAddressingModeFromOperand(String s, CommandInfo CI) {
-		if (s.charAt(0) == '#' || s.charAt(0) == '@') {
-			CI.addAddressMode(s.substring(0, 1));
+	public static void extractAddressingModeFromOperand(String input, CommandInfo CI) {
+		if (input.charAt(0) == '#' || input.charAt(0) == '@') {
+			CI.addAddressMode(input.substring(0, 1));
 			// noinspection StringOperationCanBeSimplified
-			CI.addOperand1(s.substring(1, s.length()));
+			CI.addOperand1(processOperandValue(input.substring(1, input.length())));
 		} else {
 			CI.addAddressMode("");
-			CI.addOperand1(s);
+			CI.addOperand1(processOperandValue(input));
 		}
 	}
 
@@ -153,13 +153,23 @@ public class Utility {
 		String[] op1op2 = input.split(",");
 		if (op1op2.length > 1) {
 			extractAddressingModeFromOperand(op1op2[0], CI);
-			CI.addOperand2(op1op2[1]);
+			CI.addOperand2(processOperandValue(op1op2[1]));
 		} else {
 			extractAddressingModeFromOperand(op1op2[0], CI);
 			CI.addOperand2("");
 		}
 	}
-
+	public static String processOperandValue(String input) {
+		if(input.equals(""))return "";
+		switch (input.charAt(0)){
+			case 'C': case 'c':
+				return input.substring(2,input.length()-1);
+			case 'X': case 'x':
+				return String.valueOf(Integer.parseInt(input.substring(2,input.length()-1),16));
+				default:
+				return input;
+		}
+	}
 	public static boolean containsMisplacedLetter(String s) {
 
 		int len = s.length();
