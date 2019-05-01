@@ -7,27 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3339fce9-0aa9-41be-91c7-abcfb02820a3" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/SICAssembler1.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/SICXE-Assembler.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/SICXE-Assembler/META-INF/MANIFEST.MF" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/SICXE-Assembler/view/Style.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/SICXE-Assembler/view/darkTheme.css" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/SICXE-Assembler/view/scene.fxml" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/SICAssembler_jar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Omar.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/mtmsm.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/SICAssembler.jar" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/SICAssembler_jar/SICAssembler.jar" afterPath="" />
       <change beforePath="$PROJECT_DIR$/res/LIST/listFile.txt" afterPath="$PROJECT_DIR$/res/LIST/listFile.txt" />
       <change beforePath="$PROJECT_DIR$/res/functionality/ASSEMBLING" afterPath="$PROJECT_DIR$/res/functionality/ASSEMBLING" />
-      <change beforePath="$PROJECT_DIR$/src/model/CommandInfo.java" afterPath="$PROJECT_DIR$/src/model/CommandInfo.java" />
-      <change beforePath="$PROJECT_DIR$/src/model/SourceReader.java" afterPath="$PROJECT_DIR$/src/model/SourceReader.java" />
       <change beforePath="$PROJECT_DIR$/src/view/Assembler.java" afterPath="$PROJECT_DIR$/src/view/Assembler.java" />
+      <change beforePath="$PROJECT_DIR$/src/view/scene.fxml" afterPath="$PROJECT_DIR$/src/view/scene.fxml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,8 +25,8 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/controller/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="21" column="1" lean-forward="false" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+            <state relative-caret-position="306">
+              <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -52,12 +35,32 @@
       <file leaf-file-name="Assembler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/view/Assembler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="80" column="68" lean-forward="false" selection-start-line="80" selection-start-column="68" selection-end-line="80" selection-end-column="68" />
+            <state relative-caret-position="1156">
+              <caret line="90" column="9" lean-forward="true" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
               <folding>
-                <element signature="e#4040#4041#0" expanded="true" />
-                <element signature="e#4111#4112#0" expanded="true" />
+                <element signature="e#4837#4838#0" expanded="true" />
+                <element signature="e#4908#4909#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ASSEMBLING" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/functionality/ASSEMBLING">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="listFile.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/LIST/listFile.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -68,8 +71,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="36" column="119" lean-forward="false" selection-start-line="36" selection-start-column="113" selection-end-line="36" selection-end-column="119" />
+            <state relative-caret-position="18">
+              <caret line="4" column="37" lean-forward="true" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -131,6 +134,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>inline</find>
+      <find>restrictedm</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -146,11 +150,12 @@
       <list>
         <option value="$PROJECT_DIR$/src/model/SourceReader.java" />
         <option value="$PROJECT_DIR$/src/model/CommandInfo.java" />
+        <option value="$PROJECT_DIR$/src/view/scene.fxml" />
         <option value="$PROJECT_DIR$/src/view/Assembler.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-7" />
     <option name="y" value="2" />
     <option name="width" value="1453" />
@@ -181,6 +186,23 @@
             <path>
               <item name="SICXE-Assembler" type="b2602c69:ProjectViewProjectNode" />
               <item name="SICXE-Assembler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SICXE-Assembler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SICXE-Assembler" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SICXE-Assembler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SICXE-Assembler" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="functionality" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SICXE-Assembler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SICXE-Assembler" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="LIST" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SICXE-Assembler" type="b2602c69:ProjectViewProjectNode" />
@@ -353,7 +375,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -392,10 +414,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/controller/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/model/SourceReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="21" column="1" lean-forward="false" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+        <state relative-caret-position="-71">
+          <caret line="129" column="41" lean-forward="false" selection-start-line="129" selection-start-column="41" selection-end-line="129" selection-end-column="41" />
           <folding />
         </state>
       </provider>
@@ -439,10 +461,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/SourceReader.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_172/javafx-src.zip!/com/sun/glass/ui/win/WinApplication.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-71">
-          <caret line="129" column="41" lean-forward="false" selection-start-line="129" selection-start-column="41" selection-end-line="129" selection-end-column="41" />
+        <state relative-caret-position="163">
+          <caret line="176" column="0" lean-forward="false" selection-start-line="176" selection-start-column="0" selection-end-line="176" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -452,19 +474,43 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="163">
-          <caret line="36" column="119" lean-forward="false" selection-start-line="36" selection-start-column="113" selection-end-line="36" selection-end-column="119" />
+        <state relative-caret-position="18">
+          <caret line="4" column="37" lean-forward="true" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/LIST/listFile.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/functionality/ASSEMBLING">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/Assembler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="80" column="68" lean-forward="false" selection-start-line="80" selection-start-column="68" selection-end-line="80" selection-end-column="68" />
+        <state relative-caret-position="1156">
+          <caret line="90" column="9" lean-forward="true" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
           <folding>
-            <element signature="e#4040#4041#0" expanded="true" />
-            <element signature="e#4111#4112#0" expanded="true" />
+            <element signature="e#4837#4838#0" expanded="true" />
+            <element signature="e#4908#4909#0" expanded="true" />
           </folding>
         </state>
       </provider>

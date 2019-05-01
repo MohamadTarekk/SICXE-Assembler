@@ -27,6 +27,7 @@ public class Assembler {
     FileChooser fileChooser;
     String path;
 
+    public MenuItem clearResult;
     public MenuItem loadFile;
     public MenuItem saveFile;
     public MenuItem saveAsFile;
@@ -62,23 +63,30 @@ public class Assembler {
         CommandInfo CI = SourceReader.getInstance()
                 .processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"), restricted.isSelected());
 
-        boolean firstPassDone=CI.addToLineList();
-        if(firstPassDone) {
-        String toBePrinted = textArea.getText();
-        toBePrinted += "\n-_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-";
-        toBePrinted += "\n    S   T   A   R   T      O   F      P   A   S   S   1";
-        toBePrinted += "\n-_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-\n";
-        String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "ADDRESS" + Utility.getSpaces(5) + "LABEL" + Utility.getSpaces(7) +
-                "MNEMONIC" + Utility.getSpaces(4) + "ADDR_MODE" + Utility.getSpaces(3) + "OPERAND1" + Utility.getSpaces(4) + "OPERAND2" + Utility.getSpaces(4) + "COMMENTS\n";
-        toBePrinted += TABLE_FORM;
+        boolean firstPassDone = CI.addToLineList();
+        if (firstPassDone) {
+            String toBePrintedInTextArea = textArea.getText();
+            final String lineSeparator = "\n-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
+            final String startPassOne = "\n    S   T   A   R   T      O   F      P   A   S   S   1";
+            toBePrintedInTextArea += lineSeparator;
+            toBePrintedInTextArea += startPassOne;
+            toBePrintedInTextArea += lineSeparator + "\n";
+            final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "ADDRESS" + Utility.getSpaces(5) + "LABEL" + Utility.getSpaces(7) +
+                    "MNEMONIC" + Utility.getSpaces(4) + "ADDR_MODE" + Utility.getSpaces(3) + "OPERAND1" + Utility.getSpaces(4) + "OPERAND2" + Utility.getSpaces(4) + "COMMENTS\n";
+            toBePrintedInTextArea += TABLE_FORM;
+            String toBePrintedInListFile = lineSeparator;
+            toBePrintedInListFile += startPassOne;
+            toBePrintedInListFile += lineSeparator + "\n";
+            toBePrintedInListFile += TABLE_FORM;
 
             int len = CI.getLinesList().size();
             for (int i = 0; i < len; i++) {
                 String lineCount = String.valueOf(i);
-                toBePrinted += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
+                toBePrintedInTextArea += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
+                toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
             }
-            textArea.setText(toBePrinted);
-            Utility.writeFile(toBePrinted, "res/LIST/listFile.txt");
+            textArea.setText(toBePrintedInTextArea);
+            Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
             Utility.clearAll();
         }
     }
@@ -100,6 +108,15 @@ public class Assembler {
             }
             textArea.setText(append);
         }
+    }
+
+    public void clearResultOnAction() {
+        ArrayList<String> arr = SourceReader.getInstance().readFile("res/functionality/ASSEMBLING");
+        String append = "";
+        for (String s : arr) {
+            append += s + "\n";
+        }
+        textArea.setText(append);
     }
 
     public void setRestrictedMsg() {
