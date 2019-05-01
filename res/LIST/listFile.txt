@@ -15,7 +15,7 @@ ERROR: Wrong operand type
 8           1011                    SUBR                    S           A           
 9           1013                    STA                     DELTA                   mmm
 10          .This is a comment
-11          1016        BETA        WORD                    57                      
+11          1016        BETA        WORD                    x'39'                   
 12          1019        GAMMA       WORD                    6                       
 13          101C        ALPHA       RESW                    1                       
 14          101F        DELTA       RESW                    1                       
