@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="SICAssembler:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2f4e608-6128-4bb3-bcec-6be1ab885fda" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/res/LIST/listFile.txt" afterPath="$PROJECT_DIR$/res/LIST/listFile.txt" />
-      <change beforePath="$PROJECT_DIR$/res/functionality/ASSEMBLING" afterPath="$PROJECT_DIR$/res/functionality/ASSEMBLING" />
-      <change beforePath="$PROJECT_DIR$/src/model/ErrorChecker.java" afterPath="$PROJECT_DIR$/src/model/ErrorChecker.java" />
-    </list>
+    <list default="true" id="f2f4e608-6128-4bb3-bcec-6be1ab885fda" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -74,7 +75,7 @@
       <file leaf-file-name="ErrorChecker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/model/ErrorChecker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
+            <state relative-caret-position="748">
               <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
               <folding />
             </state>
@@ -169,7 +170,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="-7" />
     <option name="y" value="2" />
     <option name="width" value="1453" />
@@ -272,7 +273,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15917969" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
@@ -421,7 +422,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="2" width="1453" height="865" extended-state="0" />
+    <frame x="-7" y="2" width="1453" height="865" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -789,7 +790,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/ErrorChecker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
+        <state relative-caret-position="748">
           <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
           <folding />
         </state>
@@ -801,10 +802,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>SICAssembler:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
