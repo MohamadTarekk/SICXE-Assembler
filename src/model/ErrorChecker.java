@@ -9,8 +9,14 @@ import model.tables.InstructionTable;
 import model.utility.Utility;
 
 public class ErrorChecker {
+
 	private static ErrorChecker instance = null;
 	private String error;
+	private ArrayList<String> labelList = new ArrayList<>();
+
+	private ErrorChecker(){
+		/* Private Constructor for Singleton*/
+	}
 
 	public static ErrorChecker getInstance() {
 		if (instance == null)
@@ -18,13 +24,10 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	private ArrayList<String> labelList = new ArrayList<>(); ;
-
 	public void verifyLine(Line line) {
 		if (verifyIfMisplaced(line)) {
 			setLineError(line);
 			return;
-
 		}
 		if (verifyLabel(line)) {
 			setLineError(line);
@@ -106,7 +109,7 @@ public class ErrorChecker {
 			error = ErrorTable.errorList[ErrorTable.UNRECOGNIZED_OPERATION_CODE];
 			return true;
 		}
-		// WRONG_OPERATION_PREFIX - CANT_BE_FORTMAT4_INSTRUCTION
+		// WRONG_OPERATION_PREFIX - CANT_BE_FORMAT4_INSTRUCTION
 		if (Utility.isInstruction(mnemonic)) {
 			switch (InstructionTable.instructionTable.get(mnemonic).getFormat()) {
 			case FOUR:
@@ -148,11 +151,9 @@ public class ErrorChecker {
 		 * STATEMENT_CANT_HAVE_OPERAND
 		 */
 		if (Utility.isDirective(mnemonic)) {
-			boolean temp = verifyDirectiveOperands(line);
-			return temp;
+			return verifyDirectiveOperands(line);
 		} else {
-			boolean temp = verifyInstructionOperands(line);
-			return temp;
+			return verifyInstructionOperands(line);
 		}
 	}
 

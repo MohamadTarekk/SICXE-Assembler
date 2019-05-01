@@ -6,10 +6,10 @@ public class CommandInfo {
 
 	// private static CommandInfo instance = null;
 
-	public CommandInfo() {
-	}
+	//public CommandInfo() {
+	//}
 
-	ProgramCounter pc = ProgramCounter.getInstance();
+	private ProgramCounter pc = ProgramCounter.getInstance();
 
 	// info for each line command
 	private ArrayList<String> wholeInstruction = new ArrayList<>();
@@ -21,7 +21,7 @@ public class CommandInfo {
 	private ArrayList<String> commentList = new ArrayList<>();
 
 	// All of the lines
-	private ArrayList<Line> linesList = new ArrayList<Line>();
+	private ArrayList<Line> linesList = new ArrayList<>();
 
 	public void addDefaults() {
 		addLabel("(~)");
@@ -34,8 +34,9 @@ public class CommandInfo {
 
 	public void addToLineList() {
 		int length = wholeInstruction.size();
-		for (int i = 0; i < length; i++) {
-			Line line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
+        Line line;
+        for (int i = 0; i < length; i++) {
+			line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
 					addressingModeList.get(i), operand1List.get(i),
 					operand2List.get(i), commentList.get(i));
 			ErrorChecker.getInstance().verifyLine(line);

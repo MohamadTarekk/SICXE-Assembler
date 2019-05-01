@@ -14,6 +14,7 @@ import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.tables.RegisterTable;
 
+@SuppressWarnings({"RedundantIfStatement", "BooleanMethodIsAlwaysInverted"})
 public class Utility {
 
     public static void clearAll() {
@@ -37,7 +38,6 @@ public class Utility {
         if (RegisterTable.registerTable.containsKey(registerName.toUpperCase()))
             return true;
         return false;
-
     }
 
     public static boolean isLabel(String labelName) {
@@ -54,7 +54,7 @@ public class Utility {
     }
 
     public static String getSpaces(int count) {
-        String s = new String();
+        String s = "";
         for (int i = 0; i < count; i++)
             s += " ";
         return s;
@@ -78,7 +78,7 @@ public class Utility {
         return matchArr;
     }
     public static int getNumberOfMatches(String input,String regex){
-        /** compile the regex using Java regex engine */
+        /* compile the regex using Java regex engine */
         Pattern reg = Pattern.compile(regex);
         int numSpaces=0;
         Matcher m=reg.matcher(input);
@@ -89,15 +89,15 @@ public class Utility {
         return numSpaces;
     }
     public static String removeExtraSpaces(String input) {
-        /**
-         *  keep matching spaces if there are 3 or more spaces don't trim them and return
-         *  e.g:_LABEL_LDA__ (underscores are spaces)
-         *  and also return if label end has letter
-         *  e.g : LABEL__LDA
+        /*
+           keep matching spaces if there are 3 or more spaces don't trim them and return
+           e.g:_LABEL_LDA__ (underscores are spaces)
+           and also return if label end has letter
+           e.g : LABEL__LDA
          */
         int numSpaces=getNumberOfMatches(input,"(\\s+)");
         if(numSpaces>=3||input.charAt(input.length()-1)!=' ')return input;
-        /**
+        /*
          * get the index for first char after several spaces to keep misplaced label for example exist
          */
 
@@ -136,6 +136,7 @@ public class Utility {
     public static void extractAddressingModeFromOperand(String s, CommandInfo CI) {
         if (s.charAt(0) == '#' || s.charAt(0) == '@') {
             CI.addAddressMode(s.substring(0, 1));
+            //noinspection StringOperationCanBeSimplified
             CI.addOperand1(s.substring(1, s.length()));
         } else {
             CI.addAddressMode("");

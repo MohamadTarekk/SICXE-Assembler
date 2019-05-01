@@ -6,14 +6,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SourceReader {
 
 	private static SourceReader instance = null;
 
 	private SourceReader() {
+		/*Private constructor for Singleton*/
 	}
 
 	/**
@@ -83,25 +82,23 @@ public class SourceReader {
 	 */
 	private CommandInfo processRestricted(ArrayList<String> fileInfo) {
 		CommandInfo CI = new CommandInfo();
-		int len = fileInfo.size();
 		String Spaces = "";
-		/**
+		/*
 		 * Temporary variable that holds 67 spaces to check if line have 1 space at
 		 * least as anyline that has less than 67 chars will be filled with spaces
 		 */
 		while (Spaces.length() < 67)
 			Spaces += " ";
 
-		for (int i = 0; i < len; i++) {
+		for (String currentLine : fileInfo) {
 
-			String currentLine = fileInfo.get(i);
 			while (currentLine.length() < 67)
 				currentLine += " ";
-			if (currentLine.equals("") || currentLine.equals(Spaces))
+			if (currentLine.equals(Spaces))
 				continue;
 			CI.addWholeInstruction(currentLine);
-			/**
-			 * this line is prefixed with comment so should be avoided however i had to add
+			/*
+			 * this line is prefixed with comment so should be avoided however it had to add
 			 * defaults to CI so it can be processed normally and so comment is printed not
 			 * ignored
 			 *
@@ -115,7 +112,7 @@ public class SourceReader {
 			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 8)));
 			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 16)));
 			String operand = Utility.removeExtraSpaces(currentLine.substring(17, 35));
-			/**
+			/*
 			 * get addressing mode - operand 1 - operand 2 values from operand string and
 			 * them to CI Accordingly
 			 **/
@@ -141,15 +138,13 @@ public class SourceReader {
 	private CommandInfo processFreeFormat(ArrayList<String> fileInfo) {
 		CommandInfo CI = new CommandInfo();
 
-		/** regex which is used to match the instruction information **/
-		String regex = "(\\S+)";//matches any char that is not space/tabs/linebreaks
-		/** compile the regex using Java regex engine */
-		int len = fileInfo.size();
-		for (int i = 0; i < len; i++) {
-			String currentLine = fileInfo.get(i);
+		/* regex which is used to match the instruction information **/
+		String regex = "(\\S+)";	//matches any char that is not space/tabs/linebreaks
+		/* compile the regex using Java regex engine */
+		for (String currentLine : fileInfo) {
 			CI.addWholeInstruction(currentLine);
-			/**
-			 * this line is prefixed with comment so should be avoided however i had to add
+			/*
+			 * this line is prefixed with comment so should be avoided however it had to add
 			 * defaults to CI so it can be processed normally and so comment is printed not
 			 * ignored
 			 *
@@ -160,28 +155,27 @@ public class SourceReader {
 				CI.addComment(currentLine);
 				continue;
 			}
-			ArrayList<String> elements=Utility.getMatches(currentLine,regex);
+			ArrayList<String> elements = Utility.getMatches(currentLine, regex);
 			// ";(.+)" matches any char that come after ';'
-			switch (elements.size()-Utility.getNumberOfMatches(currentLine,";(.+)")){
+			switch (elements.size() - Utility.getNumberOfMatches(currentLine, ";(.+)")) {
 				case 2:
 					CI.addCommand(elements.get(0));
-					Utility.processOperand(elements.get(1),CI);
-					CI.addComment(Utility.getMatch(currentLine,";(.+)"));
+					Utility.processOperand(elements.get(1), CI);
+					CI.addComment(Utility.getMatch(currentLine, ";(.+)"));
 					CI.addLabel("");
 					break;
 				case 3:
 					CI.addLabel(elements.get(0));
 					CI.addCommand(elements.get(1));
-					Utility.processOperand(elements.get(2),CI);
-					CI.addComment(Utility.getMatch(currentLine,";(.+)"));
+					Utility.processOperand(elements.get(2), CI);
+					CI.addComment(Utility.getMatch(currentLine, ";(.+)"));
 					break;
-					default:
-						//CI.addDefaults();
-						//CI.addComment(currentLine);
-						break;
+				default:
+					//CI.addDefaults();
+					//CI.addComment(currentLine);
+					break;
 
 			}
-
 
 		}
 

@@ -36,7 +36,7 @@ public class Assembler {
 
 	public TextArea textArea;
 
-	public void initialize(Stage primaryStage) throws Exception {
+	public void initialize(Stage primaryStage) {
 
 		window = primaryStage;
 		primaryStage.setTitle("SIC/XE Assembler");
@@ -87,7 +87,7 @@ public class Assembler {
 		CommandInfo CI = SourceReader.getInstance()
 				.processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"),restricted.isSelected());
 
-		String toBePrinted=textArea.getText();
+		String toBePrinted = textArea.getText();
 		toBePrinted+="\n-_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-";
 		toBePrinted+="\n    S   T   A   R   T      O   F      P   A   S   S   1";
 		toBePrinted+="\n-_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-\n";
