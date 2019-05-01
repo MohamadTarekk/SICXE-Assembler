@@ -1,13 +1,13 @@
 .2345678_0123456_8901234567890123456
-         START   1000              comment
-Q1     LDA      #BETA              comment
+         START   1000              ;comment
+Q1     LDA      #BETA              ;comment
   ss     LDS     GAMMA
-SSSS     ADD     TEST              comment
+SSSS     ADD     TEST              ;comment
          STA     ALPHA
 SSS      MULR    A,S
          LDA     BETA
          SUBR    S,A
-         STA     DELTA              mmm
+         STA     DELTA              ;mmm
 .This is a comment
 BETA     WORD    39
 GAMMA    WORD    6
@@ -20,20 +20,19 @@ DELTA    RESW    1
 -_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-
 LINES       ADDRESS     LABEL       MNEMONIC    ADDR_MODE   OPERAND1    OPERAND2    COMMENTS
 0           .2345678_0123456_8901234567890123456
-1           0000        START       1000                    comment                 
-ERROR: Unrecognized operation code 
-2           Q1     LDA      #BETA              comment
-3           0000        ss          LDS                     GAMMA                   
-4           SSSS     ADD     TEST              comment
-5           0003                    STA                     ALPHA                   
-6           0006        SSS         MULR                    A           S           
-7           0008                    LDA                     BETA                    
-8           000B                    SUBR                    S           A           
-9           000D        STA         DELTA                   mmm                     
-ERROR: Unrecognized operation code 
+1           1000                    START                   1000                    comment
+2           1000        Q1          LDA         #           BETA                    comment
+3           1003        ss          LDS                     GAMMA                   
+4           1006        SSSS        ADD                     TEST                    comment
+ERROR: Wrong operand type 
+5           1009                    STA                     ALPHA                   
+6           100C        SSS         MULR                    A           S           
+7           100E                    LDA                     BETA                    
+8           1011                    SUBR                    S           A           
+9           1013                    STA                     DELTA                   mmm
 10          .This is a comment
-11          000D        BETA        WORD                    39                      
-12          0010        GAMMA       WORD                    6                       
-13          0013        ALPHA       RESW                    1                       
-14          0016        DELTA       RESW                    1                       
-15          0019                    END                     Q1                      
+11          1016        BETA        WORD                    39                      
+12          1019        GAMMA       WORD                    6                       
+13          101C        ALPHA       RESW                    1                       
+14          101F        DELTA       RESW                    1                       
+15          1022                    END                     Q1                      

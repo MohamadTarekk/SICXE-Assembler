@@ -18,9 +18,10 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	private ArrayList<String> labelList = new ArrayList<>();
+	private ArrayList<String> labelList ;
 
 	public void verifyLine(Line line) {
+		labelList = new ArrayList<>();
 		if (verifyIfMisplaced(line)) {
 			setLineError(line);
 			return;
