@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="SICAssembler:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/SICAssembler_jar</output-path>
-    <root id="archive" name="SICAssembler.jar">
-      <element id="module-output" name="SICAssembler" />
-    </root>
-  </artifact>
-</component>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SICAssembler.iml" filepath="$PROJECT_DIR$/SICAssembler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SICXE-Assembler.iml" filepath="$PROJECT_DIR$/SICXE-Assembler.iml" />
     </modules>
   </component>
 </project>

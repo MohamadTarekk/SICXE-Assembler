@@ -1,5 +1,16 @@
-
-
-
-
-
+.2345678_0123456_8901234567890123456
+         START   1000              comment
+Q1       LDA     #BETA             comment
+ss       LDS     GAMMA
+SSSS     ADD     ALPHA             comment
+         STA     ALPHA
+SSS      MULR    A,S
+         LDA     BETA
+         SUBR    S,A
+         STA     DELTA             mmm
+.This is a comment
+BETA     WORD    39
+GAMMA    WORD    6
+ALPHA    RESW    1
+DELTA    RESW    1
+         END     Q1
