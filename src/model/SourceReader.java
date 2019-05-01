@@ -67,7 +67,7 @@ public class SourceReader {
 		if (isRestricted) {
 			return processRestricted(fileInfo);
 		}
-		return processFreeFormat2(fileInfo);
+		return processFreeFormat(fileInfo);
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class SourceReader {
 	 * @return command info which have arraylists with correct instructions
 	 *         information later converted to Line.
 	 */
-	private CommandInfo processFreeFormat2(ArrayList<String> fileInfo) {
+	private CommandInfo processFreeFormat(ArrayList<String> fileInfo) {
 		CommandInfo CI = new CommandInfo();
 
 		/** regex which is used to match the instruction information **/

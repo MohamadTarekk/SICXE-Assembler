@@ -6,7 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2f4e608-6128-4bb3-bcec-6be1ab885fda" name="Default" comment="" />
+    <list default="true" id="f2f4e608-6128-4bb3-bcec-6be1ab885fda" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/src/model/SourceReader.java" afterPath="$PROJECT_DIR$/src/model/SourceReader.java" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,12 +24,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SourceReader.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SourceReader.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/model/SourceReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="30" lean-forward="true" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-              <folding />
+            <state relative-caret-position="252">
+              <caret line="73" column="59" lean-forward="false" selection-start-line="73" selection-start-column="59" selection-end-line="73" selection-end-column="59" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -72,10 +76,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ErrorChecker.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ErrorChecker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/model/ErrorChecker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
+            <state relative-caret-position="85">
               <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
               <folding />
             </state>
@@ -165,12 +169,12 @@
         <option value="$PROJECT_DIR$/src/model/CommandInfo.java" />
         <option value="$PROJECT_DIR$/src/model/utility/Utility.java" />
         <option value="$PROJECT_DIR$/src/model/Line.java" />
-        <option value="$PROJECT_DIR$/src/model/SourceReader.java" />
         <option value="$PROJECT_DIR$/src/model/ErrorChecker.java" />
+        <option value="$PROJECT_DIR$/src/model/SourceReader.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="-7" />
     <option name="y" value="2" />
     <option name="width" value="1453" />
@@ -422,7 +426,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="2" width="1453" height="865" extended-state="1" />
+    <frame x="-7" y="2" width="1453" height="865" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -468,7 +472,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -515,7 +521,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="51" column="2" lean-forward="false" selection-start-line="51" selection-start-column="2" selection-end-line="51" selection-end-column="2" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -547,7 +555,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="51" column="2" lean-forward="false" selection-start-line="51" selection-start-column="2" selection-end-line="51" selection-end-column="2" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -579,7 +589,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="51" column="2" lean-forward="true" selection-start-line="51" selection-start-column="2" selection-end-line="51" selection-end-column="2" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -611,7 +623,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="33" column="99" lean-forward="false" selection-start-line="33" selection-start-column="99" selection-end-line="33" selection-end-column="99" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -772,14 +786,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/SourceReader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="30" lean-forward="true" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/tables/ErrorTable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -790,9 +796,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/ErrorChecker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
+        <state relative-caret-position="85">
           <caret line="50" column="39" lean-forward="true" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/SourceReader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="73" column="59" lean-forward="false" selection-start-line="73" selection-start-column="59" selection-end-line="73" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
