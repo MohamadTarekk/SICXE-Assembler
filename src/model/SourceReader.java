@@ -67,7 +67,7 @@ public class SourceReader {
 		if (isRestricted) {
 			return processRestricted(fileInfo);
 		}
-		return processFreeFormat(fileInfo);
+		return processFreeFormat2(fileInfo);
 	}
 
 	/**
@@ -112,7 +112,6 @@ public class SourceReader {
 				CI.addComment(currentLine);
 				continue;
 			}
-			CI.addMatchedInstruction(Utility.removeExtraSpaces(currentLine.substring(0, 66)));
 			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 8)));
 			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 16)));
 			String operand = Utility.removeExtraSpaces(currentLine.substring(17, 35));
@@ -139,13 +138,12 @@ public class SourceReader {
 	 * @return command info which have arraylists with correct instructions
 	 *         information later converted to Line.
 	 */
-	private CommandInfo processFreeFormat(ArrayList<String> fileInfo) {
+	private CommandInfo processFreeFormat2(ArrayList<String> fileInfo) {
 		CommandInfo CI = new CommandInfo();
 
 		/** regex which is used to match the instruction information **/
-		String regex = "(?:[\\s|\\t]+)?([a-zA-Z0-9_]+)?(?:[\\s|\\t]+)([a-zA-Z+\\-]+)(?:[ |\\t]+)?([@#]?)([a-zA-Z0-9_']+)?,?([a-zA-Z0-9_']+)?(?:(?:[ |\\t]+)(\\S+)?)";
+		String regex = "(\\S+)";//matches any char that is not space/tabs/linebreaks
 		/** compile the regex using Java regex engine */
-		Pattern reg = Pattern.compile(regex);
 		int len = fileInfo.size();
 		for (int i = 0; i < len; i++) {
 			String currentLine = fileInfo.get(i);
@@ -162,61 +160,31 @@ public class SourceReader {
 				CI.addComment(currentLine);
 				continue;
 			}
-
-			Matcher m = reg.matcher(currentLine);
-			if (m.find()) {
-				if (m.group(4) == null && Utility.isThatStringEqualAnyDirective(m.group(2))) {
-					CI.addMatchedInstruction(m.group(0));
-					CI.addLabel(m.group(1));
-					CI.addCommand(m.group(2));
-					CI.addOperand1(m.group(6));
-					CI.addAddressMode("");
-					CI.addOperand2("");
-					CI.addComment("");
-
-				} else if (m.group(4) == null && m.group(1) == null) {
-					CI.addMatchedInstruction(m.group(0));
-					CI.addLabel(m.group(1));
-					CI.addCommand(m.group(2));
-					String[] match6 = m.group(6).split(",");
-					if (match6.length > 1) {
-						if (match6[0].charAt(0) == '#' || match6[0].charAt(0) == '@') {
-							CI.addAddressMode(match6[0].substring(0, 1));
-							CI.addOperand1(match6[0].substring(1, match6[0].length()));
-						} else {
-							CI.addAddressMode("");
-							CI.addOperand1(match6[0]);
-						}
-						CI.addOperand2(match6[1]);
-						CI.addComment("");
-					} else {
-						CI.addOperand1(m.group(6));
-						CI.addAddressMode("");
-						CI.addOperand2(m.group(5));
-						CI.addComment("");
-					}
-
-				} else if (m.group(4) == null) {
-					CI.addMatchedInstruction(m.group(0));
+			ArrayList<String> elements=Utility.getMatches(currentLine,regex);
+			// ";(.+)" matches any char that come after ';'
+			switch (elements.size()-Utility.getNumberOfMatches(currentLine,";(.+)")){
+				case 2:
+					CI.addCommand(elements.get(0));
+					Utility.processOperand(elements.get(1),CI);
+					CI.addComment(Utility.getMatch(currentLine,";(.+)"));
 					CI.addLabel("");
-					CI.addCommand(m.group(1));
-					CI.addOperand1(m.group(2));
-					CI.addAddressMode("");
-					CI.addOperand2(m.group(5));
-					CI.addComment(m.group(6));
-				} else {
-					CI.addLabel(m.group(1));
-					CI.addCommand(m.group(2));
-					CI.addAddressMode(m.group(3));
-					CI.addOperand1(m.group(4));
-					CI.addOperand2(m.group(5));
-					CI.addComment(m.group(6));
-				}
-			} else {
-				CI.addDefaults();
-				CI.addComment("");
+					break;
+				case 3:
+					CI.addLabel(elements.get(0));
+					CI.addCommand(elements.get(1));
+					Utility.processOperand(elements.get(2),CI);
+					CI.addComment(Utility.getMatch(currentLine,";(.+)"));
+					break;
+					default:
+						//CI.addDefaults();
+						//CI.addComment(currentLine);
+						break;
+
 			}
+
+
 		}
+
 		return CI;
 
 	}

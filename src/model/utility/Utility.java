@@ -3,6 +3,7 @@ package model.utility;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,22 +59,43 @@ public class Utility {
             s += " ";
         return s;
     }
+    public static String getMatch(String input,String regex){
+        Pattern reg = Pattern.compile(regex);
+        Matcher m=reg.matcher(input);
+        if(m.find()){
+            return m.group(1);
+        }
+        return "";
+    }
+    public static ArrayList<String> getMatches(String input, String regex){
+        ArrayList<String> matchArr=new ArrayList<>();
+        Pattern reg = Pattern.compile(regex);
 
-    public static String removeExtraSpaces(String input) {
-        String regex = "(\\s+)";//regex to find spaces
+        Matcher m=reg.matcher(input);
+        while(m.find()){
+            matchArr.add(m.group(1));
+        }
+        return matchArr;
+    }
+    public static int getNumberOfMatches(String input,String regex){
         /** compile the regex using Java regex engine */
         Pattern reg = Pattern.compile(regex);
         int numSpaces=0;
         Matcher m=reg.matcher(input);
+
+        while(m.find()){
+            numSpaces++;
+        }
+        return numSpaces;
+    }
+    public static String removeExtraSpaces(String input) {
         /**
          *  keep matching spaces if there are 3 or more spaces don't trim them and return
          *  e.g:_LABEL_LDA__ (underscores are spaces)
          *  and also return if label end has letter
          *  e.g : LABEL__LDA
-          */
-        while(m.find()){
-            numSpaces++;
-        }
+         */
+        int numSpaces=getNumberOfMatches(input,"(\\s+)");
         if(numSpaces>=3||input.charAt(input.length()-1)!=' ')return input;
         /**
          * get the index for first char after several spaces to keep misplaced label for example exist

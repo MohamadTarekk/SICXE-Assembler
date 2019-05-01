@@ -13,7 +13,6 @@ public class CommandInfo {
 
 	// info for each line command
 	private ArrayList<String> wholeInstruction = new ArrayList<>();
-	private ArrayList<String> matchedInstruction = new ArrayList<>();
 	public static ArrayList<String> labelList = new ArrayList<>();
 	private ArrayList<String> mnemonicList = new ArrayList<>();
 	private ArrayList<String> addressingModeList = new ArrayList<>();
@@ -25,7 +24,6 @@ public class CommandInfo {
 	private ArrayList<Line> linesList = new ArrayList<Line>();
 
 	public void addDefaults() {
-		addMatchedInstruction("NOMATCH");
 		addLabel("(~)");
 		addCommand("NOP");
 		addOperand1("");
@@ -110,28 +108,12 @@ public class CommandInfo {
 		this.wholeInstruction = wholeInstruction;
 	}
 
-	public ArrayList<String> getMatchedInstruction() {
-		return matchedInstruction;
-	}
-
-	public void setMatchedInstruction(ArrayList<String> matchedInstruction) {
-		this.matchedInstruction = matchedInstruction;
-	}
-
 	public void addWholeInstruction(String s) {
 		if (s == null) {
 			wholeInstruction.add("");
 			return;
 		}
 		wholeInstruction.add(s);
-	}
-
-	public void addMatchedInstruction(String s) {
-		if (s == null) {
-			matchedInstruction.add("");
-			return;
-		}
-		matchedInstruction.add(s);
 	}
 
 	public void addLabel(String s) {
