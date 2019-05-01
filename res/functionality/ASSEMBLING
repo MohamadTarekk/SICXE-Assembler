@@ -9,6 +9,7 @@ SSS      MULR    A,S
          SUBR    S,A
          STA     DELTA              mmm
 .This is a comment
+         ORG     2
 BETA     WORD    39
 GAMMA    WORD    6
 ALPHA    RESW    1

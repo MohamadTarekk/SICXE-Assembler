@@ -34,6 +34,10 @@ public class ProgramCounter {
 			hexaValue = convertToHexa(locationCounter);
 			line.setLocation(hexaValue);
 		}
+		
+		if (mnemonic.equals("Org".toUpperCase())) {
+			locationCounter = hexToDecimal(line.getFirstOperand());
+		}
 
 		if (Utility.isDirective(mnemonic)) {
 			switch (DirectiveTable.directiveTable.get(mnemonic).getLength()) {
