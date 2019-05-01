@@ -109,8 +109,8 @@ public class SourceReader {
 				CI.addComment(currentLine);
 				continue;
 			}
-			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 8)));
-			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 16)));
+			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 9)));
+			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 17)));
 			String operand = Utility.removeExtraSpaces(currentLine.substring(17, 35));
 			/*
 			 * get addressing mode - operand 1 - operand 2 values from operand string and
@@ -127,8 +127,7 @@ public class SourceReader {
 	 *         using regex. to test regex i recommend going into this site
 	 *         https://regexr.com/ paste regex in expression field and test case in
 	 *         text field then look at explanation & details to know how the regex
-	 *         used or what did it match. TODO make it loop on each string in word
-	 *         instead of this way. TODO REFACTOR THE MANY IFs ELSEs statements
+	 *         used or what did it match.
 	 * @param fileInfo
 	 *            the lines read from file usually after using this.readFile()
 	 *

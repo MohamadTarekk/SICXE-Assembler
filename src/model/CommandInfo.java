@@ -32,16 +32,22 @@ public class CommandInfo {
 
 	}
 
-	public void addToLineList() {
+	public boolean addToLineList() {
 		int length = wholeInstruction.size();
         Line line;
-        for (int i = 0; i < length; i++) {
-			line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
-					addressingModeList.get(i), operand1List.get(i),
-					operand2List.get(i), commentList.get(i));
-			ErrorChecker.getInstance().verifyLine(line);
-			pc.updateCounters(line);
-			linesList.add(line);
+        try {
+			for (int i = 0; i < length; i++) {
+				line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
+						addressingModeList.get(i), operand1List.get(i),
+						operand2List.get(i), commentList.get(i));
+				ErrorChecker.getInstance().verifyLine(line);
+				pc.updateCounters(line);
+				linesList.add(line);
+			}
+			return true;
+		}catch (Exception e){
+        	System.err.println("El code darab ya m3lm olna mtensash t7ot el ';' ");
+        	return false;
 		}
 	}
 
