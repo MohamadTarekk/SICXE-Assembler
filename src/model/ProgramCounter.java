@@ -27,12 +27,16 @@ public class ProgramCounter {
 		String mnemonic = line.getMnemonic();
 		String hexaValue = convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
-		if (mnemonic == null || mnemonic == "")
+		if (mnemonic == null || mnemonic.equals(""))
 				return;
 		if (mnemonic.equals("Start".toUpperCase())) {
 			locationCounter = hexToDecimal(line.getFirstOperand());
 			hexaValue = convertToHexa(locationCounter);
 			line.setLocation(hexaValue);
+		}
+		
+		if (mnemonic.equals("Org".toUpperCase())) {
+			locationCounter = hexToDecimal(line.getFirstOperand());
 		}
 
 		if (Utility.isDirective(mnemonic)) {
@@ -40,6 +44,7 @@ public class ProgramCounter {
 			case THREE:
 				locationCounter += 3;
 			case VARIABLE:
+				//noinspection IfCanBeSwitch
 				if (mnemonic.toUpperCase().equals("RESB")) {
 					locationCounter += Integer.parseInt(line.getFirstOperand());
 				} else if (mnemonic.toUpperCase().equals("RESW")) {
@@ -84,8 +89,7 @@ public class ProgramCounter {
 	}
 
 	private String convertToHexa(int address) {
-		String hexadecimalValue = String.format("%1$04X", address);
-		return hexadecimalValue;
+		return String.format("%1$04X", address);
 	}
 
 }

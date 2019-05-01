@@ -27,8 +27,8 @@ public class ErrorTable {
 
 	public static void loadErrorList() {
 		errorList[MISPLACED_LABEL] = "ERROR: Misplaced label";
-		errorList[MISSING_MISPLACED_OPERATION_MNEMONIC] = "ERROR: Missing or misplaced operation mnemonic + ";
-		errorList[MISSING_MISPLACED_OPERAND_FIELD] = "ERROR: Missing or misplaced operand field + "; // DONE
+		errorList[MISSING_MISPLACED_OPERATION_MNEMONIC] = "ERROR: Missing or misplaced operation mnemonic ";
+		errorList[MISSING_MISPLACED_OPERAND_FIELD] = "ERROR: Missing or misplaced operand field "; // DONE
 		errorList[DUPLICATE_LABEL_DEFINITION] = "ERROR: Duplicate label definition "; // DONE
 		errorList[STATEMENT_CANT_HAVE_LABEL] = "ERROR: This statement can�t have a label "; // DONE
 		errorList[STATEMENT_CANT_HAVE_OPERAND] = "ERROR: This statement can�t have an operand "; // DONE

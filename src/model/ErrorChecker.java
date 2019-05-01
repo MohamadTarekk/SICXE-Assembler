@@ -9,8 +9,14 @@ import model.tables.InstructionTable;
 import model.utility.Utility;
 
 public class ErrorChecker {
+
 	private static ErrorChecker instance = null;
 	private String error;
+	private ArrayList<String> labelList = new ArrayList<>();
+
+	private ErrorChecker(){
+		/* Private Constructor for Singleton*/
+	}
 
 	public static ErrorChecker getInstance() {
 		if (instance == null)
@@ -18,14 +24,10 @@ public class ErrorChecker {
 		return instance;
 	}
 
-	private ArrayList<String> labelList ;
-
 	public void verifyLine(Line line) {
-		labelList = new ArrayList<>();
 		if (verifyIfMisplaced(line)) {
 			setLineError(line);
 			return;
-
 		}
 		if (verifyLabel(line)) {
 			setLineError(line);
@@ -107,7 +109,7 @@ public class ErrorChecker {
 			error = ErrorTable.errorList[ErrorTable.UNRECOGNIZED_OPERATION_CODE];
 			return true;
 		}
-		// WRONG_OPERATION_PREFIX - CANT_BE_FORTMAT4_INSTRUCTION
+		// WRONG_OPERATION_PREFIX - CANT_BE_FORMAT4_INSTRUCTION
 		if (Utility.isInstruction(mnemonic)) {
 			switch (InstructionTable.instructionTable.get(mnemonic).getFormat()) {
 			case FOUR:
@@ -149,11 +151,9 @@ public class ErrorChecker {
 		 * STATEMENT_CANT_HAVE_OPERAND
 		 */
 		if (Utility.isDirective(mnemonic)) {
-			boolean temp = verifyDirectiveOperands(line);
-			return temp;
+			return verifyDirectiveOperands(line);
 		} else {
-			boolean temp = verifyInstructionOperands(line);
-			return temp;
+			return verifyInstructionOperands(line);
 		}
 	}
 
@@ -172,10 +172,17 @@ public class ErrorChecker {
 					return true;
 				}
 			} else if (InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
-				if (!Utility.isRegister(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())) {
+				if (!Utility.isRegister(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand()) && 
+						!isNumeric(line.getFirstOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
+					return true;
 				}
-				return true;
+				if(line.getAddressingMode().equals("#")) {
+					if(!isNumeric(line.getFirstOperand())) {
+						error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
+						return true;
+					}
+				}
 			}
 		} else {
 			if (!line.getFirstOperand().equals("")) {
@@ -251,11 +258,10 @@ public class ErrorChecker {
 		}
 	}
 
-	private void verifyEndStatement(Line line) {
-		/*
-		 * MISSING_END_STATEMENT
-		 */
-	}
+	/*private void verifyEndStatement(Line line) {
+
+	}*/
+
 
 	private boolean isHexa(String value) {
 		try {
@@ -277,10 +283,6 @@ public class ErrorChecker {
 
 	private void setLineError(Line line) {
 		line.setError(error);
-	}
-
-	private boolean checkIfMisplaced(String input, String correctVal) {
-		return !input.equals(correctVal);
 	}
 
 	public String getError() {
