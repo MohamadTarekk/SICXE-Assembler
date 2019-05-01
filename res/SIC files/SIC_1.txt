@@ -1,10 +1,10 @@
-.23456789012345678901234567890123456
+.2345678_0123456_8901234567890123456
          START   1000              comment
-Q1       LDA     BETA              comment
+Q1     LDA      #BETA              comment
   ss     LDS     GAMMA
-SSSS     ADD     S,A               comment
+SSSS     ADD     TEST              comment
          STA     ALPHA
-SSSS     MULR    A
+SSS      MULR    A,S
          LDA     BETA
          SUBR    S,A
          STA     DELTA              mmm

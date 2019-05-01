@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
@@ -30,6 +31,7 @@ public class Assembler {
 	public MenuItem saveAsFile;
 	public MenuItem assemble;
 	public CheckMenuItem restricted;
+	public Label restrictedMsgLabel;
 
 	public TextArea textArea;
 
@@ -118,5 +120,10 @@ public class Assembler {
 			}
 			textArea.setText(append);
 		}
+	}
+	
+	public void setRestrictedMsg() {
+		System.out.println(restricted.isSelected());
+		restrictedMsgLabel.setVisible(!restricted.isSelected());
 	}
 }

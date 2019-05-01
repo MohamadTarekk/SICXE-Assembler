@@ -1,13 +1,13 @@
-.23456789012345678901234567890123456
-         START   1000              comment
-Q1       LDA     BETA              comment
+.2345678_0123456_8901234567890123456
+         START   1000              ;comment
+Q1     LDA      #BETA              ;comment
   ss     LDS     GAMMA
-SSSS     ADD     S,A               comment
+SSSS     ADD     TEST              ;comment
          STA     ALPHA
-SSSS     MULR    A
+SSS      MULR    A,S
          LDA     BETA
          SUBR    S,A
-         STA     DELTA              mmm
+         STA     DELTA              ;mmm
 .This is a comment
 BETA     WORD    39
 GAMMA    WORD    6
@@ -19,22 +19,20 @@ DELTA    RESW    1
     S   T   A   R   T      O   F      P   A   S   S   1
 -_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-_--_-_-_-_-_-_-_-_-_-
 LINES       ADDRESS     LABEL       MNEMONIC    ADDR_MODE   OPERAND1    OPERAND2    COMMENTS
-0           .23456789012345678901234567890123456
+0           .2345678_0123456_8901234567890123456
 1           1000                    START                   1000                    comment
-2           1000        Q1          LDA                     BETA                    comment
-3           1003                    SS                      LDS                     GAMMA
-ERROR: Unrecognized operation code 
-4           1003        SSSS        ADD                     S           A           comment
+2           1000        Q1          LDA         #           BETA                    comment
+3           1003        ss          LDS                     GAMMA                   
+4           1006        SSSS        ADD                     TEST                    comment
 ERROR: Wrong operand type 
-5           1006                    STA                     ALPHA                   
-6           1009                    SSSS                    MULR                    A
-ERROR: Unrecognized operation code 
-7           1009                    LDA                     BETA                    
-8           100C                    SUBR                    S           A           
-9           100E                    STA                     DELTA                   mmm
+5           1009                    STA                     ALPHA                   
+6           100C        SSS         MULR                    A           S           
+7           100E                    LDA                     BETA                    
+8           1011                    SUBR                    S           A           
+9           1013                    STA                     DELTA                   mmm
 10          .This is a comment
-11          1011        BETA        WORD                    39                      
-12          1014        GAMMA       WORD                    6                       
-13          1017        ALPHA       RESW                    1                       
-14          101A        DELTA       RESW                    1                       
-15          101D                    END                     Q1                      
+11          1016        BETA        WORD                    39                      
+12          1019        GAMMA       WORD                    6                       
+13          101C        ALPHA       RESW                    1                       
+14          101F        DELTA       RESW                    1                       
+15          1022                    END                     Q1                      

@@ -4,17 +4,15 @@ import java.util.ArrayList;
 
 public class CommandInfo {
 
-	private static CommandInfo instance = null;
+	// private static CommandInfo instance = null;
 
 	public CommandInfo() {
 	}
 
-	
 	ProgramCounter pc = ProgramCounter.getInstance();
 
 	// info for each line command
 	private ArrayList<String> wholeInstruction = new ArrayList<>();
-	private ArrayList<String> matchedInstruction = new ArrayList<>();
 	public static ArrayList<String> labelList = new ArrayList<>();
 	private ArrayList<String> mnemonicList = new ArrayList<>();
 	private ArrayList<String> addressingModeList = new ArrayList<>();
@@ -26,8 +24,7 @@ public class CommandInfo {
 	private ArrayList<Line> linesList = new ArrayList<Line>();
 
 	public void addDefaults() {
-		addMatchedInstruction("NOMATCH");
-	    addLabel("(~)");
+		addLabel("(~)");
 		addCommand("NOP");
 		addOperand1("");
 		addAddressMode("");
@@ -38,9 +35,9 @@ public class CommandInfo {
 	public void addToLineList() {
 		int length = wholeInstruction.size();
 		for (int i = 0; i < length; i++) {
-			Line line = new Line(labelList.get(i).toUpperCase(), mnemonicList.get(i).toUpperCase(), 
-					addressingModeList.get(i).toUpperCase(),operand1List.get(i).toUpperCase(),
-					operand2List.get(i).toUpperCase(), commentList.get(i));
+			Line line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
+					addressingModeList.get(i), operand1List.get(i),
+					operand2List.get(i), commentList.get(i));
 			ErrorChecker.getInstance().verifyLine(line);
 			pc.updateCounters(line);
 			linesList.add(line);
@@ -103,10 +100,6 @@ public class CommandInfo {
 		this.linesList = linesList;
 	}
 
-	public static void setInstance(CommandInfo instance) {
-		CommandInfo.instance = instance;
-	}
-
 	public ArrayList<String> getWholeInstruction() {
 		return wholeInstruction;
 	}
@@ -115,28 +108,12 @@ public class CommandInfo {
 		this.wholeInstruction = wholeInstruction;
 	}
 
-	public ArrayList<String> getMatchedInstruction() {
-		return matchedInstruction;
-	}
-
-	public void setMatchedInstruction(ArrayList<String> matchedInstruction) {
-		this.matchedInstruction = matchedInstruction;
-	}
-
 	public void addWholeInstruction(String s) {
 		if (s == null) {
 			wholeInstruction.add("");
 			return;
 		}
 		wholeInstruction.add(s);
-	}
-
-	public void addMatchedInstruction(String s) {
-		if (s == null) {
-			matchedInstruction.add("");
-			return;
-		}
-		matchedInstruction.add(s);
 	}
 
 	public void addLabel(String s) {
@@ -179,12 +156,13 @@ public class CommandInfo {
 		}
 		operand2List.add(s);
 	}
-	public void addComment(String s){
-		if(s==null){
+
+	public void addComment(String s) {
+		if (s == null) {
 			commentList.add("");
-		    return;
+			return;
 		}
-	    commentList.add(s);
+		commentList.add(s);
 	}
 
 }

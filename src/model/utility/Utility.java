@@ -1,17 +1,25 @@
 package model.utility;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import model.CommandInfo;
+import model.ErrorChecker;
+import model.ProgramCounter;
 import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.tables.RegisterTable;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
-
 public class Utility {
+
+    public static void clearAll() {
+        ErrorChecker.getInstance().getLabelList().clear();
+        ProgramCounter.getInstance().resetAddresses();
+    }
 
     public static boolean isDirective(String directiveMnemonic) {
         if (DirectiveTable.directiveTable.containsKey(directiveMnemonic.toUpperCase()))
@@ -47,24 +55,67 @@ public class Utility {
 
     public static String getSpaces(int count) {
         String s = new String();
-        for (int i = 0; i < count; i++) s += " ";
+        for (int i = 0; i < count; i++)
+            s += " ";
         return s;
     }
+    public static String getMatch(String input,String regex){
+        Pattern reg = Pattern.compile(regex);
+        Matcher m=reg.matcher(input);
+        if(m.find()){
+            return m.group(1);
+        }
+        return "";
+    }
+    public static ArrayList<String> getMatches(String input, String regex){
+        ArrayList<String> matchArr=new ArrayList<>();
+        Pattern reg = Pattern.compile(regex);
 
+        Matcher m=reg.matcher(input);
+        while(m.find()){
+            matchArr.add(m.group(1));
+        }
+        return matchArr;
+    }
+    public static int getNumberOfMatches(String input,String regex){
+        /** compile the regex using Java regex engine */
+        Pattern reg = Pattern.compile(regex);
+        int numSpaces=0;
+        Matcher m=reg.matcher(input);
+
+        while(m.find()){
+            numSpaces++;
+        }
+        return numSpaces;
+    }
     public static String removeExtraSpaces(String input) {
+        /**
+         *  keep matching spaces if there are 3 or more spaces don't trim them and return
+         *  e.g:_LABEL_LDA__ (underscores are spaces)
+         *  and also return if label end has letter
+         *  e.g : LABEL__LDA
+         */
+        int numSpaces=getNumberOfMatches(input,"(\\s+)");
+        if(numSpaces>=3||input.charAt(input.length()-1)!=' ')return input;
+        /**
+         * get the index for first char after several spaces to keep misplaced label for example exist
+         */
 
         int firstCharIdx = 0;
         for (int i = 0; i < input.length(); i++) {
             firstCharIdx = i;
-            if (input.charAt(i) != ' ') break;
+            if (input.charAt(i) != ' ')
+                break;
 
         }
         String s = "";
-        if (firstCharIdx == input.length() - 1) return s;
+        if (firstCharIdx == input.length() - 1)
+            return s;
         if (firstCharIdx > 0)
             s = input.substring(0, firstCharIdx);
         for (int i = firstCharIdx; i < input.length(); i++) {
-            if (input.charAt(i) == ' ') break;
+            if (input.charAt(i) == ' ')
+                break;
             s += input.charAt(i);
         }
         return s;
@@ -82,35 +133,41 @@ public class Utility {
         }
     }
 
+    public static void extractAddressingModeFromOperand(String s, CommandInfo CI) {
+        if (s.charAt(0) == '#' || s.charAt(0) == '@') {
+            CI.addAddressMode(s.substring(0, 1));
+            CI.addOperand1(s.substring(1, s.length()));
+        } else {
+            CI.addAddressMode("");
+            CI.addOperand1(s);
+        }
+    }
+
     public static void processOperand(String input, CommandInfo CI) {
         String[] op1op2 = input.split(",");
         if (op1op2.length > 1) {
-            if (op1op2[0].charAt(0) == '#' || op1op2[0].charAt(0) == '@') {
-                CI.addAddressMode(op1op2[0].substring(0, 1));
-                CI.addOperand1(op1op2[0].substring(1, op1op2[0].length()));
-            } else {
-                CI.addAddressMode("");
-                CI.addOperand1(op1op2[0]);
-            }
+            extractAddressingModeFromOperand(op1op2[0], CI);
             CI.addOperand2(op1op2[1]);
         } else {
-            CI.addOperand1(input);
-            CI.addAddressMode("");
+            extractAddressingModeFromOperand(op1op2[0], CI);
             CI.addOperand2("");
         }
     }
 
+    public static boolean containsMisplacedLetter(String s) {
+
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            if (s.charAt(i) == ' ') return true;
+        }
+        return false;
+    }
+
     public static boolean isThatStringEqualAnyDirective(String input) {
 
-        return (input.equalsIgnoreCase("byte")
-                || input.equalsIgnoreCase("resb")
-                || input.equalsIgnoreCase("word")
-                || input.equalsIgnoreCase("resw")
-                || input.equalsIgnoreCase("equ")
-                || input.equalsIgnoreCase("start")
-                || input.equalsIgnoreCase("org")
-                || input.equalsIgnoreCase("base")
-                || input.equalsIgnoreCase("nobase")
+        return (input.equalsIgnoreCase("byte") || input.equalsIgnoreCase("resb") || input.equalsIgnoreCase("word")
+                || input.equalsIgnoreCase("resw") || input.equalsIgnoreCase("equ") || input.equalsIgnoreCase("start")
+                || input.equalsIgnoreCase("org") || input.equalsIgnoreCase("base") || input.equalsIgnoreCase("nobase")
                 || input.equalsIgnoreCase("ltorg"));
     }
 }

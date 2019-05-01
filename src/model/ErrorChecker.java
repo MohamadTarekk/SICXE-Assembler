@@ -17,39 +17,56 @@ public class ErrorChecker {
 			instance = new ErrorChecker();
 		return instance;
 	}
-	
-	private ArrayList<String> labelList = new ArrayList<>();
+
+	private ArrayList<String> labelList ;
 
 	public void verifyLine(Line line) {
-		if(verifyIfMisplaced(line)) {
+		labelList = new ArrayList<>();
+		if (verifyIfMisplaced(line)) {
 			setLineError(line);
 			return;
 
 		}
-		if(verifyLabel(line)) {
+		if (verifyLabel(line)) {
 			setLineError(line);
 			return;
 		}
-		if(verifyMnemonic(line)) {
+		if (verifyMnemonic(line)) {
 			setLineError(line);
 			return;
 		}
-		if(verifyAddressingMode(line)) {
+		if (verifyAddressingMode(line)) {
 			setLineError(line);
 			return;
 		}
-		if(verifyOperands(line)) {
+		if (verifyOperands(line)) {
 			setLineError(line);
 			return;
 		}
-		//verifyEndStatement(line);
+		// verifyEndStatement(line);
 		setLineError(line);
 	}
 
 	private boolean verifyIfMisplaced(Line line) {
 		String label = line.getLabel();
-		if(label.startsWith("  ")) {
+		if (label.startsWith(" ")) {
 			error = ErrorTable.errorList[ErrorTable.MISPLACED_LABEL];
+			return true;
+		}
+		if(Utility.containsMisplacedLetter(label)){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+			return true;
+		}
+		if(line.getMnemonic().startsWith(" ")){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+			return true;
+		}
+		if(Utility.containsMisplacedLetter(line.getMnemonic())){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+			return true;
+		}
+		if(line.getFirstOperand().startsWith(" ")){
+			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 			return true;
 		}
 		return false;
@@ -60,24 +77,21 @@ public class ErrorChecker {
 
 	private boolean verifyLabel(Line line) {
 		/*
-		 * DUPLICATE_LABEL_DEFINITION 
-		 * LABEL_STARTING_WITH_DIGIT
+		 * DUPLICATE_LABEL_DEFINITION LABEL_STARTING_WITH_DIGIT
 		 */
 		String label = line.getLabel();
-		if(!label.equals("") && !label.equals("(~)")) {
-			if(labelList.contains(label)) {
+		if (!label.equals("") && !label.equals("(~)")) {
+			if (labelList.contains(label)) {
 				error = ErrorTable.errorList[ErrorTable.DUPLICATE_LABEL_DEFINITION];
 				return true;
-			}
-			else if (Character.isDigit(label.charAt(0))){
+			} else if (Character.isDigit(label.charAt(0))) {
 				error = ErrorTable.errorList[ErrorTable.LABEL_CANT_START_WITH_DIGIT];
 				return true;
-			}
-			else {
+			} else {
 				labelList.add(label);
 				return false;
 			}
-			
+
 		}
 
 		return false;
@@ -131,16 +145,14 @@ public class ErrorChecker {
 		String mnemonic = line.getMnemonic();
 		/*
 		 * MISSING_MISPLACED_OPERAND_FIELD UNDEFINED_SYMBOL_IN_OPERAND
-		 * NOT_HEXADECIMAL_STRING 
-		 * ILLEGAL_ADDRESS_FOR_REGISTER 
-		 * WRONG_OPERAND_TYPE
+		 * NOT_HEXADECIMAL_STRING ILLEGAL_ADDRESS_FOR_REGISTER WRONG_OPERAND_TYPE
 		 * STATEMENT_CANT_HAVE_OPERAND
 		 */
 		if (Utility.isDirective(mnemonic)) {
 			boolean temp = verifyDirectiveOperands(line);
 			return temp;
 		} else {
-			boolean temp =verifyInstructionOperands(line);
+			boolean temp = verifyInstructionOperands(line);
 			return temp;
 		}
 	}
@@ -160,10 +172,10 @@ public class ErrorChecker {
 					return true;
 				}
 			} else if (InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
-				if (!Utility.isLabel(line.getFirstOperand())) {
+				if (!Utility.isRegister(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
-					return true;
 				}
+				return true;
 			}
 		} else {
 			if (!line.getFirstOperand().equals("")) {
@@ -183,7 +195,7 @@ public class ErrorChecker {
 					return true;
 				}
 			} else if (InstructionTable.instructionTable.get(mnemonic).getSecondOperand() == OperandType.VALUE) {
-				if (!Utility.isLabel(line.getSecondOperand())) {
+				if (!Utility.isRegister(line.getSecondOperand()) && !Utility.isLabel(line.getSecondOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
 					return true;
 				}
@@ -245,11 +257,20 @@ public class ErrorChecker {
 		 */
 	}
 
-	private static boolean isHexa(String value) {
+	private boolean isHexa(String value) {
 		try {
 			Long.parseLong(value, 16);
 			return true;
 		} catch (NumberFormatException ex) {
+			return false;
+		}
+	}
+
+	private boolean isNumeric(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch (NumberFormatException e) {
 			return false;
 		}
 	}
@@ -268,6 +289,14 @@ public class ErrorChecker {
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+	public ArrayList<String> getLabelList() {
+		return labelList;
+	}
+
+	public void setLabelList(ArrayList<String> labelList) {
+		this.labelList = labelList;
 	}
 
 }
