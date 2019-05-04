@@ -4,8 +4,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.graalvm.compiler.hotspot.nodes.GetObjectAddressNode;
-
 import model.CommandInfo;
 import model.Instruction;
 import model.Line;
@@ -18,11 +16,21 @@ import model.utility.Utility;
 
 public class Controller {
 	
-	String path;
-	
 	CommandInfo CI;
 	ArrayList<Line> lineList;
 	HashMap<String, Instruction> instructionTable;
+	
+	private String path;
+	
+	private boolean noErrors = false;
+
+	public boolean isNoErrors() {
+		return noErrors;
+	}
+
+	public void setNoErrors(boolean noErrors) {
+		this.noErrors = noErrors;
+	}
 
 	public void loadInstructionTable() {
 
@@ -81,7 +89,7 @@ public class Controller {
 		Utility.writeFile(address, "res/LIST/symTable.txt");
 	}
 
-	public boolean passOne(String program, boolean restricted) {
+	public void passOne(String program, boolean restricted) {
 
 		Utility.writeFile(program, "res/functionality/ASSEMBLING");
 		CI = SourceReader.getInstance()
@@ -90,7 +98,7 @@ public class Controller {
 		boolean firstPassDone = CI.addToLineList();
 		if(firstPassDone)
 			prepareListFile();
-		return firstPassDone;
+		noErrors = CI.checkForErrors();
 	}
 	
 	public String getStartOfProgram() {
@@ -168,7 +176,6 @@ public class Controller {
 		String headerRecord = "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;
 		String addressOfFirstExcutableInstruction = getAddresOfFirstExcutableInstruction();
 		String endRecord = "E^" + addressOfFirstExcutableInstruction;
-		System.out.println(endRecord);
 	}
 	
 
@@ -200,4 +207,5 @@ public class Controller {
         }
         return append;
 	}
+
 }

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -51,10 +53,23 @@ public class Assembler {
 
         controller.prepareData();
     }
+    
+    public void showAssembleMsgDialog(boolean noErrors) {
+    	
+    	Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Note");
+        alert.setHeaderText(null);
+        String msg;
+        msg = noErrors ? "Successful Assembly" : "Incomplete Assembly" ;
+        alert.setContentText(msg);
+
+        alert.showAndWait();
+    }
 
     public void assembleOnAction() {
 
         controller.assemble(textArea.getText(), restricted.isSelected());
+        showAssembleMsgDialog(controller.isNoErrors());
     }
     
     public void showListFile() {

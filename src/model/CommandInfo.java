@@ -31,6 +31,15 @@ public class CommandInfo {
 		addOperand2("");
 
 	}
+	
+	public boolean checkForErrors() {
+		
+		for(Line line : linesList) {
+			if(!line.getError().equals(""))
+				return false;
+		}
+		return true;
+	}
 
 	public boolean addToLineList() {
 		int length = wholeInstruction.size();
@@ -44,11 +53,10 @@ public class CommandInfo {
 				pc.updateCounters(line);
 				linesList.add(line);
 			}
-			return true;
-		}catch (Exception e){
-        	System.err.println("El code darab ya m3lm olna mtensash t7ot el ';' ");
+		} catch (Exception e) {
         	return false;
 		}
+        return true;
 	}
 
 	public ArrayList<String> getCommentList() {
