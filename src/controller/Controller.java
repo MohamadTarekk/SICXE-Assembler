@@ -4,6 +4,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.graalvm.compiler.hotspot.nodes.GetObjectAddressNode;
+
 import model.CommandInfo;
 import model.Instruction;
 import model.Line;
@@ -107,8 +109,10 @@ public class Controller {
 		
 		String endOfProgram = null;
 		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("END"))
+			if(line.getMnemonic().equalsIgnoreCase("END")) {
 				endOfProgram = "00" + line.getLocation();
+				break;
+			}
 		}
 		return endOfProgram;
 	}
@@ -122,8 +126,10 @@ public class Controller {
 		
 		String name = "";
 		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("START"))
+			if(line.getMnemonic().equalsIgnoreCase("START")) {
 				name = line.getLabel();
+				break;
+			}
 		}
 		int length = name.length();
 		if(length > 6)
@@ -131,6 +137,24 @@ public class Controller {
 		if(length < 6)
 			name += Utility.getSpaces(6 - length);
 		return name;
+	}
+	
+	public String getAddresOfFirstExcutableInstruction() {
+		
+		String label, address;
+		label = address = null;
+		for(Line line : lineList) {
+			if(line.getMnemonic().equalsIgnoreCase("END")) {
+				label = line.getFirstOperand();
+				break;
+			}
+		}
+		for(Line line : lineList) {
+			if(line.getLabel().equalsIgnoreCase(label)) {
+				address = line.getLocation();
+			}
+		}
+		return "00" + address;
 	}
 
 	public void passTwo() {
@@ -142,7 +166,9 @@ public class Controller {
 		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
 		String programName = getProgramName();
 		String headerRecord = "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;
-		System.out.println(headerRecord);
+		String addressOfFirstExcutableInstruction = getAddresOfFirstExcutableInstruction();
+		String endRecord = "E^" + addressOfFirstExcutableInstruction;
+		System.out.println(endRecord);
 	}
 	
 
