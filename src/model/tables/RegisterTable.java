@@ -6,7 +6,7 @@ public class RegisterTable {
 
 	public static HashMap<String, Integer> registerTable = new HashMap<>();
 
-	public static void loadRegisterTabkle() {
+	public static void loadRegisterTable() {
 		registerTable.put("A", 0);
 		registerTable.put("X", 1);
 		registerTable.put("L", 2);

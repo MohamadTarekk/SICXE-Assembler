@@ -5,7 +5,7 @@ import model.tables.InstructionTable;
 import model.utility.Utility;
 
 public class ProgramCounter {
-
+	
 	private static ProgramCounter instance = null;
 
 	private ProgramCounter() {
@@ -25,18 +25,18 @@ public class ProgramCounter {
 
 	public void updateCounters(Line line) {
 		String mnemonic = line.getMnemonic();
-		String hexaValue = convertToHexa(locationCounter);
+		String hexaValue = Utility.convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
 		if (mnemonic == null || mnemonic.equals(""))
 				return;
 		if (mnemonic.equals("Start".toUpperCase())) {
-			locationCounter = hexToDecimal(line.getFirstOperand());
-			hexaValue = convertToHexa(locationCounter);
+			locationCounter = Utility.hexToDecimal(line.getFirstOperand());
+			hexaValue = Utility.convertToHexa(locationCounter);
 			line.setLocation(hexaValue);
 		}
 		
 		if (mnemonic.equals("Org".toUpperCase())) {
-			locationCounter = hexToDecimal(line.getFirstOperand());
+			locationCounter = Utility.hexToDecimal(line.getFirstOperand());
 		}
 
 		if (Utility.isDirective(mnemonic)) {
@@ -82,14 +82,6 @@ public class ProgramCounter {
 				break;
 			}
 		}
-	}
-
-	private int hexToDecimal(String hex) {
-		return Integer.parseInt(hex, 16);
-	}
-
-	private String convertToHexa(int address) {
-		return String.format("%1$04X", address);
 	}
 
 }

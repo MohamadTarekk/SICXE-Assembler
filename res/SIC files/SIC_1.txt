@@ -1,5 +1,5 @@
 .2345678_0123456_8901234567890123456
-         START   1000              comment
+prog1    START   1000              comment
 Q1       LDA     #BETA              comment
   ss     LDS     GAMMA
 SSSS     ADD     #5                 comment

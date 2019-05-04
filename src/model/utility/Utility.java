@@ -17,6 +17,14 @@ import model.tables.RegisterTable;
 @SuppressWarnings({})
 public class Utility {
 
+	public static int hexToDecimal(String hex) {
+		return Integer.parseInt(hex, 16);
+	}
+
+	public static String convertToHexa(int address) {
+		return String.format("%1$04X", address);
+	}
+	
     public static void clearAll() {
         ErrorChecker.getInstance().getLabelList().clear();
         ProgramCounter.getInstance().resetAddresses();

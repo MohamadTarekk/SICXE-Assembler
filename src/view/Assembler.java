@@ -13,13 +13,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.CommandInfo;
+import controller.Controller;
 import model.SourceReader;
-import model.tables.DirectiveTable;
-import model.tables.ErrorTable;
-import model.tables.InstructionTable;
-import model.tables.RegisterTable;
-import model.utility.Utility;
 
 public class Assembler {
 
@@ -36,6 +31,8 @@ public class Assembler {
     public Label restrictedMsgLabel;
 
     public TextArea textArea;
+    
+    Controller controller = new Controller();
 
     public void initialize(Stage primaryStage) {
 
@@ -52,55 +49,17 @@ public class Assembler {
             e.printStackTrace();
         }
 
-        InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
-        DirectiveTable.loadDirectiveTable();
-        ErrorTable.loadErrorList();
-        RegisterTable.loadRegisterTabkle();
+        controller.prepareData();
     }
 
     public void assembleOnAction() {
 
-        Utility.writeFile(textArea.getText(), "res/functionality/ASSEMBLING");
-        CommandInfo CI = SourceReader.getInstance()
-                .processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"), restricted.isSelected());
-
-        boolean firstPassDone = CI.addToLineList();
-        if (firstPassDone) {
-            String toBePrintedInTextArea = textArea.getText();
-            final String lineSeparator = "\n-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
-            final String startPassOne = "\n    S   T   A   R   T      O   F      P   A   S   S   1";
-            toBePrintedInTextArea += lineSeparator;
-            toBePrintedInTextArea += startPassOne;
-            toBePrintedInTextArea += lineSeparator + "\n";
-            final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "ADDRESS" + Utility.getSpaces(5) + "LABEL" + Utility.getSpaces(7) +
-                    "MNEMONIC" + Utility.getSpaces(4) + "ADDR_MODE" + Utility.getSpaces(3) + "OPERAND1" + Utility.getSpaces(4) + "OPERAND2" + Utility.getSpaces(4) + "COMMENTS\n";
-            toBePrintedInTextArea += TABLE_FORM;
-            String toBePrintedInListFile = lineSeparator;
-            toBePrintedInListFile += startPassOne;
-            toBePrintedInListFile += lineSeparator + "\n";
-            toBePrintedInListFile += TABLE_FORM;
-
-            int len = CI.getLinesList().size();
-            for (int i = 0; i < len; i++) {
-                String lineCount = String.valueOf(i);
-                toBePrintedInTextArea += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
-                toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
-            }
-            textArea.setText(toBePrintedInTextArea);
-            Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
-            String address = "";
-            for (int i = 0; i < CI.getLinesList().size(); i++) {
-                if(!CI.getLinesList().get(i).getLabel().equals("")&&!CI.getLinesList().get(i).getLabel().equals("(~)")){
-                    address +=CI.getLinesList().get(i).getLabel();
-                    address +=Utility.getSpaces(12-CI.getLinesList().get(i).getLabel().length());
-                    address +=CI.getLinesList().get(i).getLocation();
-                    address += "\n";
-                }
-
-			}
-			Utility.writeFile(address, "res/LIST/symTable.txt");
-        }
-        Utility.clearAll();
+        controller.assemble(textArea.getText(), restricted.isSelected());
+    }
+    
+    public void showListFile() {
+    	
+        textArea.setText(controller.getListFile());
     }
 
     public void loadFileOnAction() {
@@ -113,12 +72,7 @@ public class Assembler {
         File file = fileChooser.showOpenDialog(window);
         if (file != null) {
             path = file.getAbsolutePath();
-            ArrayList<String> arr = SourceReader.getInstance().readFile(path);
-            String append = "";
-            for (String s : arr) {
-                append += s + "\n";
-            }
-            textArea.setText(append);
+            textArea.setText(controller.loadFile(path));
         }
     }
 
@@ -132,6 +86,7 @@ public class Assembler {
     }
 
     public void setRestrictedMsg() {
+    	
         restrictedMsgLabel.setVisible(!restricted.isSelected());
     }
 }

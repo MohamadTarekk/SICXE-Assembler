@@ -1,5 +1,6 @@
+prog1       1000
 Q1          1000
-ss          1003
+  ss        1003
 SSSS        1006
 SSS         100C
 BETA        1016
