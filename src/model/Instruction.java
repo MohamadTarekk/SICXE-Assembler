@@ -75,6 +75,16 @@ public class Instruction {
 			return true;
 		return false;
 	}
+	
+	public int numberOfOperands() {
+		
+		int sum = 0;
+		if(hasFirstOperand())
+			sum++;
+		if(hasSecondOperand())
+			sum++;
+		return sum;
+	}
 
 	@Override
 	public String toString() {

@@ -61,8 +61,6 @@ RD                D8			VALUE			NONE		 	THREE
 RMO               AC			REGISTER		REGISTER 	 	TWO
 RSUB              4C			NONE			NONE		 	THREE
 +RSUB             4C			NONE			NONE		 	THREE
-SHIFTL            A4			REGISTER		VALUE		 	TWO
-SHIFTR            A8			REGISTER		VALUE		 	TWO
 SIO               F0			NONE			NONE		 	ONE
 SSK               EC			VALUE			NONE		 	THREE
 +SSK              EC			VALUE			NONE		 	FOUR

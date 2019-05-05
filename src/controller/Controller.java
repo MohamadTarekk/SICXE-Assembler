@@ -8,20 +8,22 @@ import model.CommandInfo;
 import model.Instruction;
 import model.Line;
 import model.SourceReader;
+import model.Symbol;
 import model.tables.DirectiveTable;
 import model.tables.ErrorTable;
 import model.tables.InstructionTable;
 import model.tables.RegisterTable;
+import model.tables.SymbolTable;
 import model.utility.Utility;
 
 public class Controller {
-	
+
 	CommandInfo CI;
+
 	ArrayList<Line> lineList;
 	HashMap<String, Instruction> instructionTable;
-	
+
 	private String path;
-	
 	private boolean noErrors = false;
 
 	public boolean isNoErrors() {
@@ -77,16 +79,14 @@ public class Controller {
 		}
 		// textArea.setText(toBePrintedInTextArea);
 		Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
-		String address = "";
-		for (int i = 0; i < CI.getLinesList().size(); i++) {
-			if(!CI.getLinesList().get(i).getLabel().equals("")&&!CI.getLinesList().get(i).getLabel().equals("(~)")){
-				address +=CI.getLinesList().get(i).getLabel();
-				address +=Utility.getSpaces(12-CI.getLinesList().get(i).getLabel().length());
-				address +=CI.getLinesList().get(i).getLocation();
-				address += "\n";
+		Symbol symbol;
+		for(Line line : lineList) {
+			if(!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
+				symbol = new Symbol(line.getLabel(), line.getLocation());
+				SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 			}
 		}
-		Utility.writeFile(address, "res/LIST/symTable.txt");
+		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
 	}
 
 	public void passOne(String program, boolean restricted) {
@@ -96,13 +96,14 @@ public class Controller {
 				.processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"), restricted);
 
 		boolean firstPassDone = CI.addToLineList();
+		lineList = CI.getLinesList();
 		if(firstPassDone)
 			prepareListFile();
 		noErrors = CI.checkForErrors();
 	}
-	
+
 	public String getStartOfProgram() {
-		
+
 		String startOfProgram = "000000";
 		for(Line line : lineList) {
 			if(line.getMnemonic().equalsIgnoreCase("START")) {
@@ -112,9 +113,9 @@ public class Controller {
 		}
 		return startOfProgram;
 	}
-	
+
 	public String getEndOfProgram() {
-		
+
 		String endOfProgram = null;
 		for(Line line : lineList) {
 			if(line.getMnemonic().equalsIgnoreCase("END")) {
@@ -124,14 +125,14 @@ public class Controller {
 		}
 		return endOfProgram;
 	}
-	
+
 	public String getSizeOfProgram(String startOfProgram, String endOfProgram) {
-		
+
 		return "00" + Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) + 1);
 	}
-	
+
 	public String getProgramName() {
-		
+
 		String name = "";
 		for(Line line : lineList) {
 			if(line.getMnemonic().equalsIgnoreCase("START")) {
@@ -146,9 +147,9 @@ public class Controller {
 			name += Utility.getSpaces(6 - length);
 		return name;
 	}
-	
+
 	public String getAddresOfFirstExcutableInstruction() {
-		
+
 		String label, address;
 		label = address = null;
 		for(Line line : lineList) {
@@ -165,19 +166,98 @@ public class Controller {
 		return "00" + address;
 	}
 
+	public String addToTextRecord(String text) {
+
+		String textRecord = "";
+		// TODO: receive text, add it to the text record then format the string
+		return textRecord;
+	}
+
 	public void passTwo() {
 
 		instructionTable = InstructionTable.instructionTable;
-		lineList = CI.getLinesList();
 		String startOfProgram = getStartOfProgram();
 		String endOfProgram = getEndOfProgram();
 		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
 		String programName = getProgramName();
 		String headerRecord = "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;
+
+		String textRecord = "";
+		@SuppressWarnings("unused")
+		int n, i, x, b, p, e;
+		String flagsByte = "";
+		String textRecordTemp;
+		String addressingMode;
+		String firstOperand;
+		String secondOperand;
+		String mnemonic;
+		Instruction currentInstruction;
+		for(Line line : lineList) {
+			addressingMode = line.getAddressingMode();
+			mnemonic = line.getMnemonic();
+			currentInstruction = InstructionTable.instructionTable.get(mnemonic);
+			if(currentInstruction != null) {
+				textRecordTemp = String.format("%1$02X", currentInstruction.getOpcode());
+				switch(currentInstruction.getFormat()) {
+				case ONE:
+					addToTextRecord(textRecordTemp);
+					break;
+				case TWO:
+					firstOperand = Integer.toString(RegisterTable.registerTable.get(line.getFirstOperand()));
+					if(currentInstruction.hasSecondOperand())
+						secondOperand = Integer.toString(RegisterTable.registerTable.get(line.getSecondOperand()));
+					else
+						secondOperand = "0";
+					addToTextRecord(textRecordTemp + firstOperand + secondOperand);
+					break;
+				case THREE:
+					switch(addressingMode) {
+					// set n, i and x flags
+					case "#":
+						// Not yet supported
+						break;
+					case "@":
+						// Not yet supported
+						break;
+					default:
+						// TODO: set flags byte
+						break;						
+					}
+					// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 (Format 3)
+					firstOperand = "";
+					addToTextRecord(textRecordTemp + flagsByte + firstOperand);
+					break;
+				case FOUR:
+					// almost same as Format 3
+					break;
+				default:
+					break;
+				}
+			} else {
+				// Directive
+				switch(mnemonic) {
+				case "WORD":
+					addToTextRecord(String.format("%1$06X", Integer.parseInt(line.getFirstOperand())));
+					break;
+				case "BYTE":
+					addToTextRecord(String.format("%1$02X", Integer.parseInt(line.getFirstOperand())));
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		// TODO: get the final text record
+		textRecord = "";
+
 		String addressOfFirstExcutableInstruction = getAddresOfFirstExcutableInstruction();
 		String endRecord = "E^" + addressOfFirstExcutableInstruction;
+		
+		@SuppressWarnings("unused")
+		String objectCode = headerRecord + textRecord + endRecord;
+		// Utility.writeFile(objectCode, "/res/LIST/objFile.o");
 	}
-	
+
 
 	public void assemble(String program, boolean restricted) {
 
@@ -185,27 +265,27 @@ public class Controller {
 		passTwo();
 		Utility.clearAll();
 	}
-	
+
 	public String getListFile() {
-		
+
 		path = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/LIST/listFile.txt";
-        ArrayList<String> arr = SourceReader.getInstance().readFile(path);
-        String append = "";
-        for (String s : arr) {
-            append += s + "\n";
-        }
-        return append;
+		ArrayList<String> arr = SourceReader.getInstance().readFile(path);
+		String append = "";
+		for (String s : arr) {
+			append += s + "\n";
+		}
+		return append;
 	}
-	
+
 	public String loadFile(String path) {
-		
+
 		this.path = path;
-        ArrayList<String> arr = SourceReader.getInstance().readFile(path);
-        String append = "";
-        for (String s : arr) {
-            append += s + "\n";
-        }
-        return append;
+		ArrayList<String> arr = SourceReader.getInstance().readFile(path);
+		String append = "";
+		for (String s : arr) {
+			append += s + "\n";
+		}
+		return append;
 	}
 
 }
