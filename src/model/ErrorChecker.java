@@ -231,10 +231,6 @@ public class ErrorChecker {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 				return true;
 			}
-			if (!isHexa(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
-				error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
-				return true;
-			}
 		default:
 			if (line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
@@ -263,6 +259,7 @@ public class ErrorChecker {
 	}*/
 
 
+	@SuppressWarnings("unused")
 	private boolean isHexa(String value) {
 		try {
 			Long.parseLong(value, 16);

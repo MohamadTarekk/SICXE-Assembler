@@ -9,7 +9,7 @@ SSS      MULR    A,S
          SUBR    S,A
          STA     DELTA              mmm
 .This is a comment
-BETA     BYTE    x'339'
+BETA     BYTE    x'3'
 GAMMA    WORD    6
 ALPHA    RESW    1
 DELTA    RESW    1

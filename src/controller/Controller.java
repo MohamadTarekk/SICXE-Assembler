@@ -400,14 +400,15 @@ public class Controller {
 				case "BYTE":
 					for(String operand : operands) {
 						type = operand.charAt(0);
-						operand = extractOperand(operand);
 						switch(type) {
 						case 'X':
+							operand = extractOperand(operand);
 							textRecordTemp = Utility.getZeros((int)Math.ceil((double)(operand.length())/2)*2 - operand.length()) + operand;
 							textRecord += textRecordTemp;
 							recordLengths.add(textRecordTemp.length()/2);
 							break;
 						case 'C':
+							operand = extractOperand(operand);
 							textRecord += convertToAscii(operand);
 							recordLengths.add(operand.length());
 							break;
