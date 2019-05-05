@@ -19,10 +19,12 @@ import model.utility.Utility;
 
 public class Controller {
 
-	CommandInfo CI;
+	private CommandInfo CI;
 
-	ArrayList<Line> lineList;
-	ArrayList<Integer> recordLengths = new ArrayList<>();
+	private ArrayList<Line> lineList;
+	private ArrayList<Integer> recordLengths = new ArrayList<>();
+
+	@SuppressWarnings("unused")
 	HashMap<String, Instruction> instructionTable;
 
 	private String path;
@@ -35,26 +37,27 @@ public class Controller {
 		return noErrors;
 	}
 
+	@SuppressWarnings("unused")
 	public void setNoErrors(boolean noErrors) {
 		this.noErrors = noErrors;
 	}
 
-	public void loadInstructionTable() {
+	private void loadInstructionTable() {
 
-		InstructionTable.loadInstructionTable("res/SIC-XE Instructions Opcode.txt");
+		InstructionTable.loadInstructionTable();
 	}
 
-	public void loadDirectiveTable() {
+	private void loadDirectiveTable() {
 
 		DirectiveTable.loadDirectiveTable();
 	}
 
-	public void loadErrorList() {
+	private void loadErrorList() {
 
 		ErrorTable.loadErrorList();
 	}
 
-	public void loadRegisterTable() {
+	private void loadRegisterTable() {
 
 		RegisterTable.loadRegisterTable();
 	}
@@ -67,7 +70,7 @@ public class Controller {
 		loadRegisterTable();
 	}
 
-	public void prepareListFile() {
+	private void prepareListFile() {
 
 		final String lineSeparator = "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
 		final String startPassOne = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   1 -_-_-_-_-_-_-_-_-_-_-";
@@ -80,6 +83,7 @@ public class Controller {
 		int len = CI.getLinesList().size();
 		for (int i = 0; i < len; i++) {
 			String lineCount = String.valueOf(i);
+			//noinspection StringConcatenationInLoop
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
 		}
 		// textArea.setText(toBePrintedInTextArea);
@@ -94,7 +98,7 @@ public class Controller {
 		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
 	}
 
-	public void passOne(String program, boolean restricted) {
+	private void passOne(String program, boolean restricted) {
 
 		Utility.writeFile(program, "res/functionality/ASSEMBLING");
 		CI = SourceReader.getInstance()
@@ -107,7 +111,7 @@ public class Controller {
 		noErrors = CI.checkForErrors();
 	}
 
-	public String getStartOfProgram() {
+	private String getStartOfProgram() {
 
 		String startOfProgram = "000000";
 		for(Line line : lineList) {
@@ -119,7 +123,7 @@ public class Controller {
 		return startOfProgram;
 	}
 
-	public String getEndOfProgram() {
+	private String getEndOfProgram() {
 
 		String endOfProgram = null;
 		for(Line line : lineList) {
@@ -131,12 +135,12 @@ public class Controller {
 		return endOfProgram;
 	}
 
-	public String getSizeOfProgram(String startOfProgram, String endOfProgram) {
+	private String getSizeOfProgram(String startOfProgram, String endOfProgram) {
 
 		return "00" + Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) + 1);
 	}
 
-	public String getProgramName() {
+	private String getProgramName() {
 
 		String name = "";
 		for(Line line : lineList) {
@@ -153,17 +157,16 @@ public class Controller {
 		return name;
 	}
 
-	public String getHeaderRecord() {
+	private String getHeaderRecord() {
 
 		String startOfProgram = getStartOfProgram();
 		String endOfProgram = getEndOfProgram();
 		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
 		String programName = getProgramName();
-		String headerRecord = "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;
-		return headerRecord;
+		return "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;		//Return header Record
 	}
 
-	public String addToTextRecord(String opcode, String flags, String disp, Format format) {
+	private String addToTextRecord(String opcode, String flags, String disp, Format format) {
 
 		String record;
 		record = Utility.hexToBin(opcode).substring(12, 18); // take 6 bits only
@@ -173,7 +176,7 @@ public class Controller {
 		return record;
 	}
 
-	public String getNIX(Line line) {
+	private String getNIX(Line line) {
 
 		String nix;
 		switch(line.getAddressingMode()) {
@@ -191,7 +194,7 @@ public class Controller {
 		default:
 			// case direct
 			// nix = indexing? 111 : 110;
-			if(line.getSecondOperand() != "") {
+			if(!line.getSecondOperand().equals("")) {
 				// indexed
 				nix = "111";
 			} else {
@@ -203,7 +206,7 @@ public class Controller {
 		return nix;
 	}
 
-	public String getBPE(Line line, Format format) {
+	private String getBPE(Line line, Format format) {
 
 		// TODO: set bpe
 		// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 for Format 3 and e = 1 for Format 4
@@ -245,17 +248,17 @@ public class Controller {
 		return bpe;
 	}
 
-	public void setBase(String base) {
+	private void setBase(String base) {
 
 		this.base = base;
 	}
 
-	public int getBase() {
+	private int getBase() {
 
 		return Utility.hexToDecimal(base);
 	}
 
-	public boolean checkBase() {
+	private boolean checkBase() {
 
 		for(Line line : lineList) {
 			if(line.getMnemonic().equalsIgnoreCase("BASE")) {
@@ -267,22 +270,23 @@ public class Controller {
 		return false;
 	}
 
-	public String extractOperand(String operand) {
+	private String extractOperand(String operand) {
 		
 		return operand.substring(2).replace("'", "");
 	}
 	
-	public String convertToAscii(String data) {
+	private String convertToAscii(String data) {
 		
 		String res = "";
 		char[] charArray = data.toCharArray();
 		for(char c : charArray) {
+			//noinspection StringConcatenationInLoop
 			res += (int) c;
 		}
 		return res;
 	}
 	
-	public String formatTextRecord(String textRecord) {
+	private String formatTextRecord(String textRecord) {
 		
 		ArrayList<String> lengths = new ArrayList<>();
 		String start = getStartOfProgram();
@@ -296,11 +300,13 @@ public class Controller {
 			if(sum <= 30) {
 				int i;
 				for(i = index; i < index + n*2; i++) {
+					//noinspection StringConcatenationInLoop
 					result += temp[i];
 				}
 				tempSize = sum;
 				index = i;
 			} else {
+				//noinspection StringConcatenationInLoop
 				result += "\nT^";
 				start = String.format("%1$06X", Utility.hexToDecimal(start) + sum - n);
 				lengths.add(String.format("%1$02X", sum - n));
@@ -321,11 +327,11 @@ public class Controller {
 		return result;
 	}
 
-	public String getTextRecord() {
+	private String getTextRecord() {
 
 		String textRecord = "";
 		String nix, bpe;
-		String flagsByte = "";
+		@SuppressWarnings("UnusedAssignment") String flagsByte = "";
 		String textRecordTemp;
 		String firstOperand;
 		String secondOperand;
@@ -338,6 +344,7 @@ public class Controller {
 				textRecordTemp = String.format("%1$02X", currentInstruction.getOpcode());
 				switch(currentInstruction.getFormat()) {
 				case ONE:
+					//noinspection StringConcatenationInLoop
 					textRecord += textRecordTemp;
 					recordLengths.add(1);
 					break;
@@ -347,6 +354,7 @@ public class Controller {
 						secondOperand = Integer.toString(RegisterTable.registerTable.get(line.getSecondOperand()));
 					else
 						secondOperand = "0";
+					//noinspection StringConcatenationInLoop
 					textRecord += textRecordTemp + firstOperand + secondOperand;
 					recordLengths.add(2);
 					break;
@@ -357,10 +365,12 @@ public class Controller {
 						return BASE_ERROR;
 					}
 					flagsByte = Utility.binToHex(nix + bpe);
+					//noinspection StringConcatenationInLoop
 					textRecord += addToTextRecord(textRecordTemp, flagsByte, displacement, Format.THREE);
 					recordLengths.add(3);
 					break;
 				case FOUR:
+					//noinspection UnusedAssignment
 					firstOperand = line.getFirstOperand();
 					nix = getNIX(line);
 					bpe = getBPE(line, Format.FOUR);
@@ -368,6 +378,7 @@ public class Controller {
 						return BASE_ERROR;
 					}
 					flagsByte = Utility.binToHex(nix + bpe);
+					//noinspection StringConcatenationInLoop
 					textRecord += addToTextRecord(textRecordTemp, flagsByte, displacement, Format.FOUR);
 					recordLengths.add(4);
 					break;
@@ -391,6 +402,7 @@ public class Controller {
 							// textRecord += convertToAscii(extractOperand(operand));
 							break;
 						default:
+							//noinspection StringConcatenationInLoop
 							textRecord += String.format("%1$06X", Integer.parseInt(operand));
 							recordLengths.add(3);
 							break;
@@ -404,14 +416,17 @@ public class Controller {
 						switch(type) {
 						case 'X':
 							textRecordTemp = Utility.getZeros((int)Math.ceil((double)(operand.length())/2)*2 - operand.length()) + operand;
+							//noinspection StringConcatenationInLoop
 							textRecord += textRecordTemp;
 							recordLengths.add(textRecordTemp.length()/2);
 							break;
 						case 'C':
+							//noinspection StringConcatenationInLoop
 							textRecord += convertToAscii(operand);
 							recordLengths.add(operand.length());
 							break;
 						default:
+							//noinspection StringConcatenationInLoop
 							textRecord += String.format("%1$02X", Integer.parseInt(operand));
 							recordLengths.add(1);
 							break;
@@ -426,7 +441,7 @@ public class Controller {
 		return formatTextRecord(textRecord);
 	}
 
-	public String getAddresOfFirstExcutableInstruction() {
+	private String getAddressOfFirstExecutableInstruction() {
 
 		String label, address;
 		label = address = null;
@@ -444,25 +459,24 @@ public class Controller {
 		return "00" + address;
 	}
 
-	String getEndRecord() {
+	private String getEndRecord() {
 
-		String addressOfFirstExcutableInstruction = getAddresOfFirstExcutableInstruction();
-		String endRecord = "E^" + addressOfFirstExcutableInstruction;
-		return endRecord;
+		String addressOfFirstExecutableInstruction = getAddressOfFirstExecutableInstruction();
+		return "E^" + addressOfFirstExecutableInstruction;				// Return endRecord
 	}
 
-	public String getObjectCode() {
+	private String getObjectCode() {
 
 		String headerRecord = getHeaderRecord();
 		String textRecord = getTextRecord();
 		if(textRecord.equals(BASE_ERROR))
 			return BASE_ERROR;
 		String endRecord = getEndRecord();
-		String objectCode = headerRecord + "\n" + textRecord + "\n" + endRecord;
-		return objectCode;
+		return headerRecord + "\n" + textRecord + "\n" + endRecord;		// Return objectCode
 	}
 
-	public boolean passTwo() {
+	@SuppressWarnings("UnusedReturnValue")
+	private boolean passTwo() {
 
 		String objectCode = getObjectCode();
 		if(objectCode.equals(BASE_ERROR))
@@ -485,6 +499,7 @@ public class Controller {
 		ArrayList<String> arr = SourceReader.getInstance().readFile(path);
 		String append = "";
 		for (String s : arr) {
+			//noinspection StringConcatenationInLoop
 			append += s + "\n";
 		}
 		return append;
@@ -496,6 +511,7 @@ public class Controller {
 		ArrayList<String> arr = SourceReader.getInstance().readFile(path);
 		String append = "";
 		for (String s : arr) {
+			//noinspection StringConcatenationInLoop
 			append += s + "\n";
 		}
 		return append;

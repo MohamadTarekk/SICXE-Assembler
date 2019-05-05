@@ -20,21 +20,19 @@ import model.SourceReader;
 
 public class Assembler {
 
-    public Stage window;
-    FileChooser fileChooser;
-    String path;
+    private Stage window;
 
     public MenuItem clearResult;
     public MenuItem loadFile;
-    public MenuItem saveFile;
-    public MenuItem saveAsFile;
+    //public MenuItem saveFile;
+    //public MenuItem saveAsFile;
     public MenuItem assemble;
     public CheckMenuItem restricted;
     public Label restrictedMsgLabel;
 
     public TextArea textArea;
     
-    Controller controller = new Controller();
+    private Controller controller = new Controller();
 
     public void initialize(Stage primaryStage) {
 
@@ -54,7 +52,7 @@ public class Assembler {
         controller.prepareData();
     }
     
-    public void showAssembleMsgDialog(boolean noErrors) {
+    private void showAssembleMsgDialog(boolean noErrors) {
     	
     	Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Note");
@@ -79,14 +77,14 @@ public class Assembler {
 
     public void loadFileOnAction() {
 
-        fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(extFilter);
         String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/SIC files";
         fileChooser.setInitialDirectory(new File(currentPath));
         File file = fileChooser.showOpenDialog(window);
         if (file != null) {
-            path = file.getAbsolutePath();
+            String path = file.getAbsolutePath();
             textArea.setText(controller.loadFile(path));
         }
     }
@@ -95,6 +93,7 @@ public class Assembler {
         ArrayList<String> arr = SourceReader.getInstance().readFile("res/functionality/ASSEMBLING");
         String append = "";
         for (String s : arr) {
+            //noinspection StringConcatenationInLoop
             append += s + "\n";
         }
         textArea.setText(append);

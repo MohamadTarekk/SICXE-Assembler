@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +14,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Assembler">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Assembler">
    <children>
       <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -23,9 +27,10 @@
                   <MenuItem mnemonicParsing="false" text="Save As..." />
             </items>
           </Menu>
-          <Menu fx:id="assemble" mnemonicParsing="false" onAction="#assembleOnAction" text="Assemble">
+          <Menu fx:id="assemble" mnemonicParsing="false" text="Assemble">
             <items>
-              <MenuItem mnemonicParsing="false" text="Assemble" />
+              <MenuItem mnemonicParsing="false" onAction="#assembleOnAction" text="Assemble" />
+                  <MenuItem mnemonicParsing="false" onAction="#showListFile" text="List File" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Mode">
