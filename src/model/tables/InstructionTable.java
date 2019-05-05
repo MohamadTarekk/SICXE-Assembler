@@ -22,8 +22,8 @@ public class InstructionTable {
 		InstructionTable.instructionTable = instructionTable;
 	}
 
-	public static void loadInstructionTable(String filePath) {
-		ArrayList<String> fileInfo = SourceReader.getInstance().readFile(filePath);
+	public static void loadInstructionTable() {
+		ArrayList<String> fileInfo = SourceReader.getInstance().readFile("res/SIC-XE Instructions Opcode.txt");
 		String regex = "(.+)[ |\\t]+([a-fA-F0-9]+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)[ |\\t]+(\\S+)";
 		Pattern reg = Pattern.compile(regex);
 		int len = fileInfo.size();
