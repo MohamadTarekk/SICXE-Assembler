@@ -9,6 +9,7 @@ import model.Instruction;
 import model.Line;
 import model.SourceReader;
 import model.Symbol;
+import model.enums.Format;
 import model.tables.DirectiveTable;
 import model.tables.ErrorTable;
 import model.tables.InstructionTable;
@@ -21,9 +22,13 @@ public class Controller {
 	CommandInfo CI;
 
 	ArrayList<Line> lineList;
+	ArrayList<Integer> recordLengths = new ArrayList<>();
 	HashMap<String, Instruction> instructionTable;
 
 	private String path;
+	private String base;
+	private String displacement;
+	private String BASE_ERROR = "Base Error";
 	private boolean noErrors = false;
 
 	public boolean isNoErrors() {
@@ -148,6 +153,279 @@ public class Controller {
 		return name;
 	}
 
+	public String getHeaderRecord() {
+
+		String startOfProgram = getStartOfProgram();
+		String endOfProgram = getEndOfProgram();
+		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
+		String programName = getProgramName();
+		String headerRecord = "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;
+		return headerRecord;
+	}
+
+	public String addToTextRecord(String opcode, String flags, String disp, Format format) {
+
+		String record;
+		record = Utility.hexToBin(opcode).substring(12, 18); // take 6 bits only
+		record += Utility.hexToBin(flags).substring(14); 
+		record += format == Format.THREE ? Utility.hexToBin(disp).substring(8) : Utility.hexToBin(disp) ;
+		record = Utility.binToHex(record, format);
+		return record;
+	}
+
+	public String getNIX(Line line) {
+
+		String nix;
+		switch(line.getAddressingMode()) {
+		// set n, i and x flags
+		case "#":
+			// case immediate
+			// nix = 010
+			nix = "010";
+			break;
+		case "@":
+			// case indirect
+			// nix = 100
+			nix = "100";
+			break;
+		default:
+			// case direct
+			// nix = indexing? 111 : 110;
+			if(line.getSecondOperand() != "") {
+				// indexed
+				nix = "111";
+			} else {
+				// non indexed
+				nix = "110";
+			}
+			break;						
+		}
+		return nix;
+	}
+
+	public String getBPE(Line line, Format format) {
+
+		// TODO: set bpe
+		// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 for Format 3 and e = 1 for Format 4
+		String bpe, bp, e;
+		String firstOperand = line.getFirstOperand();
+		int step = format == Format.THREE ? 3 : 4;
+		int pc = Utility.hexToDecimal(line.getLocation()) + step;
+		int symLoc, disp;
+		Symbol symbol = SymbolTable.symbolTable.get(firstOperand);
+		if(symbol != null) {
+			symLoc = Utility.hexToDecimal(symbol.getAddress());
+			disp = symLoc - pc;
+			if(disp >= -2048 && disp <= 2047) {
+				// bpe = 010
+				bp = "01";
+			} else { // try base relative
+				if(checkBase()) { // check if base register is available
+					int base = getBase();
+					disp = symLoc - base;
+					if(disp >= 0 && disp <= 4*1024-1) {
+						// bpe = 100
+						bp = "10";
+					} else {
+						// error
+						return BASE_ERROR;
+					}
+				} else {
+					// error
+					return BASE_ERROR;
+				}
+			}
+		} else {
+			disp = Utility.hexToDecimal(firstOperand);
+			bp = "00";
+		}
+		displacement = format == Format.THREE  ? String.format("%1$04X", disp) : String.format("%1$05X", disp) ;
+		e = format == Format.THREE ? "0" : "1" ;
+		bpe = bp + e;
+		return bpe;
+	}
+
+	public void setBase(String base) {
+
+		this.base = base;
+	}
+
+	public int getBase() {
+
+		return Utility.hexToDecimal(base);
+	}
+
+	public boolean checkBase() {
+
+		for(Line line : lineList) {
+			if(line.getMnemonic().equalsIgnoreCase("BASE")) {
+				setBase(line.getFirstOperand());
+				return true;
+			} else if(line.getMnemonic().equalsIgnoreCase("NOBASE"))
+				return false;
+		}
+		return false;
+	}
+
+	public String extractOperand(String operand) {
+		
+		return operand.substring(2).replace("'", "");
+	}
+	
+	public String convertToAscii(String data) {
+		
+		String res = "";
+		char[] charArray = data.toCharArray();
+		for(char c : charArray) {
+			res += (int) c;
+		}
+		return res;
+	}
+	
+	public String formatTextRecord(String textRecord) {
+		
+		ArrayList<String> lengths = new ArrayList<>();
+		String start = getStartOfProgram();
+		String result = "T^" + start + "^^";
+		char[] temp = textRecord.toCharArray();
+		int sum = 0;
+		int index = 0;
+		int tempSize = 0;
+		for(int n : recordLengths) {
+			sum += n;
+			if(sum <= 30) {
+				int i;
+				for(i = index; i < index + n*2; i++) {
+					result += temp[i];
+				}
+				tempSize = sum;
+				index = i;
+			} else {
+				result += "\nT^";
+				start = String.format("%1$06X", Utility.hexToDecimal(start) + sum - n);
+				lengths.add(String.format("%1$02X", sum - n));
+				result += start;
+				result += "^^";
+				tempSize = sum - n;
+				sum = 0;
+			}
+		}
+		lengths.add(String.format("%1$02X", tempSize));
+		int size = result.length();
+		index = 0;
+		for(int i = 0; i < size; i++) {
+			if(result.charAt(i) == 'T') {
+				result = result.substring(0, i+9) + lengths.get(index++) + result.substring(i+9);
+			}
+		}
+		return result;
+	}
+
+	public String getTextRecord() {
+
+		String textRecord = "";
+		String nix, bpe;
+		String flagsByte = "";
+		String textRecordTemp;
+		String firstOperand;
+		String secondOperand;
+		String mnemonic;
+		Instruction currentInstruction;
+		for(Line line : lineList) {
+			mnemonic = line.getMnemonic();
+			currentInstruction = InstructionTable.instructionTable.get(mnemonic);
+			if(currentInstruction != null) {
+				textRecordTemp = String.format("%1$02X", currentInstruction.getOpcode());
+				switch(currentInstruction.getFormat()) {
+				case ONE:
+					textRecord += textRecordTemp;
+					recordLengths.add(1);
+					break;
+				case TWO:
+					firstOperand = Integer.toString(RegisterTable.registerTable.get(line.getFirstOperand()));
+					if(currentInstruction.hasSecondOperand())
+						secondOperand = Integer.toString(RegisterTable.registerTable.get(line.getSecondOperand()));
+					else
+						secondOperand = "0";
+					textRecord += textRecordTemp + firstOperand + secondOperand;
+					recordLengths.add(2);
+					break;
+				case THREE:
+					nix = getNIX(line);
+					bpe = getBPE(line, Format.THREE);
+					if(bpe.equals(BASE_ERROR)) {
+						return BASE_ERROR;
+					}
+					flagsByte = Utility.binToHex(nix + bpe);
+					textRecord += addToTextRecord(textRecordTemp, flagsByte, displacement, Format.THREE);
+					recordLengths.add(3);
+					break;
+				case FOUR:
+					firstOperand = line.getFirstOperand();
+					nix = getNIX(line);
+					bpe = getBPE(line, Format.FOUR);
+					if(bpe.equals(BASE_ERROR)) {
+						return BASE_ERROR;
+					}
+					flagsByte = Utility.binToHex(nix + bpe);
+					textRecord += addToTextRecord(textRecordTemp, flagsByte, displacement, Format.FOUR);
+					recordLengths.add(4);
+					break;
+				default:
+					break;
+				}
+			} else {
+				// Directive
+				String data = line.getFirstOperand().toUpperCase();
+				String[] operands = data.split(",");
+				char type;
+				switch(mnemonic) {
+				case "WORD":
+					for(String operand : operands) {
+						type = operand.charAt(0);
+						switch(type) {
+						case 'X':
+							// textRecord += Utility.getZeros(6 - operand.length()) + extractOperand(operand);
+							break;
+						case 'C':
+							// textRecord += convertToAscii(extractOperand(operand));
+							break;
+						default:
+							textRecord += String.format("%1$06X", Integer.parseInt(operand));
+							recordLengths.add(3);
+							break;
+						}
+					}
+					break;
+				case "BYTE":
+					for(String operand : operands) {
+						type = operand.charAt(0);
+						operand = extractOperand(operand);
+						switch(type) {
+						case 'X':
+							textRecordTemp = Utility.getZeros((int)Math.ceil((double)(operand.length())/2)*2 - operand.length()) + operand;
+							textRecord += textRecordTemp;
+							recordLengths.add(textRecordTemp.length()/2);
+							break;
+						case 'C':
+							textRecord += convertToAscii(operand);
+							recordLengths.add(operand.length());
+							break;
+						default:
+							textRecord += String.format("%1$02X", Integer.parseInt(operand));
+							recordLengths.add(1);
+							break;
+						}
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		return formatTextRecord(textRecord);
+	}
+
 	public String getAddresOfFirstExcutableInstruction() {
 
 		String label, address;
@@ -166,96 +444,31 @@ public class Controller {
 		return "00" + address;
 	}
 
-	public String addToTextRecord(String text) {
-
-		String textRecord = "";
-		// TODO: receive text, add it to the text record then format the string
-		return textRecord;
-	}
-
-	public void passTwo() {
-
-		instructionTable = InstructionTable.instructionTable;
-		String startOfProgram = getStartOfProgram();
-		String endOfProgram = getEndOfProgram();
-		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
-		String programName = getProgramName();
-		String headerRecord = "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;
-
-		String textRecord = "";
-		@SuppressWarnings("unused")
-		int n, i, x, b, p, e;
-		String flagsByte = "";
-		String textRecordTemp;
-		String addressingMode;
-		String firstOperand;
-		String secondOperand;
-		String mnemonic;
-		Instruction currentInstruction;
-		for(Line line : lineList) {
-			addressingMode = line.getAddressingMode();
-			mnemonic = line.getMnemonic();
-			currentInstruction = InstructionTable.instructionTable.get(mnemonic);
-			if(currentInstruction != null) {
-				textRecordTemp = String.format("%1$02X", currentInstruction.getOpcode());
-				switch(currentInstruction.getFormat()) {
-				case ONE:
-					addToTextRecord(textRecordTemp);
-					break;
-				case TWO:
-					firstOperand = Integer.toString(RegisterTable.registerTable.get(line.getFirstOperand()));
-					if(currentInstruction.hasSecondOperand())
-						secondOperand = Integer.toString(RegisterTable.registerTable.get(line.getSecondOperand()));
-					else
-						secondOperand = "0";
-					addToTextRecord(textRecordTemp + firstOperand + secondOperand);
-					break;
-				case THREE:
-					switch(addressingMode) {
-					// set n, i and x flags
-					case "#":
-						// Not yet supported
-						break;
-					case "@":
-						// Not yet supported
-						break;
-					default:
-						// TODO: set flags byte
-						break;						
-					}
-					// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 (Format 3)
-					firstOperand = "";
-					addToTextRecord(textRecordTemp + flagsByte + firstOperand);
-					break;
-				case FOUR:
-					// almost same as Format 3
-					break;
-				default:
-					break;
-				}
-			} else {
-				// Directive
-				switch(mnemonic) {
-				case "WORD":
-					addToTextRecord(String.format("%1$06X", Integer.parseInt(line.getFirstOperand())));
-					break;
-				case "BYTE":
-					addToTextRecord(String.format("%1$02X", Integer.parseInt(line.getFirstOperand())));
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		// TODO: get the final text record
-		textRecord = "";
+	String getEndRecord() {
 
 		String addressOfFirstExcutableInstruction = getAddresOfFirstExcutableInstruction();
 		String endRecord = "E^" + addressOfFirstExcutableInstruction;
-		
-		@SuppressWarnings("unused")
-		String objectCode = headerRecord + textRecord + endRecord;
-		// Utility.writeFile(objectCode, "/res/LIST/objFile.o");
+		return endRecord;
+	}
+
+	public String getObjectCode() {
+
+		String headerRecord = getHeaderRecord();
+		String textRecord = getTextRecord();
+		if(textRecord.equals(BASE_ERROR))
+			return BASE_ERROR;
+		String endRecord = getEndRecord();
+		String objectCode = headerRecord + "\n" + textRecord + "\n" + endRecord;
+		return objectCode;
+	}
+
+	public boolean passTwo() {
+
+		String objectCode = getObjectCode();
+		if(objectCode.equals(BASE_ERROR))
+			return false;
+		Utility.writeFile(objectCode, "res/LIST/objFile.o");
+		return true;
 	}
 
 

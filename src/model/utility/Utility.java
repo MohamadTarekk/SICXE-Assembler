@@ -3,6 +3,7 @@ package model.utility;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,12 +11,39 @@ import java.util.regex.Pattern;
 import model.CommandInfo;
 import model.ErrorChecker;
 import model.ProgramCounter;
+import model.enums.Format;
 import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.tables.RegisterTable;
 
 @SuppressWarnings({})
 public class Utility {
+	
+	public static String binToHex(String bin) {
+		
+		int decimal = Integer.parseInt(bin,2);
+		return convertToHexa(decimal);
+	}
+	
+	public static String binToHex(String bin, Format format) {
+		
+		int decimal = Integer.parseInt(bin,2);
+		String res = convertToHexa(decimal);
+		String zeros;
+		if(format == Format.THREE)
+			zeros = getZeros(6 - res.length());
+		else
+			zeros = getZeros(8 - res.length());
+		res = zeros + res;
+		return res;
+	}
+	
+	public static String hexToBin(String hex) {
+		
+		String res = new BigInteger(hex, 16).toString(2);
+		res = getZeros(20 - res.length()) + res;
+		return res;
+	}
 
 	public static int hexToDecimal(String hex) {
 		return Integer.parseInt(hex, 16);
@@ -65,6 +93,13 @@ public class Utility {
         String s = "";
         for (int i = 0; i < count; i++)
             s += " ";
+        return s;
+    }
+    
+    public static String getZeros(int count) {
+        String s = "";
+        for (int i = 0; i < count; i++)
+            s += "0";
         return s;
     }
 
