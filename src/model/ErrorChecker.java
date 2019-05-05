@@ -231,11 +231,12 @@ public class ErrorChecker {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 				return true;
 			}
-			if(line.getFirstOperand().startsWith("X") && !isHexa(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
+			if((line.getFirstOperand().startsWith("X") || line.getFirstOperand().startsWith("x"))  && !isHexa(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
 				error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
 				return true;
 
 			}
+			break;
 		default:
 			if (line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
