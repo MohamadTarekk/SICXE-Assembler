@@ -17,7 +17,7 @@ public class SourceReader {
 
 	/**
 	 *
-	 * @Author BlueLort SINGLETON DESIGN PATTERN
+	 * SINGLETON DESIGN PATTERN
 	 * @return the only single instance from this class.
 	 */
 	public static SourceReader getInstance() {
@@ -27,7 +27,6 @@ public class SourceReader {
 	}
 
 	/**
-	 * @Author BlueLort
 	 * @param filePath
 	 *            the read file path.
 	 *
@@ -52,7 +51,6 @@ public class SourceReader {
 	}
 
 	/**
-	 * @Author BlueLort
 	 * @param fileInfo
 	 *            the lines read from file usually after using this.readFile()
 	 * @param isRestricted
@@ -70,7 +68,7 @@ public class SourceReader {
 	}
 
 	/**
-	 * @Author BlueLort usually make a sub strings from each line and assign them
+	 *          usually make a sub strings from each line and assign them
 	 *         accordingly to the suitable instruction info. (using zero indexing)
 	 *         0-> 7 label 8 empty/space 9-> 15 mnemonic 16 empty/space 17->34
 	 *         operand 35->65 comment
@@ -123,7 +121,7 @@ public class SourceReader {
 	}
 
 	/**
-	 * @Author BlueLort tries to match and get instruction information from a line
+	 *         tries to match and get instruction information from a line
 	 *         using regex. to test regex i recommend going into this site
 	 *         https://regexr.com/ paste regex in expression field and test case in
 	 *         text field then look at explanation & details to know how the regex
