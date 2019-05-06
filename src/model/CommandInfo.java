@@ -1,5 +1,7 @@
 package model;
 
+import model.tables.LiteralTable;
+
 import java.util.ArrayList;
 
 public class CommandInfo {
@@ -42,7 +44,12 @@ public class CommandInfo {
 	}
 
 	public void addLiteralsToPool(){
-
+		Line line;
+		for (Literal literal : LiteralTable.literalList) {
+			line = new Line("", "", "", literal.getValue(), "", "");
+			line.setLocation(literal.getAddress());
+			linesList.add(line);
+		}
 	}
 
 	public boolean addToLineList() {

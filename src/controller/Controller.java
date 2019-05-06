@@ -108,8 +108,7 @@ public class Controller {
 				}
 			}
 		}
-		// TODO: add literals to lineList
-		//CI.addLiteralsToPool();
+		CI.addLiteralsToPool();
 	}
 
 	private void passOne(String program, boolean restricted) {
