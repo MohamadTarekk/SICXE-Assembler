@@ -173,7 +173,7 @@ public class ErrorChecker {
 				}
 			} else if (InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
 				if (!Utility.isRegister(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand()) && 
-						!isNumeric(line.getFirstOperand())) {
+						!isNumeric(line.getFirstOperand()) && !Utility.isLiteral(line.getFirstOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
 					return true;
 				}

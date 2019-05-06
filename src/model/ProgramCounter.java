@@ -19,6 +19,10 @@ public class ProgramCounter {
 
 	private int locationCounter = 0;
 
+	public int getProgramCounter() {
+		return locationCounter;
+	}
+
 	public void resetAddresses() {
 		locationCounter = 0;
 	}

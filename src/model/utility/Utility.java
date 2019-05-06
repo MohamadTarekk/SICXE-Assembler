@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.deploy.util.StringUtils;
 import model.CommandInfo;
 import model.ErrorChecker;
 import model.ProgramCounter;
@@ -81,6 +82,86 @@ public class Utility {
             return true;
         return false;
 
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private static boolean isNumeric(String str){
+        try {
+            Long.parseLong(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
+    private static boolean validateWordFormat(String operand) {
+        if (operand.length() == 5) {
+            if (!isNumeric(operand.substring(3, 3)))
+                return false;
+        }
+        if (operand.charAt(3) == '-'){
+            if (!isNumeric(operand.substring(4, operand.length()-2)))
+                return false;
+        }
+        else {
+            if (!isNumeric(operand.substring(3, operand.length()-2)))
+                return false;                }
+        return true;
+    }
+
+    private static boolean isHex(String operand) {
+        try {
+            Long.parseLong(operand, 16);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    private static boolean validateHexFormat(String operand) {
+        for (int i=3 ; i<operand.length()-1 ; i++){
+            if (!isHex(operand.substring(i,i)))
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean isLiteral(String operand) {
+	    System.out.println(operand);
+	    if (operand.charAt(0) != '=') {
+            System.out.println("1");
+	        return false;
+        }
+
+	    if (operand.length() <= 4) {
+            System.out.println("2");
+            return false;
+        }
+
+	    if (operand.charAt(2) != '\''   ||   operand.charAt(operand.length()-1) != '\'') {
+            System.out.println("3");
+            return false;
+        }
+
+	    operand = operand.toUpperCase();
+	    char dataType = operand.charAt(1);
+	    switch (dataType) {
+            case 'W':
+                System.out.println("word");
+                return validateWordFormat(operand);
+
+            case 'X':
+                System.out.println("hex");
+                return validateHexFormat(operand);
+
+            case 'C':       // all cases already checked before switch()
+                return true;
+
+            default:
+                System.out.println("default");
+                return false;
+        }
     }
 
     public static boolean isComment(String line) {

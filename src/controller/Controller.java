@@ -4,17 +4,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.CommandInfo;
-import model.Instruction;
-import model.Line;
-import model.SourceReader;
-import model.Symbol;
+import model.*;
 import model.enums.Format;
-import model.tables.DirectiveTable;
-import model.tables.ErrorTable;
-import model.tables.InstructionTable;
-import model.tables.RegisterTable;
-import model.tables.SymbolTable;
+import model.tables.*;
 import model.utility.Utility;
 
 public class Controller {
@@ -87,7 +79,14 @@ public class Controller {
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
 		}
 		// textArea.setText(toBePrintedInTextArea);
+
 		Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
+		fillSymbolTable();
+		fillLiteralsTable();
+		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
+	}
+
+	private void fillSymbolTable() {
 		Symbol symbol;
 		for(Line line : lineList) {
 			if(!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
@@ -95,7 +94,18 @@ public class Controller {
 				SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 			}
 		}
-		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
+	}
+
+	private void fillLiteralsTable() {
+		Literal literal;
+		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
+		for(Line line : lineList) {
+			if(line.getAddressingMode().equals("=")) {
+				literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
+				startingAddress += literal.calculateLength();
+				LiteralTable.literalList.add(literal);
+			}
+		}
 	}
 
 	private void passOne(String program, boolean restricted) {
@@ -239,6 +249,16 @@ public class Controller {
 				}
 			}
 		} else {
+
+			/* TODO!!!
+			 * the literals caused an exception in calculating disp
+			 * test example operand: W'123'
+			 * when the following was added the error was gone and successful assembly
+						if (firstOperand.charAt(0) == '=')
+							disp = Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
+						else
+							disp = Utility.hexToDecimal(firstOperand);
+			*/
 			disp = Utility.hexToDecimal(firstOperand);
 			bp = "00";
 		}
