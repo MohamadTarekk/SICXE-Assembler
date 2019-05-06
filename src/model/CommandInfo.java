@@ -3,6 +3,7 @@ package model;
 import model.tables.LiteralTable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.tables.ErrorTable;
 
@@ -48,9 +49,9 @@ public class CommandInfo {
 
 	public void addLiteralsToPool() {
 		Line line;
-		for (Literal literal : LiteralTable.literalList) {
-			line = new Line("", "", "", literal.getValue(), "", "");
-			line.setLocation(literal.getAddress());
+		for (HashMap.Entry<String, Literal> literal : LiteralTable.literalTable.entrySet()) {
+			line = new Line("", "", "", literal.getValue().getOperand(), "", "");
+			line.setLocation(literal.getValue().getAddress());
 			linesList.add(line);
 		}
 	}

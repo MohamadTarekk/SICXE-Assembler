@@ -106,7 +106,7 @@ public class Controller {
 				if (line.getFirstOperand().charAt(0) == '=') {
 					literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
 					startingAddress += literal.calculateLength();
-					LiteralTable.literalList.add(literal);
+					LiteralTable.literalTable.put(literal.getOperand(), literal);
 				}
 			}
 		}
