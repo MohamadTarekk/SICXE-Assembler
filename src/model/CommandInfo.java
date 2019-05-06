@@ -41,6 +41,10 @@ public class CommandInfo {
 		return true;
 	}
 
+	public void addLiteralsToPool(){
+
+	}
+
 	public boolean addToLineList() {
 		int length = wholeInstruction.size();
         Line line;
