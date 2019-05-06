@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="SICXE-Assembler:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/SICXE_Assembler_jar</output-path>
-    <root id="archive" name="SICXE-Assembler.jar">
-      <element id="module-output" name="SICXE-Assembler" />
-    </root>
-  </artifact>
-</component>
