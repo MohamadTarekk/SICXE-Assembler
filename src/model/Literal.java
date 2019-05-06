@@ -10,7 +10,6 @@ public class Literal {
 
     public Literal(String operand, String address){
 
-        // TODO: if operand is negative for a word literal
         this.type = "" + operand.charAt(0);
         this.type = this.type.toUpperCase();
         this.value = operand.substring(2, operand.length()-2);      // W'1234'
@@ -54,6 +53,30 @@ public class Literal {
     @Override
     public String toString() {
         return value + Utility.getSpaces(12-value.length()) + address + "\n";
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }
