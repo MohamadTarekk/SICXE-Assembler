@@ -2,12 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
+import model.tables.ErrorTable;
+
 public class CommandInfo {
 
 	// private static CommandInfo instance = null;
 
-	//public CommandInfo() {
-	//}
+	// public CommandInfo() {
+	// }
 
 	private ProgramCounter pc = ProgramCounter.getInstance();
 
@@ -31,32 +33,52 @@ public class CommandInfo {
 		addOperand2("");
 
 	}
-	
+
 	public boolean checkForErrors() {
-		
-		for(Line line : linesList) {
-			if(!line.getError().equals(""))
+
+		for (Line line : linesList) {
+			if (!line.getError().equals("")) {
 				return false;
+			}
 		}
 		return true;
 	}
 
 	public boolean addToLineList() {
 		int length = wholeInstruction.size();
-        Line line;
-        try {
-			for (int i = 0; i < length; i++) {
-				line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(),
-						addressingModeList.get(i), operand1List.get(i),
-						operand2List.get(i), commentList.get(i));
-				ErrorChecker.getInstance().verifyLine(line);
-				pc.updateCounters(line);
-				linesList.add(line);
-			}
-		} catch (Exception e) {
-        	return false;
+		Line line;
+		for (int i = 0; i < length; i++) {
+			line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(), addressingModeList.get(i),
+					operand1List.get(i), operand2List.get(i), commentList.get(i));
+			ErrorChecker.getInstance().verifyLine(line);
+			pc.updateCounters(line);
+			linesList.add(line);
 		}
-        return true;
+		verifyEndAndStartStatements();
+		return true;
+	}
+
+	public void verifyEndAndStartStatements() {
+		int endCounter = 0;
+		int startCounter = 0;
+		for (Line line : linesList) {
+			String mnemonic = line.getMnemonic();
+			if (mnemonic.equalsIgnoreCase("END")) {
+				endCounter++;
+				if (endCounter > 1)
+					line.setError(ErrorTable.errorList[ErrorTable.MORE_THAN_ONE_END]);
+			}
+			if (mnemonic.equalsIgnoreCase("START")) {
+				startCounter++;
+				if (startCounter > 1)
+					line.setError(ErrorTable.errorList[ErrorTable.MORE_THAN_ONE_START]);
+			}
+		}
+
+		if (endCounter < 1) {
+			System.out.println(linesList.get(linesList.size() - 1));
+			linesList.get(linesList.size() - 1).setError(ErrorTable.errorList[ErrorTable.MISSING_END_STATEMENT]);
+		}
 	}
 
 	public ArrayList<String> getCommentList() {

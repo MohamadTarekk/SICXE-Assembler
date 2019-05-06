@@ -147,7 +147,7 @@ public class Controller {
 
 	private String getSizeOfProgram(String startOfProgram, String endOfProgram) {
 
-		return "00" + Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) + 1);
+		return "00" + Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) - 1);
 	}
 
 	private String getProgramName() {

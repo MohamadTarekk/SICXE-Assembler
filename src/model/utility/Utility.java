@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.deploy.util.StringUtils;
 import model.CommandInfo;
 import model.ErrorChecker;
 import model.ProgramCounter;
@@ -83,8 +82,11 @@ public class Utility {
         return false;
 
     }
+    
+    public static int getNumberOfDigits(String value) {
+    	return String.valueOf(value).length();
+    }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private static boolean isNumeric(String str){
         try {
             Long.parseLong(str);
@@ -94,7 +96,6 @@ public class Utility {
         }
     }
 
-    @SuppressWarnings("RedundantIfStatement")
     private static boolean validateWordFormat(String operand) {
         if (operand.length() == 5) {
             if (!isNumeric(operand.substring(3, 3)))
@@ -110,7 +111,7 @@ public class Utility {
         return true;
     }
 
-    private static boolean isHex(String operand) {
+    public static boolean isHex(String operand) {
         try {
             Long.parseLong(operand, 16);
             return true;
