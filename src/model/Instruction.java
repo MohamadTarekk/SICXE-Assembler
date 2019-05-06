@@ -75,13 +75,13 @@ public class Instruction {
 			return true;
 		return false;
 	}
-	
+
 	public int numberOfOperands() {
-		
+
 		int sum = 0;
-		if(hasFirstOperand())
+		if (hasFirstOperand())
 			sum++;
-		if(hasSecondOperand())
+		if (hasSecondOperand())
 			sum++;
 		return sum;
 	}

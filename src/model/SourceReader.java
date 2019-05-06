@@ -12,12 +12,13 @@ public class SourceReader {
 	private static SourceReader instance = null;
 
 	private SourceReader() {
-		/*Private constructor for Singleton*/
+		/* Private constructor for Singleton */
 	}
 
 	/**
 	 *
 	 * SINGLETON DESIGN PATTERN
+	 * 
 	 * @return the only single instance from this class.
 	 */
 	public static SourceReader getInstance() {
@@ -68,10 +69,10 @@ public class SourceReader {
 	}
 
 	/**
-	 *          usually make a sub strings from each line and assign them
-	 *         accordingly to the suitable instruction info. (using zero indexing)
-	 *         0-> 7 label 8 empty/space 9-> 15 mnemonic 16 empty/space 17->34
-	 *         operand 35->65 comment
+	 * usually make a sub strings from each line and assign them accordingly to the
+	 * suitable instruction info. (using zero indexing) 0-> 7 label 8 empty/space
+	 * 9-> 15 mnemonic 16 empty/space 17->34 operand 35->65 comment
+	 * 
 	 * @param fileInfo
 	 *            the lines read from file usually after using this.readFile()
 	 *
@@ -121,11 +122,11 @@ public class SourceReader {
 	}
 
 	/**
-	 *         tries to match and get instruction information from a line
-	 *         using regex. to test regex i recommend going into this site
-	 *         https://regexr.com/ paste regex in expression field and test case in
-	 *         text field then look at explanation & details to know how the regex
-	 *         used or what did it match.
+	 * tries to match and get instruction information from a line using regex. to
+	 * test regex i recommend going into this site https://regexr.com/ paste regex
+	 * in expression field and test case in text field then look at explanation &
+	 * details to know how the regex used or what did it match.
+	 * 
 	 * @param fileInfo
 	 *            the lines read from file usually after using this.readFile()
 	 *
@@ -136,7 +137,7 @@ public class SourceReader {
 		CommandInfo CI = new CommandInfo();
 
 		/* regex which is used to match the instruction information **/
-		String regex = "(\\S+)";	//matches any char that is not space/tabs/linebreaks
+		String regex = "(\\S+)"; // matches any char that is not space/tabs/linebreaks
 		/* compile the regex using Java regex engine */
 		for (String currentLine : fileInfo) {
 			CI.addWholeInstruction(currentLine);
@@ -155,22 +156,22 @@ public class SourceReader {
 			ArrayList<String> elements = Utility.getMatches(currentLine, regex);
 			// ";(.+)" matches any char that come after ';'
 			switch (elements.size() - Utility.getNumberOfMatches(currentLine, ";(.+)")) {
-				case 2:
-					CI.addCommand(elements.get(0));
-					Utility.processOperand(elements.get(1), CI);
-					CI.addComment(Utility.getMatch(currentLine, ";(.+)"));
-					CI.addLabel("");
-					break;
-				case 3:
-					CI.addLabel(elements.get(0));
-					CI.addCommand(elements.get(1));
-					Utility.processOperand(elements.get(2), CI);
-					CI.addComment(Utility.getMatch(currentLine, ";(.+)"));
-					break;
-				default:
-					//CI.addDefaults();
-					//CI.addComment(currentLine);
-					break;
+			case 2:
+				CI.addCommand(elements.get(0));
+				Utility.processOperand(elements.get(1), CI);
+				CI.addComment(Utility.getMatch(currentLine, ";(.+)"));
+				CI.addLabel("");
+				break;
+			case 3:
+				CI.addLabel(elements.get(0));
+				CI.addCommand(elements.get(1));
+				Utility.processOperand(elements.get(2), CI);
+				CI.addComment(Utility.getMatch(currentLine, ";(.+)"));
+				break;
+			default:
+				// CI.addDefaults();
+				// CI.addComment(currentLine);
+				break;
 
 			}
 

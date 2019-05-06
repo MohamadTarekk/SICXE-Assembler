@@ -277,6 +277,30 @@ public class ErrorChecker {
 			return true;
 		}
 	}
+	
+	public void verifyEndAndStartStatements(ArrayList<Line> linesList)  {
+		int endCounter = 0;
+		int startCounter = 0;
+		for (Line line : linesList) {
+			String mnemonic = line.getMnemonic();
+			if (mnemonic.equalsIgnoreCase("END")) {
+				endCounter++;
+				if (endCounter > 1)
+					line.setError(ErrorTable.errorList[ErrorTable.MORE_THAN_ONE_END]);
+			}
+			if (mnemonic.equalsIgnoreCase("START")) {
+				startCounter++;
+				if (startCounter > 1)
+					line.setError(ErrorTable.errorList[ErrorTable.MORE_THAN_ONE_START]);
+			}
+		}
+
+		if (endCounter < 1) {
+			System.out.println(linesList.get(linesList.size() - 1));
+			linesList.get(linesList.size() - 1).setError(ErrorTable.errorList[ErrorTable.MISSING_END_STATEMENT]);
+		}
+	}
+
 
 	private boolean isNumeric(String str) {
 		try {

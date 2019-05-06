@@ -5,7 +5,7 @@ import model.tables.InstructionTable;
 import model.utility.Utility;
 
 public class ProgramCounter {
-	
+
 	private static ProgramCounter instance = null;
 
 	private ProgramCounter() {
@@ -32,13 +32,13 @@ public class ProgramCounter {
 		String hexaValue = Utility.convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
 		if (mnemonic == null || mnemonic.equals(""))
-				return;
+			return;
 		if (mnemonic.equals("Start".toUpperCase())) {
 			locationCounter = Utility.hexToDecimal(line.getFirstOperand());
 			hexaValue = Utility.convertToHexa(locationCounter);
 			line.setLocation(hexaValue);
 		}
-		
+
 		if (mnemonic.equals("Org".toUpperCase())) {
 			locationCounter = Utility.hexToDecimal(line.getFirstOperand());
 		}
@@ -48,7 +48,7 @@ public class ProgramCounter {
 			case THREE:
 				locationCounter += 3;
 			case VARIABLE:
-				//noinspection IfCanBeSwitch
+				// noinspection IfCanBeSwitch
 				if (mnemonic.toUpperCase().equals("RESB")) {
 					locationCounter += Integer.parseInt(line.getFirstOperand());
 				} else if (mnemonic.toUpperCase().equals("RESW")) {

@@ -46,7 +46,7 @@ public class CommandInfo {
 		return true;
 	}
 
-	public void addLiteralsToPool(){
+	public void addLiteralsToPool() {
 		Line line;
 		for (Literal literal : LiteralTable.literalList) {
 			line = new Line("", "", "", literal.getValue(), "", "");
