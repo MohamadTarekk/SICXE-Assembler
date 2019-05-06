@@ -230,11 +230,11 @@ public class ErrorChecker {
 				return true;
 			}
 			if ((line.getFirstOperand().startsWith("X") || line.getFirstOperand().startsWith("x"))) {
-				if(line.getFirstOperand().length() < 4 || line.getFirstOperand().length() > 17) {
+				if (line.getFirstOperand().length() < 4 || line.getFirstOperand().length() > 17) {
 					error = ErrorTable.errorList[ErrorTable.INCORRECT_OPERAND_FORMAT];
 					return true;
 				}
-				if(!Utility.isHex(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
+				if (!Utility.isHex(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
 					error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
 					return true;
 				}
@@ -250,7 +250,7 @@ public class ErrorChecker {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 				return true;
 			}
-			if(Utility.getNumberOfDigits(line.getFirstOperand()) > 4) {
+			if (Utility.getNumberOfDigits(line.getFirstOperand()) > 4) {
 				error = ErrorTable.errorList[ErrorTable.OPERAND_EXCEEDED_NUMBER_OF_DECIMAL_DIGITS];
 				return true;
 			}
@@ -277,30 +277,6 @@ public class ErrorChecker {
 			return true;
 		}
 	}
-	
-	public void verifyEndAndStartStatements(ArrayList<Line> linesList)  {
-		int endCounter = 0;
-		int startCounter = 0;
-		for (Line line : linesList) {
-			String mnemonic = line.getMnemonic();
-			if (mnemonic.equalsIgnoreCase("END")) {
-				endCounter++;
-				if (endCounter > 1)
-					line.setError(ErrorTable.errorList[ErrorTable.MORE_THAN_ONE_END]);
-			}
-			if (mnemonic.equalsIgnoreCase("START")) {
-				startCounter++;
-				if (startCounter > 1)
-					line.setError(ErrorTable.errorList[ErrorTable.MORE_THAN_ONE_START]);
-			}
-		}
-
-		if (endCounter < 1) {
-			System.out.println(linesList.get(linesList.size() - 1));
-			linesList.get(linesList.size() - 1).setError(ErrorTable.errorList[ErrorTable.MISSING_END_STATEMENT]);
-		}
-	}
-
 
 	private boolean isNumeric(String str) {
 		try {
