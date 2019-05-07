@@ -89,7 +89,7 @@ public class Line {
 
 	@Override
 	public String toString() {
-		if (label.contains("(~)")||mnemonic.equals("NOP"))
+		if (label.contains("(~)") || mnemonic.equals("NOP"))
 			return comment;
 		final int maxSizePerInfo = 12;
 		int maxSize = maxSizePerInfo;

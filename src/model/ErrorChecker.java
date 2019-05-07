@@ -14,8 +14,8 @@ public class ErrorChecker {
 	private String error;
 	private ArrayList<String> labelList = new ArrayList<>();
 
-	private ErrorChecker(){
-		/* Private Constructor for Singleton*/
+	private ErrorChecker() {
+		/* Private Constructor for Singleton */
 	}
 
 	public static ErrorChecker getInstance() {
@@ -55,26 +55,23 @@ public class ErrorChecker {
 			error = ErrorTable.errorList[ErrorTable.MISPLACED_LABEL];
 			return true;
 		}
-		if(Utility.containsMisplacedLetter(label)){
-			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+		if (Utility.containsMisplacedLetter(label)) {
+			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
 			return true;
 		}
-		if(line.getMnemonic().startsWith(" ")){
-			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
+		if (line.getMnemonic().startsWith(" ")) {
+			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERATION_MNEMONIC];
 			return true;
 		}
-		if(Utility.containsMisplacedLetter(line.getMnemonic())){
-			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+		if (Utility.containsMisplacedLetter(line.getMnemonic())) {
+			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 			return true;
 		}
-		if(line.getFirstOperand().startsWith(" ")){
-			error=ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+		if (line.getFirstOperand().startsWith(" ")) {
+			error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 			return true;
 		}
 		return false;
-		/*
-		 * TODO: MISSING_MISPLACED_OPERAND_FIELD
-		 */
 	}
 
 	private boolean verifyLabel(Line line) {
@@ -172,13 +169,13 @@ public class ErrorChecker {
 					return true;
 				}
 			} else if (InstructionTable.instructionTable.get(mnemonic).getFirstOperand() == OperandType.VALUE) {
-				if (!Utility.isRegister(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand()) && 
-						!isNumeric(line.getFirstOperand()) && !Utility.isLiteral(line.getFirstOperand())) {
+				if (!Utility.isRegister(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())
+						&& !isNumeric(line.getFirstOperand()) && !Utility.isLiteral(line.getFirstOperand())) {
 					error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
 					return true;
 				}
-				if(line.getAddressingMode().equals("#")) {
-					if(!isNumeric(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())) {
+				if (line.getAddressingMode().equals("#")) {
+					if (!isNumeric(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())) {
 						error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
 						return true;
 					}
@@ -186,7 +183,7 @@ public class ErrorChecker {
 			}
 		} else {
 			if (!line.getFirstOperand().equals("")) {
-				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
+				error = ErrorTable.errorList[ErrorTable.CANT_HAVE_FIRST_OPERAND];
 				return true;
 			}
 		}
@@ -208,8 +205,8 @@ public class ErrorChecker {
 				}
 			}
 		} else {
-			if (!line.getSecondOperand().equals("")) {
-				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
+			if (!line.getSecondOperand().equals("") && !line.getSecondOperand().equalsIgnoreCase("X")) {
+				error = ErrorTable.errorList[ErrorTable.CANT_HAVE_SECOND_OPERAND];
 				return true;
 			}
 		}
@@ -226,15 +223,36 @@ public class ErrorChecker {
 				error = ErrorTable.errorList[ErrorTable.STATEMENT_CANT_HAVE_OPERAND];
 				return true;
 			}
+			break;
 		case "BYTE":
 			if (line.getFirstOperand().equals("")) {
 				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
 				return true;
 			}
-			if((line.getFirstOperand().startsWith("X") || line.getFirstOperand().startsWith("x"))  && !isHexa(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
-				error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
+			if ((line.getFirstOperand().startsWith("X") || line.getFirstOperand().startsWith("x"))) {
+				if (line.getFirstOperand().length() < 4 || line.getFirstOperand().length() > 17) {
+					error = ErrorTable.errorList[ErrorTable.INCORRECT_OPERAND_FORMAT];
+					return true;
+				}
+				if (!Utility.isHex(line.getFirstOperand().substring(2, line.getFirstOperand().length() - 1))) {
+					error = ErrorTable.errorList[ErrorTable.NOT_HEXADECIMAL_STRING];
+					return true;
+				}
+			}
+			if ((line.getFirstOperand().startsWith("C") || line.getFirstOperand().startsWith("c"))
+					&& line.getFirstOperand().length() < 4 || line.getFirstOperand().length() > 18) {
+				error = ErrorTable.errorList[ErrorTable.INCORRECT_OPERAND_FORMAT];
 				return true;
-
+			}
+			break;
+		case "WORD":
+			if (line.getFirstOperand().equals("")) {
+				error = ErrorTable.errorList[ErrorTable.MISSING_MISPLACED_OPERAND_FIELD];
+				return true;
+			}
+			if (Utility.getNumberOfDigits(line.getFirstOperand()) > 4) {
+				error = ErrorTable.errorList[ErrorTable.OPERAND_EXCEEDED_NUMBER_OF_DECIMAL_DIGITS];
+				return true;
 			}
 			break;
 		default:
@@ -257,21 +275,6 @@ public class ErrorChecker {
 		default:
 			error = ErrorTable.errorList[ErrorTable.WRONG_ADDRESSING_MODE];
 			return true;
-		}
-	}
-
-	/*private void verifyEndStatement(Line line) {
-
-	}*/
-
-
-	@SuppressWarnings("unused")
-	private boolean isHexa(String value) {
-		try {
-			Long.parseLong(value, 16);
-			return true;
-		} catch (NumberFormatException ex) {
-			return false;
 		}
 	}
 

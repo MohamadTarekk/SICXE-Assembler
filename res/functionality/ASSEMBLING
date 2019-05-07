@@ -1,15 +1,17 @@
 .2345678_0123456_8901234567890123456
-         START   1000              comment
-Q1       LDA     #BETA             comment
-ss       LDS     GAMMA
-SSSS     ADD     ALPHA             comment
+prog1    START   1000              comment
+Q1       LDA     #BETA              comment
+         LDS     GAMMA
+SSSS     ADD     #5                 comment
+SSSS     ADD     =W'12'              comment
          STA     ALPHA
 SSS      MULR    A,S
          LDA     BETA
          SUBR    S,A
-         STA     DELTA             mmm
+         STA     DELTA              mmm
 .This is a comment
-BETA     WORD    x'39'
+BETA     BYTE    x'3'
+GAMMA    WORD    66666
 GAMMA    WORD    6
 ALPHA    RESW    1
 DELTA    RESW    1

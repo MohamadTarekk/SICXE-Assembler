@@ -66,8 +66,9 @@ public class Controller {
 
 		final String lineSeparator = "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
 		final String startPassOne = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   1 -_-_-_-_-_-_-_-_-_-_-";
-		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "ADDRESS" + Utility.getSpaces(5) + "LABEL" + Utility.getSpaces(7) +
-				"MNEMONIC" + Utility.getSpaces(4) + "ADDR_MODE" + Utility.getSpaces(3) + "OPERAND1" + Utility.getSpaces(4) + "OPERAND2" + Utility.getSpaces(4) + "COMMENTS\n";
+		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "ADDRESS" + Utility.getSpaces(5) + "LABEL"
+				+ Utility.getSpaces(7) + "MNEMONIC" + Utility.getSpaces(4) + "ADDR_MODE" + Utility.getSpaces(3)
+				+ "OPERAND1" + Utility.getSpaces(4) + "OPERAND2" + Utility.getSpaces(4) + "COMMENTS\n";
 		String toBePrintedInListFile = lineSeparator;
 		toBePrintedInListFile += startPassOne + "\n\n";
 		toBePrintedInListFile += TABLE_FORM;
@@ -75,8 +76,9 @@ public class Controller {
 		int len = CI.getLinesList().size();
 		for (int i = 0; i < len; i++) {
 			String lineCount = String.valueOf(i);
-			//noinspection StringConcatenationInLoop
-			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length()) + CI.getLinesList().get(i).toString() + "\n";
+			// noinspection StringConcatenationInLoop
+			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length())
+					+ CI.getLinesList().get(i).toString() + "\n";
 		}
 		// textArea.setText(toBePrintedInTextArea);
 
@@ -88,8 +90,8 @@ public class Controller {
 
 	private void fillSymbolTable() {
 		Symbol symbol;
-		for(Line line : lineList) {
-			if(!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
+		for (Line line : lineList) {
+			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
 				symbol = new Symbol(line.getLabel(), line.getLocation());
 				SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 			}
@@ -99,24 +101,27 @@ public class Controller {
 	private void fillLiteralsTable() {
 		Literal literal;
 		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
-		for(Line line : lineList) {
-			if(line.getAddressingMode().equals("=")) {
-				literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
-				startingAddress += literal.calculateLength();
-				LiteralTable.literalList.add(literal);
+		for (Line line : lineList) {
+			if (!line.getFirstOperand().equals("")) {
+				if (line.getFirstOperand().charAt(0) == '=') {
+					literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
+					startingAddress += literal.calculateLength();
+					LiteralTable.literalTable.put(literal.getOperand(), literal);
+				}
 			}
 		}
+		CI.addLiteralsToPool();
 	}
 
 	private void passOne(String program, boolean restricted) {
 
 		Utility.writeFile(program, "res/functionality/ASSEMBLING");
-		CI = SourceReader.getInstance()
-				.processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"), restricted);
+		CI = SourceReader.getInstance().processFile(SourceReader.getInstance().readFile("res/functionality/ASSEMBLING"),
+				restricted);
 
 		boolean firstPassDone = CI.addToLineList();
 		lineList = CI.getLinesList();
-		if(firstPassDone)
+		if (firstPassDone)
 			prepareListFile();
 		noErrors = CI.checkForErrors();
 	}
@@ -124,8 +129,8 @@ public class Controller {
 	private String getStartOfProgram() {
 
 		String startOfProgram = "000000";
-		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("START")) {
+		for (Line line : lineList) {
+			if (line.getMnemonic().equalsIgnoreCase("START")) {
 				startOfProgram = "00" + line.getLocation();
 				break;
 			}
@@ -136,8 +141,8 @@ public class Controller {
 	private String getEndOfProgram() {
 
 		String endOfProgram = null;
-		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("END")) {
+		for (Line line : lineList) {
+			if (line.getMnemonic().equalsIgnoreCase("END")) {
 				endOfProgram = "00" + line.getLocation();
 				break;
 			}
@@ -147,22 +152,23 @@ public class Controller {
 
 	private String getSizeOfProgram(String startOfProgram, String endOfProgram) {
 
-		return "00" + Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) + 1);
+		return "00"
+				+ Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) - 1);
 	}
 
 	private String getProgramName() {
 
 		String name = "";
-		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("START")) {
+		for (Line line : lineList) {
+			if (line.getMnemonic().equalsIgnoreCase("START")) {
 				name = line.getLabel();
 				break;
 			}
 		}
 		int length = name.length();
-		if(length > 6)
+		if (length > 6)
 			name = name.substring(0, 6);
-		if(length < 6)
+		if (length < 6)
 			name += Utility.getSpaces(6 - length);
 		return name;
 	}
@@ -173,15 +179,15 @@ public class Controller {
 		String endOfProgram = getEndOfProgram();
 		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
 		String programName = getProgramName();
-		return "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram;		//Return header Record
+		return "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram; // Return header Record
 	}
 
 	private String addToTextRecord(String opcode, String flags, String disp, Format format) {
 
 		String record;
 		record = Utility.hexToBin(opcode).substring(12, 18); // take 6 bits only
-		record += Utility.hexToBin(flags).substring(14); 
-		record += format == Format.THREE ? Utility.hexToBin(disp).substring(8) : Utility.hexToBin(disp) ;
+		record += Utility.hexToBin(flags).substring(14);
+		record += format == Format.THREE ? Utility.hexToBin(disp).substring(8) : Utility.hexToBin(disp);
 		record = Utility.binToHex(record, format);
 		return record;
 	}
@@ -189,7 +195,7 @@ public class Controller {
 	private String getNIX(Line line) {
 
 		String nix;
-		switch(line.getAddressingMode()) {
+		switch (line.getAddressingMode()) {
 		// set n, i and x flags
 		case "#":
 			// case immediate
@@ -204,14 +210,14 @@ public class Controller {
 		default:
 			// case direct
 			// nix = indexing? 111 : 110;
-			if(!line.getSecondOperand().equals("")) {
+			if (!line.getSecondOperand().equals("")) {
 				// indexed
 				nix = "111";
 			} else {
 				// non indexed
 				nix = "110";
 			}
-			break;						
+			break;
 		}
 		return nix;
 	}
@@ -219,24 +225,25 @@ public class Controller {
 	private String getBPE(Line line, Format format) {
 
 		// TODO: set bpe
-		// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 for Format 3 and e = 1 for Format 4
+		// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 for
+		// Format 3 and e = 1 for Format 4
 		String bpe, bp, e;
 		String firstOperand = line.getFirstOperand();
 		int step = format == Format.THREE ? 3 : 4;
 		int pc = Utility.hexToDecimal(line.getLocation()) + step;
 		int symLoc, disp;
 		Symbol symbol = SymbolTable.symbolTable.get(firstOperand);
-		if(symbol != null) {
+		if (symbol != null) {
 			symLoc = Utility.hexToDecimal(symbol.getAddress());
 			disp = symLoc - pc;
-			if(disp >= -2048 && disp <= 2047) {
+			if (disp >= -2048 && disp <= 2047) {
 				// bpe = 010
 				bp = "01";
 			} else { // try base relative
-				if(checkBase()) { // check if base register is available
+				if (checkBase()) { // check if base register is available
 					int base = getBase();
 					disp = symLoc - base;
-					if(disp >= 0 && disp <= 4*1024-1) {
+					if (disp >= 0 && disp <= 4 * 1024 - 1) {
 						// bpe = 100
 						bp = "10";
 					} else {
@@ -250,20 +257,18 @@ public class Controller {
 			}
 		} else {
 
-			/* TODO!!!
-			 * the literals caused an exception in calculating disp
-			 * test example operand: W'123'
-			 * when the following was added the error was gone and successful assembly
-						if (firstOperand.charAt(0) == '=')
-							disp = Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
-						else
-							disp = Utility.hexToDecimal(firstOperand);
-			*/
+			/*
+			 * TODO!!! the literals caused an exception in calculating disp test example
+			 * operand: W'123' when the following was added the error was gone and
+			 * successful assembly if (firstOperand.charAt(0) == '=') disp =
+			 * Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
+			 * else disp = Utility.hexToDecimal(firstOperand);
+			 */
 			disp = Utility.hexToDecimal(firstOperand);
 			bp = "00";
 		}
-		displacement = format == Format.THREE  ? String.format("%1$04X", disp) : String.format("%1$05X", disp) ;
-		e = format == Format.THREE ? "0" : "1" ;
+		displacement = format == Format.THREE ? String.format("%1$04X", disp) : String.format("%1$05X", disp);
+		e = format == Format.THREE ? "0" : "1";
 		bpe = bp + e;
 		return bpe;
 	}
@@ -280,34 +285,34 @@ public class Controller {
 
 	private boolean checkBase() {
 
-		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("BASE")) {
+		for (Line line : lineList) {
+			if (line.getMnemonic().equalsIgnoreCase("BASE")) {
 				setBase(line.getFirstOperand());
 				return true;
-			} else if(line.getMnemonic().equalsIgnoreCase("NOBASE"))
+			} else if (line.getMnemonic().equalsIgnoreCase("NOBASE"))
 				return false;
 		}
 		return false;
 	}
 
 	private String extractOperand(String operand) {
-		
+
 		return operand.substring(2).replace("'", "");
 	}
-	
+
 	private String convertToAscii(String data) {
-		
+
 		String res = "";
 		char[] charArray = data.toCharArray();
-		for(char c : charArray) {
-			//noinspection StringConcatenationInLoop
+		for (char c : charArray) {
+			// noinspection StringConcatenationInLoop
 			res += (int) c;
 		}
 		return res;
 	}
-	
+
 	private String formatTextRecord(String textRecord) {
-		
+
 		ArrayList<String> lengths = new ArrayList<>();
 		String start = getStartOfProgram();
 		String result = "T^" + start + "^^";
@@ -315,18 +320,18 @@ public class Controller {
 		int sum = 0;
 		int index = 0;
 		int tempSize = 0;
-		for(int n : recordLengths) {
+		for (int n : recordLengths) {
 			sum += n;
-			if(sum <= 30) {
+			if (sum <= 30) {
 				int i;
-				for(i = index; i < index + n*2; i++) {
-					//noinspection StringConcatenationInLoop
+				for (i = index; i < index + n * 2; i++) {
+					// noinspection StringConcatenationInLoop
 					result += temp[i];
 				}
 				tempSize = sum;
 				index = i;
 			} else {
-				//noinspection StringConcatenationInLoop
+				// noinspection StringConcatenationInLoop
 				result += "\nT^";
 				start = String.format("%1$06X", Utility.hexToDecimal(start) + sum - n);
 				lengths.add(String.format("%1$02X", sum - n));
@@ -339,9 +344,9 @@ public class Controller {
 		lengths.add(String.format("%1$02X", tempSize));
 		int size = result.length();
 		index = 0;
-		for(int i = 0; i < size; i++) {
-			if(result.charAt(i) == 'T') {
-				result = result.substring(0, i+9) + lengths.get(index++) + result.substring(i+9);
+		for (int i = 0; i < size; i++) {
+			if (result.charAt(i) == 'T') {
+				result = result.substring(0, i + 9) + lengths.get(index++) + result.substring(i + 9);
 			}
 		}
 		return result;
@@ -357,48 +362,48 @@ public class Controller {
 		String secondOperand;
 		String mnemonic;
 		Instruction currentInstruction;
-		for(Line line : lineList) {
+		for (Line line : lineList) {
 			mnemonic = line.getMnemonic();
 			currentInstruction = InstructionTable.instructionTable.get(mnemonic);
-			if(currentInstruction != null) {
+			if (currentInstruction != null) {
 				textRecordTemp = String.format("%1$02X", currentInstruction.getOpcode());
-				switch(currentInstruction.getFormat()) {
+				switch (currentInstruction.getFormat()) {
 				case ONE:
-					//noinspection StringConcatenationInLoop
+					// noinspection StringConcatenationInLoop
 					textRecord += textRecordTemp;
 					recordLengths.add(1);
 					break;
 				case TWO:
 					firstOperand = Integer.toString(RegisterTable.registerTable.get(line.getFirstOperand()));
-					if(currentInstruction.hasSecondOperand())
+					if (currentInstruction.hasSecondOperand())
 						secondOperand = Integer.toString(RegisterTable.registerTable.get(line.getSecondOperand()));
 					else
 						secondOperand = "0";
-					//noinspection StringConcatenationInLoop
+					// noinspection StringConcatenationInLoop
 					textRecord += textRecordTemp + firstOperand + secondOperand;
 					recordLengths.add(2);
 					break;
 				case THREE:
 					nix = getNIX(line);
 					bpe = getBPE(line, Format.THREE);
-					if(bpe.equals(BASE_ERROR)) {
+					if (bpe.equals(BASE_ERROR)) {
 						return BASE_ERROR;
 					}
 					flagsByte = Utility.binToHex(nix + bpe);
-					//noinspection StringConcatenationInLoop
+					// noinspection StringConcatenationInLoop
 					textRecord += addToTextRecord(textRecordTemp, flagsByte, displacement, Format.THREE);
 					recordLengths.add(3);
 					break;
 				case FOUR:
-					//noinspection UnusedAssignment
+					// noinspection UnusedAssignment
 					firstOperand = line.getFirstOperand();
 					nix = getNIX(line);
 					bpe = getBPE(line, Format.FOUR);
-					if(bpe.equals(BASE_ERROR)) {
+					if (bpe.equals(BASE_ERROR)) {
 						return BASE_ERROR;
 					}
 					flagsByte = Utility.binToHex(nix + bpe);
-					//noinspection StringConcatenationInLoop
+					// noinspection StringConcatenationInLoop
 					textRecord += addToTextRecord(textRecordTemp, flagsByte, displacement, Format.FOUR);
 					recordLengths.add(4);
 					break;
@@ -410,19 +415,20 @@ public class Controller {
 				String data = line.getFirstOperand().toUpperCase();
 				String[] operands = data.split(",");
 				char type;
-				switch(mnemonic) {
+				switch (mnemonic) {
 				case "WORD":
-					for(String operand : operands) {
+					for (String operand : operands) {
 						type = operand.charAt(0);
-						switch(type) {
+						switch (type) {
 						case 'X':
-							// textRecord += Utility.getZeros(6 - operand.length()) + extractOperand(operand);
+							// textRecord += Utility.getZeros(6 - operand.length()) +
+							// extractOperand(operand);
 							break;
 						case 'C':
 							// textRecord += convertToAscii(extractOperand(operand));
 							break;
 						default:
-							//noinspection StringConcatenationInLoop
+							// noinspection StringConcatenationInLoop
 							textRecord += String.format("%1$06X", Integer.parseInt(operand));
 							recordLengths.add(3);
 							break;
@@ -430,24 +436,25 @@ public class Controller {
 					}
 					break;
 				case "BYTE":
-					for(String operand : operands) {
+					for (String operand : operands) {
 						type = operand.charAt(0);
-						switch(type) {
+						switch (type) {
 						case 'X':
 							operand = extractOperand(operand);
-							textRecordTemp = Utility.getZeros((int)Math.ceil((double)(operand.length())/2)*2 - operand.length()) + operand;
-							//noinspection StringConcatenationInLoop
+							textRecordTemp = Utility.getZeros(
+									(int) Math.ceil((double) (operand.length()) / 2) * 2 - operand.length()) + operand;
+							// noinspection StringConcatenationInLoop
 							textRecord += textRecordTemp;
-							recordLengths.add(textRecordTemp.length()/2);
+							recordLengths.add(textRecordTemp.length() / 2);
 							break;
 						case 'C':
 							operand = extractOperand(operand);
-							//noinspection StringConcatenationInLoop
+							// noinspection StringConcatenationInLoop
 							textRecord += convertToAscii(operand);
 							recordLengths.add(operand.length());
 							break;
 						default:
-							//noinspection StringConcatenationInLoop
+							// noinspection StringConcatenationInLoop
 							textRecord += String.format("%1$02X", Integer.parseInt(operand));
 							recordLengths.add(1);
 							break;
@@ -466,14 +473,14 @@ public class Controller {
 
 		String label, address;
 		label = address = null;
-		for(Line line : lineList) {
-			if(line.getMnemonic().equalsIgnoreCase("END")) {
+		for (Line line : lineList) {
+			if (line.getMnemonic().equalsIgnoreCase("END")) {
 				label = line.getFirstOperand();
 				break;
 			}
 		}
-		for(Line line : lineList) {
-			if(line.getLabel().equalsIgnoreCase(label)) {
+		for (Line line : lineList) {
+			if (line.getLabel().equalsIgnoreCase(label)) {
 				address = line.getLocation();
 			}
 		}
@@ -483,28 +490,27 @@ public class Controller {
 	private String getEndRecord() {
 
 		String addressOfFirstExecutableInstruction = getAddressOfFirstExecutableInstruction();
-		return "E^" + addressOfFirstExecutableInstruction;				// Return endRecord
+		return "E^" + addressOfFirstExecutableInstruction; // Return endRecord
 	}
 
 	private String getObjectCode() {
 
 		String headerRecord = getHeaderRecord();
 		String textRecord = getTextRecord();
-		if(textRecord.equals(BASE_ERROR))
+		if (textRecord.equals(BASE_ERROR))
 			return BASE_ERROR;
 		String endRecord = getEndRecord();
-		return headerRecord + "\n" + textRecord + "\n" + endRecord;		// Return objectCode
+		return headerRecord + "\n" + textRecord + "\n" + endRecord; // Return objectCode
 	}
 
 	private boolean passTwo() {
 
 		String objectCode = getObjectCode();
-		if(objectCode.equals(BASE_ERROR))
+		if (objectCode.equals(BASE_ERROR))
 			return false;
 		Utility.writeFile(objectCode, "res/LIST/objFile.o");
 		return true;
 	}
-
 
 	public void assemble(String program, boolean restricted) {
 
@@ -519,7 +525,7 @@ public class Controller {
 		ArrayList<String> arr = SourceReader.getInstance().readFile(path);
 		String append = "";
 		for (String s : arr) {
-			//noinspection StringConcatenationInLoop
+			// noinspection StringConcatenationInLoop
 			append += s + "\n";
 		}
 		return append;
@@ -531,7 +537,7 @@ public class Controller {
 		ArrayList<String> arr = SourceReader.getInstance().readFile(path);
 		String append = "";
 		for (String s : arr) {
-			//noinspection StringConcatenationInLoop
+			// noinspection StringConcatenationInLoop
 			append += s + "\n";
 		}
 		return append;
