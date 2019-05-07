@@ -1,7 +1,7 @@
 .2345678_0123456_8901234567890123456
 prog1    START   1000              comment
 Q1       LDA     #BETA              comment
-         LDS     GAMMA
+         LDS     =W'123'
 SSSS     ADD     =W'123'                 comment
          STA     ALPHA
 SSS      MULR    A,S

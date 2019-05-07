@@ -10,7 +10,7 @@ public class Literal {
 
 	public Literal(String operand, String address) {
 
-		this.type = "" + operand.charAt(0);
+		this.type = "" + operand.charAt(1);
 		this.type = this.type.toUpperCase();
 		this.operand = operand; // =W'1234'
 		this.address = address;
