@@ -120,6 +120,25 @@ public class Controller {
 	}
 
 	private void processArithmeticExpressions() {
+		for (Line line : lineList) {
+			// Only if formats 3 & 4
+			switch (InstructionTable.instructionTable.get(line.getMnemonic()).getFormat()) {
+				case THREE:
+				case FOUR:
+					// ONLY if addressing mode is direct with/without indexing
+					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
+						int operandValue = Utility.evaluate(line.getFirstOperand());
+						if (!line.getSecondOperand().equals("")) {
+							// TODO: add value inside X register to operandValue if indexing is used
+							line.setSecondOperand("");
+						}
+						// TODO: check compatibility of convertToHexa
+						String operand = Utility.convertToHexa(operandValue);
+						line.setFirstOperand(operand);
+					}
+				break;
+			}
+		}
 	}
 
 	private void passOne(String program, boolean restricted) {
@@ -371,7 +390,7 @@ public class Controller {
 
 		String textRecord = "";
 		String nix, bpe;
-		String flagsByte = "";
+		String flagsByte;
 		String textRecordTemp;
 		String firstOperand;
 		String secondOperand;
