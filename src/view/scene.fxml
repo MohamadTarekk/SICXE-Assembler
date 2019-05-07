@@ -44,7 +44,7 @@
       <Label fx:id="restrictedMsgLabel" layoutX="14.0" layoutY="385.0" prefHeight="41.0" prefWidth="587.0" text="Inline comments should be preceeded with ';'" visible="false" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
    </children>
    <stylesheets>
-      <URL operand="@Style.css" />
-      <URL operand="@darkTheme.css" />
+       <URL value="@Style.css" />
+       <URL value="@darkTheme.css" />
    </stylesheets>
 </AnchorPane>

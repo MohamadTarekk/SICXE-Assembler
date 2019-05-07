@@ -2,8 +2,7 @@
 prog1    START   1000              comment
 Q1       LDA     #BETA              comment
          LDS     GAMMA
-SSSS     ADD     #5                 comment
-SSSS     ADD     =W'12'              comment
+SSSS     ADD     =W'123'                 comment
          STA     ALPHA
 SSS      MULR    A,S
          LDA     BETA
@@ -11,7 +10,6 @@ SSS      MULR    A,S
          STA     DELTA              mmm
 .This is a comment
 BETA     BYTE    x'3'
-GAMMA    WORD    66666
 GAMMA    WORD    6
 ALPHA    RESW    1
 DELTA    RESW    1
