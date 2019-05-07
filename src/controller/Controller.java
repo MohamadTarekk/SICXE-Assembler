@@ -78,7 +78,7 @@ public class Controller {
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length())
-					+ CI.getLinesList().get(i).toString() + "\n";
+			+ CI.getLinesList().get(i).toString() + "\n";
 		}
 		// textArea.setText(toBePrintedInTextArea);
 
@@ -231,18 +231,19 @@ public class Controller {
 		String firstOperand = line.getFirstOperand();
 		int step = format == Format.THREE ? 3 : 4;
 		int pc = Utility.hexToDecimal(line.getLocation()) + step;
-		int symLoc, disp;
+		int loc, disp;
 		Symbol symbol = SymbolTable.symbolTable.get(firstOperand);
-		if (symbol != null) {
-			symLoc = Utility.hexToDecimal(symbol.getAddress());
-			disp = symLoc - pc;
-			if (disp >= -2048 && disp <= 2047) {
+		Literal literal = LiteralTable.literalTable.get(firstOperand);
+		if (symbol != null || literal != null) {
+			loc = literal == null ? Utility.hexToDecimal(symbol.getAddress()) : Utility.hexToDecimal(literal.getAddress()) ;
+			disp = loc - pc;
+			if (disp >= -2048 && disp < 2048) {
 				// bpe = 010
 				bp = "01";
 			} else { // try base relative
 				if (checkBase()) { // check if base register is available
 					int base = getBase();
-					disp = symLoc - base;
+					disp = loc - base;
 					if (disp >= 0 && disp <= 4 * 1024 - 1) {
 						// bpe = 100
 						bp = "10";
@@ -256,17 +257,18 @@ public class Controller {
 				}
 			}
 		} else {
-
-			/*
-			 * TODO!!! the literals caused an exception in calculating disp test example
-			 * operand: W'123' when the following was added the error was gone and
-			 * successful assembly if (firstOperand.charAt(0) == '=') disp =
-			 * Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
-			 * else disp = Utility.hexToDecimal(firstOperand);
-			 */
 			disp = Utility.hexToDecimal(firstOperand);
 			bp = "00";
 		}
+		/*
+		 * TODO!!! the literals caused an exception in calculating disp test example
+		 * operand: W'123' when the following was added the error was gone and
+		 * successful assembly 
+		 * if (firstOperand.charAt(0) == '=')
+		 *  disp = Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
+		 * else
+		 *  disp = Utility.hexToDecimal(firstOperand);
+		 */
 		displacement = format == Format.THREE ? String.format("%1$04X", disp) : String.format("%1$05X", disp);
 		e = format == Format.THREE ? "0" : "1";
 		bpe = bp + e;
