@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,7 +88,7 @@ public class Utility {
 		return String.valueOf(value).length();
 	}
 
-	private static boolean isNumeric(String str) {
+	public static boolean isNumeric(String str) {
 		try {
 			Long.parseLong(str);
 			return true;
@@ -129,19 +130,15 @@ public class Utility {
 	}
 
 	public static boolean isLiteral(String operand) {
-//		System.out.println(operand);
 		if (operand.charAt(0) != '=') {
-//			System.out.println("1");
 			return false;
 		}
 
 		if (operand.length() <= 4) {
-//			System.out.println("2");
 			return false;
 		}
 
 		if (operand.charAt(2) != '\'' || operand.charAt(operand.length() - 1) != '\'') {
-//			System.out.println("3");
 			return false;
 		}
 
@@ -149,18 +146,15 @@ public class Utility {
 		char dataType = operand.charAt(1);
 		switch (dataType) {
 		case 'W':
-//			System.out.println("word");
 			return validateWordFormat(operand);
 
 		case 'X':
-//			System.out.println("hex");
 			return validateHexFormat(operand);
 
 		case 'C': // all cases already checked before switch()
 			return true;
 
 		default:
-//			System.out.println("default");
 			return false;
 		}
 	}
@@ -316,5 +310,101 @@ public class Utility {
 				|| input.equalsIgnoreCase("resw") || input.equalsIgnoreCase("equ") || input.equalsIgnoreCase("start")
 				|| input.equalsIgnoreCase("org") || input.equalsIgnoreCase("base") || input.equalsIgnoreCase("nobase")
 				|| input.equalsIgnoreCase("ltorg"));
+	}
+
+	public static int evaluate(String expression)
+	{
+		char[] tokens = expression.toCharArray();
+
+		// Stack for numbers: 'values'
+		Stack<Integer> values = new Stack<>();
+
+		// Stack for Operators: 'ops'
+		Stack<Character> ops = new Stack<>();
+
+		for (int i = 0; i < tokens.length; i++)
+		{
+			// Current token is a whitespace, skip it
+			if (tokens[i] == ' ')
+				continue;
+
+			// Current token is a number, push it to stack for numbers
+			if (tokens[i] >= '0' && tokens[i] <= '9')
+			{
+				StringBuilder stringBuffer = new StringBuilder();
+				// There may be more than one digits in number
+				while (i < tokens.length && tokens[i] >= '0' && tokens[i] <= '9')
+					stringBuffer.append(tokens[i++]);
+				values.push(Integer.parseInt(stringBuffer.toString()));
+			}
+
+			// Current token is an opening brace, push it to 'ops'
+			else if (tokens[i] == '(')
+				ops.push(tokens[i]);
+
+				// Closing brace encountered, solve entire brace
+			else if (tokens[i] == ')')
+			{
+				while (ops.peek() != '(')
+					values.push(applyOperator(ops.pop(), values.pop(), values.pop()));
+				ops.pop();
+			}
+
+			// Current token is an operator.
+			else if (tokens[i] == '+' || tokens[i] == '-' ||
+					tokens[i] == '*' || tokens[i] == '/')
+			{
+				// While top of 'ops' has same or greater precedence to current
+				// token, which is an operator. Apply operator on top of 'ops'
+				// to top two elements in values stack
+				while (!ops.empty() && hasPrecedence(tokens[i], ops.peek()))
+					values.push(applyOperator(ops.pop(), values.pop(), values.pop()));
+
+				// Push current token to 'ops'.
+				ops.push(tokens[i]);
+			}
+		}
+
+		// Entire expression has been parsed at this point, apply remaining
+		// ops to remaining values
+		while (!ops.empty())
+			values.push(applyOperator(ops.pop(), values.pop(), values.pop()));
+
+		// Top of 'values' contains result, return it
+		return values.pop();
+	}
+
+	// Returns true if 'op2' has higher or same precedence as 'op1',
+	// otherwise returns false.
+	private static boolean hasPrecedence(char op1, char op2)
+	{
+		if (op2 == '(' || op2 == ')')
+			return false;
+		//noinspection RedundantIfStatement
+		if ((op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-'))
+			return false;
+		else
+			return true;
+	}
+
+	// A utility method to apply an operator 'op' on operands 'a'
+	// and 'b'. Return the result.
+	private static int applyOperator(char op, int b, int a)
+	{
+		switch (op)
+		{
+			case '+':
+				return a + b;
+			case '-':
+				return a - b;
+			case '*':
+				return a * b;
+			case '/':
+				if (b == 0)
+					throw new
+							UnsupportedOperationException("Cannot divide by zero");
+				return a / b;
+		}
+		return 0;
 	}
 }

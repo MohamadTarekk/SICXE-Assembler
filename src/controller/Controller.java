@@ -83,8 +83,6 @@ public class Controller {
 		// textArea.setText(toBePrintedInTextArea);
 
 		Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
-		fillSymbolTable();
-		fillLiteralsTable();
 		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
 	}
 
@@ -103,6 +101,14 @@ public class Controller {
 		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
 		for (Line line : lineList) {
 			if (!line.getFirstOperand().equals("")) {
+				if (line.getMnemonic().equalsIgnoreCase("LTORG")) {
+					if (Utility.isNumeric(line.getFirstOperand())) {
+						startingAddress = (int) Long.parseLong(line.getFirstOperand());
+						continue;
+					}
+				}
+			}
+			if (!line.getFirstOperand().equals("")) {
 				if (line.getFirstOperand().charAt(0) == '=') {
 					literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
 					startingAddress += literal.calculateLength();
@@ -113,6 +119,9 @@ public class Controller {
 		CI.addLiteralsToPool();
 	}
 
+	private void processArithmeticExpressions() {
+	}
+
 	private void passOne(String program, boolean restricted) {
 
 		Utility.writeFile(program, "res/functionality/ASSEMBLING");
@@ -121,8 +130,12 @@ public class Controller {
 
 		boolean firstPassDone = CI.addToLineList();
 		lineList = CI.getLinesList();
-		if (firstPassDone)
+		if (firstPassDone) {
 			prepareListFile();
+			fillSymbolTable();
+			processArithmeticExpressions();
+			fillLiteralsTable();
+		}
 		noErrorsInPassOne = CI.checkForErrors();
 	}
 
