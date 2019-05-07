@@ -129,19 +129,19 @@ public class Utility {
 	}
 
 	public static boolean isLiteral(String operand) {
-		System.out.println(operand);
+//		System.out.println(operand);
 		if (operand.charAt(0) != '=') {
-			System.out.println("1");
+//			System.out.println("1");
 			return false;
 		}
 
 		if (operand.length() <= 4) {
-			System.out.println("2");
+//			System.out.println("2");
 			return false;
 		}
 
 		if (operand.charAt(2) != '\'' || operand.charAt(operand.length() - 1) != '\'') {
-			System.out.println("3");
+//			System.out.println("3");
 			return false;
 		}
 
@@ -149,18 +149,18 @@ public class Utility {
 		char dataType = operand.charAt(1);
 		switch (dataType) {
 		case 'W':
-			System.out.println("word");
+//			System.out.println("word");
 			return validateWordFormat(operand);
 
 		case 'X':
-			System.out.println("hex");
+//			System.out.println("hex");
 			return validateHexFormat(operand);
 
 		case 'C': // all cases already checked before switch()
 			return true;
 
 		default:
-			System.out.println("default");
+//			System.out.println("default");
 			return false;
 		}
 	}

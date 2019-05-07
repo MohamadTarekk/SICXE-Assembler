@@ -52,6 +52,7 @@ public class CommandInfo {
 		for (HashMap.Entry<String, Literal> literal : LiteralTable.literalTable.entrySet()) {
 			line = new Line("", "", "", literal.getValue().getOperand(), "", "");
 			line.setLocation(literal.getValue().getAddress());
+			line.setError("");
 			linesList.add(line);
 		}
 	}

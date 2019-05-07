@@ -12,7 +12,7 @@ public class Literal {
 
 		this.type = "" + operand.charAt(0);
 		this.type = this.type.toUpperCase();
-		this.operand = operand.substring(2, operand.length() - 2); // W'1234'
+		this.operand = operand; // =W'1234'
 		this.address = address;
 	}
 

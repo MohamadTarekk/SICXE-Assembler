@@ -23,15 +23,15 @@ public class Controller {
 	private String base;
 	private String displacement;
 	private String BASE_ERROR = "Base Error";
-	private boolean noErrors = false;
+	private boolean noErrorsInPassOne = false;
 
 	public boolean isNoErrors() {
-		return noErrors;
+		return noErrorsInPassOne;
 	}
 
 	@SuppressWarnings("unused")
 	public void setNoErrors(boolean noErrors) {
-		this.noErrors = noErrors;
+		this.noErrorsInPassOne = noErrors;
 	}
 
 	private void loadInstructionTable() {
@@ -123,7 +123,7 @@ public class Controller {
 		lineList = CI.getLinesList();
 		if (firstPassDone)
 			prepareListFile();
-		noErrors = CI.checkForErrors();
+		noErrorsInPassOne = CI.checkForErrors();
 	}
 
 	private String getStartOfProgram() {
@@ -517,8 +517,9 @@ public class Controller {
 	public void assemble(String program, boolean restricted) {
 
 		passOne(program, restricted);
-		passTwo();
-		Utility.clearAll();
+		if(noErrorsInPassOne)
+			passTwo();
+			Utility.clearAll();
 	}
 
 	public String getListFile() {
