@@ -20,7 +20,7 @@ public class DirectiveTable {
 		directiveTable.put("ORG", new Directive("ORG", Format.NONE));
 		directiveTable.put("BASE", new Directive("BASE", Format.NONE));
 		directiveTable.put("NOBASE", new Directive("NOBASE", Format.NONE));
-		directiveTable.put("LTORG", new Directive("START", Format.NONE));
+		directiveTable.put("LTORG", new Directive("LTORG", Format.NONE));
 	}
 
 	public HashMap<String, Directive> getDirectiveTable() {
@@ -30,9 +30,5 @@ public class DirectiveTable {
 	public void setDirectiveTable(HashMap<String, Directive> directiveTable) {
 		DirectiveTable.directiveTable = directiveTable;
 	}
-
-	/*
-	 * Length = 0 -> NONE Length = -1 -> Variable Length
-	 */
 
 }

@@ -4,6 +4,8 @@
       <w>disp</w>
       <w>hexa</w>
       <w>ltorg</w>
+      <w>resb</w>
+      <w>resw</w>
     </words>
   </dictionary>
 </component>

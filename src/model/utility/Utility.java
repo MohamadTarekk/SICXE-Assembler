@@ -57,6 +57,7 @@ public class Utility {
 	public static void clearAll() {
 		ErrorChecker.getInstance().getLabelList().clear();
 		ProgramCounter.getInstance().resetAddresses();
+		CommandInfo.labelList.clear();
 	}
 
 	public static boolean isDirective(String directiveMnemonic) {
@@ -258,13 +259,18 @@ public class Utility {
 	}
 
 	public static void extractAddressingModeFromOperand(String input, CommandInfo CI) {
-		if (input.charAt(0) == '#' || input.charAt(0) == '@') {
-			CI.addAddressMode(input.substring(0, 1));
-			// noinspection StringOperationCanBeSimplified
-			CI.addOperand1(input.substring(1, input.length()));
-		} else {
+		if (!input.equals("")) {
+			if (input.charAt(0) == '#' || input.charAt(0) == '@') {
+				CI.addAddressMode(input.substring(0, 1));
+				// noinspection StringOperationCanBeSimplified
+				CI.addOperand1(input.substring(1, input.length()));
+			} else {
+				CI.addAddressMode("");
+				CI.addOperand1(input);
+			}
+		}else{
 			CI.addAddressMode("");
-			CI.addOperand1(input);
+			CI.addOperand1("");
 		}
 	}
 
