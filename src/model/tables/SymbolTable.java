@@ -8,21 +8,13 @@ public class SymbolTable {
 
 	public static HashMap<String, Symbol> symbolTable = new HashMap<>();
 
-	public static HashMap<String, Symbol> getSymbolTable() {
-		return symbolTable;
-	}
-
-	public static void setSymbolTable(HashMap<String, Symbol> symbolTable) {
-		SymbolTable.symbolTable = symbolTable;
-	}
-
 	public static String getString() {
 
-		String table = "";
+		StringBuilder table = new StringBuilder();
 		for (HashMap.Entry<String, Symbol> symbol : symbolTable.entrySet()) {
-			table += symbol.getValue().toString();
+			table.append(symbol.getValue().toString());
 		}
-		return table;
+		return table.toString();
 	}
 
 }

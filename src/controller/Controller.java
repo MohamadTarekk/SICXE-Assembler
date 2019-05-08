@@ -116,29 +116,29 @@ public class Controller {
 				}
 			}
 		}
-		CI.addLiteralsToPool();
+		//CI.addLiteralsToPool();
 	}
 
 	private void processArithmeticExpressions() {
 		for (Line line : lineList) {
+			Format format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
 			// Only if formats 3 & 4
-			switch (InstructionTable.instructionTable.get(line.getMnemonic()).getFormat()) {
-				case THREE:
-				case FOUR:
-					// ONLY if addressing mode is direct with/without indexing
-					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
-						int operandValue = Utility.evaluate(line.getFirstOperand());
-						if (!line.getSecondOperand().equals("")) {
-							// TODO: add value inside X register to operandValue if indexing is used
-							line.setSecondOperand("");
-						}
-						// TODO: check compatibility of convertToHexa
-						String operand = Utility.convertToHexa(operandValue);
-						line.setFirstOperand(operand);
-					}
-				break;
+			if (format == Format.THREE || format == Format.FOUR) {
+				// ONLY if addressing mode is direct with/without indexing
+				if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
+					int operandValue = Utility.evaluate(line.getFirstOperand());
+					// TODO: check compatibility of convertToHexa
+					String operand = Utility.convertToHexa(operandValue);
+					line.setFirstOperand(operand);
+				}
 			}
 		}
+	}
+
+	private boolean verifyExpression(String expression) {
+		String[] result = expression.split("(?<=[-+*/])|(?=[-+*/])");
+
+		return true;
 	}
 
 	private void passOne(String program, boolean restricted) {
@@ -152,7 +152,7 @@ public class Controller {
 		if (firstPassDone) {
 			prepareListFile();
 			fillSymbolTable();
-			processArithmeticExpressions();
+			//processArithmeticExpressions();
 			fillLiteralsTable();
 		}
 		noErrorsInPassOne = CI.checkForErrors();
