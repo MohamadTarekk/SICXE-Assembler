@@ -37,26 +37,6 @@ public class CommandInfo {
 
 	}
 
-	public boolean checkForErrors() {
-
-		for (Line line : linesList) {
-			if (!line.getError().equals("")) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public void addLiteralsToPool() {
-		Line line;
-		for (HashMap.Entry<String, Literal> literal : LiteralTable.literalTable.entrySet()) {
-			line = new Line("", "", "", literal.getValue().getOperand(), "", "");
-			line.setLocation(literal.getValue().getAddress());
-			line.setError("");
-			linesList.add(line);
-		}
-	}
-
 	public boolean addToLineList() {
 		int length = wholeInstruction.size();
 		Line line;
@@ -68,6 +48,16 @@ public class CommandInfo {
 			linesList.add(line);
 		}
 		verifyEndAndStartStatements();
+		return true;
+	}
+
+	public boolean checkForErrors() {
+
+		for (Line line : linesList) {
+			if (!line.getError().equals("")) {
+				return false;
+			}
+		}
 		return true;
 	}
 

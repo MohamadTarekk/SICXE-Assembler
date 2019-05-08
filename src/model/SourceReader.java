@@ -108,7 +108,7 @@ public class SourceReader {
 				CI.addComment(currentLine);
 				continue;
 			}
-			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 9)));
+			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 9).toUpperCase()));
 			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 17)));
 			String operand = Utility.removeExtraSpaces(currentLine.substring(17, 35));
 			/*

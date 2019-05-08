@@ -5,11 +5,11 @@ import model.enums.Format;
 public class Directive {
 
 	private String directive;
-	private Format length;
+	private Format format;
 
-	public Directive(String directive, Format length) {
+	public Directive(String directive, Format format) {
 		this.directive = directive;
-		this.length = length;
+		this.format = format;
 	}
 
 	public String getDirective() {
@@ -20,16 +20,16 @@ public class Directive {
 		this.directive = directive;
 	}
 
-	public Format getLength() {
-		return length;
+	public Format getFormat() {
+		return format;
 	}
 
-	public void setLength(Format length) {
-		this.length = length;
+	public void setFormat(Format format) {
+		this.format = format;
 	}
 
 	@Override
 	public String toString() {
-		return "Directive [directive=" + directive + ", length=" + length + "]";
+		return "Directive [directive=" + directive + ", format=" + format + "]";
 	}
 }

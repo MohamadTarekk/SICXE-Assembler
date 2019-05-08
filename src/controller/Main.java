@@ -15,7 +15,7 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		/*
-		System.out.println(Utility.evaluate("*5-6"));
+		System.out.println(Utility.evaluateExpression("*5-6"));
 		String expression = "BETA + PLUS #@!$%^* ALPHA/GAMMA*10000";
 		ArrayList<String> arr=Utility.getMatches(expression,"(\\S+)");
 		StringBuilder result = new StringBuilder();

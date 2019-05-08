@@ -44,7 +44,7 @@ public class ProgramCounter {
 		}
 
 		if (Utility.isDirective(mnemonic)) {
-			switch (DirectiveTable.directiveTable.get(mnemonic).getLength()) {
+			switch (DirectiveTable.directiveTable.get(mnemonic).getFormat()) {
 			case THREE:
 				locationCounter += 3;
 			case VARIABLE:

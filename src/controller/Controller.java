@@ -116,29 +116,49 @@ public class Controller {
 				}
 			}
 		}
-		//CI.addLiteralsToPool();
 	}
 
 	private void processArithmeticExpressions() {
 		for (Line line : lineList) {
-			Format format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
-			// Only if formats 3 & 4
-			if (format == Format.THREE || format == Format.FOUR) {
-				// ONLY if addressing mode is direct with/without indexing
-				if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
-					int operandValue = Utility.evaluate(line.getFirstOperand());
-					// TODO: check compatibility of convertToHexa
-					String operand = Utility.convertToHexa(operandValue);
-					line.setFirstOperand(operand);
+			if (!line.getMnemonic().equals("NOP")) {
+				System.out.println(line.getMnemonic());
+				Format format;
+				if (Utility.isInstruction(line.getMnemonic())) {
+					format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
+				} else {	// Directive
+					format = DirectiveTable.directiveTable.get(line.getMnemonic()).getFormat();
+				}
+				// Only if formats 3 & 4
+				if (format == Format.THREE || format == Format.FOUR
+					|| line.getMnemonic().equals("ORG") || line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")	) {
+					// ONLY if addressing mode is direct with/without indexing
+					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
+						ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
+						// If operand is not an expression size after splitting will be 1
+						if (expressionList.size() == 1)
+							continue;
+						// Verify labels in the expression
+						if (Utility.verifyExpression(expressionList)) {
+							// Replace labels by the numeric value of their addresses
+							Utility.evaluateLabels(expressionList);
+							// Check syntax of arithmetic expression
+							if (Utility.validateNumericExpression(expressionList)) {
+								// Evaluate the expression
+								String expression = Utility.getNumericExpression(expressionList);
+								int operand = Utility.evaluateExpression(expression);
+								line.setFirstOperand(String.valueOf(operand));
+								System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand);
+							} else {
+								// Wrong Arithmetic expression format
+								line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
+							}
+						} else {
+							line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
+						}
+					}
 				}
 			}
 		}
-	}
-
-	private boolean verifyExpression(String expression) {
-		String[] result = expression.split("(?<=[-+*/])|(?=[-+*/])");
-
-		return true;
 	}
 
 	private void passOne(String program, boolean restricted) {
@@ -152,7 +172,7 @@ public class Controller {
 		if (firstPassDone) {
 			prepareListFile();
 			fillSymbolTable();
-			//processArithmeticExpressions();
+//			processArithmeticExpressions();
 			fillLiteralsTable();
 		}
 		noErrorsInPassOne = CI.checkForErrors();
@@ -551,7 +571,7 @@ public class Controller {
 		passOne(program, restricted);
 		if(noErrorsInPassOne)
 			passTwo();
-			Utility.clearAll();
+		Utility.clearAll();
 	}
 
 	public String getListFile() {

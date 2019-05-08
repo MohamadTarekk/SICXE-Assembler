@@ -81,7 +81,7 @@ public class Utility {
 	}
 
 	public static boolean isLabel(String labelName) {
-		if (CommandInfo.labelList.contains(labelName))
+		if (CommandInfo.labelList.contains(labelName.toUpperCase()))
 			return true;
 		return false;
 
@@ -320,7 +320,7 @@ public class Utility {
 				|| input.equalsIgnoreCase("ltorg"));
 	}
 
-	public static int evaluate(String expression) {
+	public static int evaluateExpression(String expression) {
 		char[] tokens = expression.toCharArray();
 		// Stack for numbers: 'values'
 		Stack<Integer> values = new Stack<>();
@@ -413,26 +413,54 @@ public class Utility {
 		return new ArrayList<>(Arrays.asList(results));
 	}
 
-	public static boolean verifyExpression(ArrayList<String> list) {
-		for (String s : list) {
+	public static boolean verifyExpression(ArrayList<String> expressionList) {
+		for (String s : expressionList) {
 			if (isOperator(s))
 				continue;
-			if (!isLabel(s))
+			if (!isLabel(s.toUpperCase()) && !isNumeric(s))
 				return false;
 		}
 		return true;
 	}
 
-	public static void evaluateLabels(ArrayList<String> list) {
-		for (String s : list) {
+	public static void evaluateLabels(ArrayList<String> expressionList) {
+		for (String s : expressionList) {
 			if (isLabel(s)) {
 				// Replace label with its address
-				list.set(list.indexOf(s), SymbolTable.symbolTable.get(s).getAddress());
-			}
-			else if (!isOperator(s)) {
-				// TODO: set error => Error.WRONG_OPERAND_TYPE
+				expressionList.set(expressionList.indexOf(s), SymbolTable.symbolTable.get(s).getAddress());
 			}
 		}
+	}
+
+	public static boolean validateNumericExpression(ArrayList<String> expressionList) {
+		// first element in list is numeric not operator
+		if (isOperator(expressionList.get(0)))
+			return false;
+		// last element in list is numeric not operator
+		if ( isOperator(expressionList.get(expressionList.size() - 1)))
+			return false;
+		// No consecutive operands => impossible to have consecutive operands due to split algorithm
+		// No consecutive operators => # of operators = # of numbers - 1
+		int numbers = 0;
+		int operators = 0;
+		for (String s : expressionList) {
+			if (isOperator(s) && !s.equals("(") && !s.equals(")"))
+				operators++;
+			else
+				numbers++;
+		}
+		//noinspection RedundantIfStatement
+		if (operators >= numbers)
+			return false;
+		return true;
+	}
+
+	public static String getNumericExpression(ArrayList<String> expressionList) {
+		StringBuilder expression = new StringBuilder();
+		for (String s : expressionList) {
+			expression.append(s);
+		}
+		return expression.toString();
 	}
 
 	private static boolean isOperator(String string) {
@@ -448,5 +476,20 @@ public class Utility {
 			default:
 				return false;
 		}
+	}
+
+	public static boolean isExpression(String operand) {
+		ArrayList<String> operandComponents = splitExpression(operand);
+		// If operand is not an expression size after splitting will be 1
+		if (operandComponents.size() == 1)
+			return false;
+		// Verify labels in the expression
+		if (verifyExpression(operandComponents)) {
+			evaluateLabels(operandComponents);	// Replace labels by the numeric value of their addresses
+			//noinspection RedundantIfStatement
+			if (Utility.validateNumericExpression(operandComponents))	// Check syntax of arithmetic expression
+				return true;
+		}
+		return false;
 	}
 }
