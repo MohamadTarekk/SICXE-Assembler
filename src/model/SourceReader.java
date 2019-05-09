@@ -109,8 +109,8 @@ public class SourceReader {
 				continue;
 			}
 			CI.addLabel(Utility.removeExtraSpaces(currentLine.substring(0, 9).toUpperCase()));
-			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 17)));
-			String operand = Utility.removeExtraSpaces(currentLine.substring(17, 35));
+			CI.addCommand(Utility.removeExtraSpaces(currentLine.substring(9, 17).toUpperCase()));
+			String operand = Utility.removeExtraSpaces(currentLine.substring(17, 35).toUpperCase());
 			/*
 			 * get addressing mode - operand 1 - operand 2 values from operand string and
 			 * them to CI Accordingly

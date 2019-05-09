@@ -1,11 +1,11 @@
 .2345678_0123456_8901234567890123456
 prog1    START   1000              comment
-Q1       LDA     BETA              comment
+Q1       LDA     BeTa              comment
          LDS     GAMMA
 SSSS     ADDR    A,S               comment
-         STA     ALPHA
+         STA     ALPHA+45
 SSS      MULR    A,S
-         LDA     BETA
+         LDA     BETA+12
          SUBR    S,A
          STA     DELTA              mmm
 .This is a comment

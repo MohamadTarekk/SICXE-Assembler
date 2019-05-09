@@ -6,20 +6,17 @@ import java.io.FileWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import model.CommandInfo;
 import model.ErrorChecker;
+import model.MyGenericsStack;
 import model.ProgramCounter;
 import model.enums.Format;
-import model.tables.DirectiveTable;
-import model.tables.InstructionTable;
-import model.tables.RegisterTable;
-import model.tables.SymbolTable;
+import model.tables.*;
 
-@SuppressWarnings({})
 public class Utility {
 
 	public static String binToHex(String bin) {
@@ -60,6 +57,8 @@ public class Utility {
 		ErrorChecker.getInstance().getLabelList().clear();
 		ProgramCounter.getInstance().resetAddresses();
 		CommandInfo.labelList.clear();
+		SymbolTable.symbolTable.clear();
+		LiteralTable.literalTable.clear();
 	}
 
 	public static boolean isDirective(String directiveMnemonic) {
@@ -280,7 +279,7 @@ public class Utility {
 		String[] op1op2 = input.split(",");
 		if (op1op2.length > 1) {
 			extractAddressingModeFromOperand(op1op2[0], CI);
-			CI.addOperand2(op1op2[1]);
+			CI.addOperand2(op1op2[1].toUpperCase());
 		} else {
 			extractAddressingModeFromOperand(op1op2[0], CI);
 			CI.addOperand2("");
@@ -320,86 +319,6 @@ public class Utility {
 				|| input.equalsIgnoreCase("ltorg"));
 	}
 
-	public static int evaluateExpression(String expression) {
-		char[] tokens = expression.toCharArray();
-		// Stack for numbers: 'values'
-		Stack<Integer> values = new Stack<>();
-		// Stack for Operators: 'ops'
-		Stack<Character> ops = new Stack<>();
-
-		for (int i = 0; i < tokens.length; i++) {
-			// Current token is a whitespace, skip it
-			if (tokens[i] == ' ')
-				continue;
-			// Current token is a number, push it to stack for numbers
-			if (tokens[i] >= '0' && tokens[i] <= '9') {
-				StringBuilder stringBuffer = new StringBuilder();
-				// There may be more than one digits in number
-				while (i < tokens.length && tokens[i] >= '0' && tokens[i] <= '9')
-					stringBuffer.append(tokens[i++]);
-				values.push(Integer.parseInt(stringBuffer.toString()));
-			}
-			// Current token is an opening brace, push it to 'ops'
-			else if (tokens[i] == '(')
-				ops.push(tokens[i]);
-			// Closing brace encountered, solve entire brace
-			else if (tokens[i] == ')') {
-				while (ops.peek() != '(')
-					values.push(applyOperator(ops.pop(), values.pop(), values.pop()));
-				ops.pop();
-			}
-			// Current token is an operator.
-			else if (tokens[i] == '+' || tokens[i] == '-' ||
-					tokens[i] == '*' || tokens[i] == '/')
-			{
-				// While top of 'ops' has same or greater precedence to current
-				// token, which is an operator. Apply operator on top of 'ops'
-				// to top two elements in values stack
-				while (!ops.empty() && hasPrecedence(tokens[i], ops.peek()))
-					values.push(applyOperator(ops.pop(), values.pop(), values.pop()));
-				// Push current token to 'ops'.
-				ops.push(tokens[i]);
-			}
-		}
-		// Entire expression has been parsed at this point, apply remaining
-		// ops to remaining values
-		while (!ops.empty())
-			values.push(applyOperator(ops.pop(), values.pop(), values.pop()));
-		// Top of 'values' contains result, return it
-		return values.pop();
-	}
-
-	// Returns true if 'op2' has higher or same precedence as 'op1',
-	// otherwise returns false.
-	private static boolean hasPrecedence(char op1, char op2) {
-		if (op2 == '(' || op2 == ')')
-			return false;
-		//noinspection RedundantIfStatement
-		if ((op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-'))
-			return false;
-		else
-			return true;
-	}
-
-	// A utility method to apply an operator 'op' on operands 'a'
-	// and 'b'. Return the result.
-	private static int applyOperator(char op, int b, int a) {
-		switch (op) {
-			case '+':
-				return a + b;
-			case '-':
-				return a - b;
-			case '*':
-				return a * b;
-			case '/':
-				if (b == 0)
-					throw new
-							UnsupportedOperationException("Cannot divide by zero");
-				return a / b;
-		}
-		return 0;
-	}
-
 	public static ArrayList<String> splitExpression(String expression) {
 		// Remove spaces from expression
 		ArrayList<String> matches = Utility.getMatches(expression,"(\\S+)");
@@ -427,7 +346,8 @@ public class Utility {
 		for (String s : expressionList) {
 			if (isLabel(s)) {
 				// Replace label with its address
-				expressionList.set(expressionList.indexOf(s), SymbolTable.symbolTable.get(s).getAddress());
+				int value = hexToDecimal(SymbolTable.symbolTable.get(s).getAddress());
+				expressionList.set(expressionList.indexOf(s), String.valueOf(value));
 			}
 		}
 	}
@@ -457,9 +377,11 @@ public class Utility {
 
 	public static String getNumericExpression(ArrayList<String> expressionList) {
 		StringBuilder expression = new StringBuilder();
+		expression.append("(");
 		for (String s : expressionList) {
 			expression.append(s);
 		}
+		expression.append(")");
 		return expression.toString();
 	}
 
@@ -480,16 +402,65 @@ public class Utility {
 
 	public static boolean isExpression(String operand) {
 		ArrayList<String> operandComponents = splitExpression(operand);
-		// If operand is not an expression size after splitting will be 1
+		// If operand is not an expression, size after splitting will be 1
 		if (operandComponents.size() == 1)
 			return false;
-		// Verify labels in the expression
+		//noinspection RedundantIfStatement
 		if (verifyExpression(operandComponents)) {
-			evaluateLabels(operandComponents);	// Replace labels by the numeric value of their addresses
-			//noinspection RedundantIfStatement
-			if (Utility.validateNumericExpression(operandComponents))	// Check syntax of arithmetic expression
-				return true;
+			return true;
 		}
 		return false;
+	}
+
+	public static String evaluateExpression(String expression){
+		MyGenericsStack<String> stack = new MyGenericsStack<>(expression.length());
+		// break the expression into tokens
+		StringTokenizer tokens = new StringTokenizer(expression, "{}()*/+-", true);
+		while(tokens.hasMoreTokens()){
+			String token = tokens.nextToken();
+			// read each token and take action
+			if(token.equals("(") || token.matches("[0-9]+") || token.equals("*")
+				|| token.equals("/") || token.equals("+") || token.equals("-")) {
+				// push token to the stack
+				stack.push(token);
+			} else if(token.equals("}") || token.equals(")")) {
+				try {
+					int op2 = Integer.parseInt(stack.pop());
+					String operand = stack.pop();
+					int op1 = Integer.parseInt(stack.pop());
+					// Below pop removes either } or ) from stack
+					if(!stack.isStackEmpty()) {
+						stack.pop();
+					}
+					int result = 0;
+					switch (operand) {
+						case "*":
+							result = op1 * op2;
+							break;
+						case "/":
+							result = op1 / op2;
+							break;
+						case "+":
+							result = op1 + op2;
+							break;
+						case "-":
+							result = op1 - op2;
+							break;
+					}
+					// push the result to the stack
+					stack.push(result+"");
+				} catch (Exception e) {
+					e.printStackTrace();
+					break;
+				}
+			}
+		}
+		String finalResult = "";
+		try {
+			finalResult = stack.pop();
+		} catch (Exception e) {
+			System.out.println("Stack is empty");
+		}
+		return finalResult;
 	}
 }

@@ -121,7 +121,6 @@ public class Controller {
 	private void processArithmeticExpressions() {
 		for (Line line : lineList) {
 			if (!line.getMnemonic().equals("NOP")) {
-				System.out.println(line.getMnemonic());
 				Format format;
 				if (Utility.isInstruction(line.getMnemonic())) {
 					format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
@@ -134,7 +133,7 @@ public class Controller {
 					// ONLY if addressing mode is direct with/without indexing
 					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
 						ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
-						// If operand is not an expression size after splitting will be 1
+						// If operand is not an expression, size after splitting will be 1
 						if (expressionList.size() == 1)
 							continue;
 						// Verify labels in the expression
@@ -145,9 +144,9 @@ public class Controller {
 							if (Utility.validateNumericExpression(expressionList)) {
 								// Evaluate the expression
 								String expression = Utility.getNumericExpression(expressionList);
-								int operand = Utility.evaluateExpression(expression);
-								line.setFirstOperand(String.valueOf(operand));
-								System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand);
+								String operand = Utility.evaluateExpression(expression);
+								System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand + "\t\t\t" + expression);
+								line.setFirstOperand(operand);
 							} else {
 								// Wrong Arithmetic expression format
 								line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
@@ -172,7 +171,7 @@ public class Controller {
 		if (firstPassDone) {
 			prepareListFile();
 			fillSymbolTable();
-//			processArithmeticExpressions();
+			processArithmeticExpressions();
 			fillLiteralsTable();
 		}
 		noErrorsInPassOne = CI.checkForErrors();
@@ -280,7 +279,7 @@ public class Controller {
 		// TODO: firstOperand = displacement and set the b, p and e flags, e = 0 for
 		// Format 3 and e = 1 for Format 4
 		String bpe, bp, e;
-		String firstOperand = line.getFirstOperand();
+		String firstOperand = line.getFirstOperand().toUpperCase();
 		int step = format == Format.THREE ? 3 : 4;
 		int pc = Utility.hexToDecimal(line.getLocation()) + step;
 		int loc, disp;
