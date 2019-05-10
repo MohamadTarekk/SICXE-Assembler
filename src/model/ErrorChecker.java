@@ -226,7 +226,7 @@ public class ErrorChecker {
 			}
 			break;
 		case "END":
-			if(!Utility.isLabel(line.getFirstOperand())){
+			if (!Utility.isLabel(line.getFirstOperand())) {
 				error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
 				return true;
 			}

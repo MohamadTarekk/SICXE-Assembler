@@ -78,7 +78,7 @@ public class Controller {
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length())
-			+ CI.getLinesList().get(i).toString() + "\n";
+					+ CI.getLinesList().get(i).toString() + "\n";
 		}
 		// textArea.setText(toBePrintedInTextArea);
 
@@ -124,12 +124,13 @@ public class Controller {
 				Format format;
 				if (Utility.isInstruction(line.getMnemonic())) {
 					format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
-				} else {	// Directive
+				} else { // Directive
 					format = DirectiveTable.directiveTable.get(line.getMnemonic()).getFormat();
 				}
 				// Only if formats 3 & 4
-				if (format == Format.THREE || format == Format.FOUR
 					|| line.getMnemonic().equals("ORG") || line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")	) {
+				if (format == Format.THREE || format == Format.FOUR || line.getMnemonic().equals("ORG")
+						|| line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")) {
 					// ONLY if addressing mode is direct with/without indexing
 					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
 						ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
@@ -145,7 +146,8 @@ public class Controller {
 								// Evaluate the expression
 								String expression = Utility.getNumericExpression(expressionList);
 								String operand = Utility.evaluateExpression(expression);
-								System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand + "\t\t\t" + expression);
+								System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand
+										+ "\t\t\t" + expression);
 								line.setFirstOperand(operand);
 							} else {
 								// Wrong Arithmetic expression format
@@ -286,7 +288,8 @@ public class Controller {
 		Symbol symbol = SymbolTable.symbolTable.get(firstOperand);
 		Literal literal = LiteralTable.literalTable.get(firstOperand);
 		if (symbol != null || literal != null) {
-			loc = literal == null ? Utility.hexToDecimal(symbol.getAddress()) : Utility.hexToDecimal(literal.getAddress()) ;
+			loc = literal == null ? Utility.hexToDecimal(symbol.getAddress())
+					: Utility.hexToDecimal(literal.getAddress());
 			disp = loc - pc;
 			if (disp >= -2048 && disp < 2048) {
 				// bpe = 010
@@ -314,11 +317,9 @@ public class Controller {
 		/*
 		 * TODO!!! the literals caused an exception in calculating disp test example
 		 * operand: W'123' when the following was added the error was gone and
-		 * successful assembly 
-		 * if (firstOperand.charAt(0) == '=')
-		 *  disp = Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
-		 * else
-		 *  disp = Utility.hexToDecimal(firstOperand);
+		 * successful assembly if (firstOperand.charAt(0) == '=') disp =
+		 * Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
+		 * else disp = Utility.hexToDecimal(firstOperand);
 		 */
 		displacement = format == Format.THREE ? String.format("%1$04X", disp) : String.format("%1$05X", disp);
 		e = format == Format.THREE ? "0" : "1";
@@ -568,7 +569,7 @@ public class Controller {
 	public void assemble(String program, boolean restricted) {
 
 		passOne(program, restricted);
-		if(noErrorsInPassOne)
+		if (noErrorsInPassOne)
 			passTwo();
 		Utility.clearAll();
 	}

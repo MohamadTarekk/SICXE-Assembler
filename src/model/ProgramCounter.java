@@ -54,28 +54,26 @@ public class ProgramCounter {
 				} else if (mnemonic.toUpperCase().equals("RESW")) {
 					locationCounter += 3 * Integer.parseInt(line.getFirstOperand());
 				} else if (mnemonic.toUpperCase().equals("BYTE")) {
-					String firstOperand = line.getFirstOperand().substring(0,1).toUpperCase();
+					String firstOperand = line.getFirstOperand().substring(0, 1).toUpperCase();
 					firstOperand = firstOperand + line.getFirstOperand().substring(1);
 					switch (firstOperand.charAt(0)) {
 					case 'C':
 						locationCounter += (firstOperand.length() - 3); // C'EOF' -> EOF -> 3 bytes
 						break;
 					case 'X':
-						locationCounter += Math.ceil((float)(firstOperand.length() - 3) / 2);
+						locationCounter += Math.ceil((float) (firstOperand.length() - 3) / 2);
 						break;
 					default:
 						// TODO: check that the value doesn't cause an overflow for a byte
-/*						if (Utility.isNumeric(firstOperand)) {
-							int value = (int) Long.parseLong(firstOperand);
-							if (value >= -128 && value <= 127) {
-								locationCounter += 1;
-							} else {
-
-							}
-						} else {
-
-						}
-*/						locationCounter += 1;
+						/*
+						 * if (Utility.isNumeric(firstOperand)) { int value = (int)
+						 * Long.parseLong(firstOperand); if (value >= -128 && value <= 127) {
+						 * locationCounter += 1; } else {
+						 * 
+						 * } } else {
+						 * 
+						 * }
+						 */ locationCounter += 1;
 						break;
 					}
 				}

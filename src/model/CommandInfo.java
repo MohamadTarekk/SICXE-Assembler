@@ -1,9 +1,6 @@
 package model;
 
-import model.tables.LiteralTable;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import model.tables.ErrorTable;
 

@@ -80,7 +80,7 @@ public class Utility {
 	}
 
 	public static boolean isLabel(String labelName) {
-		if (CommandInfo.labelList.contains(labelName.toUpperCase()))
+		if (CommandInfo.labelList.contains(labelName))
 			return true;
 		return false;
 
@@ -269,7 +269,7 @@ public class Utility {
 				CI.addAddressMode("");
 				CI.addOperand1(input);
 			}
-		}else{
+		} else {
 			CI.addAddressMode("");
 			CI.addOperand1("");
 		}
@@ -321,7 +321,7 @@ public class Utility {
 
 	public static ArrayList<String> splitExpression(String expression) {
 		// Remove spaces from expression
-		ArrayList<String> matches = Utility.getMatches(expression,"(\\S+)");
+		ArrayList<String> matches = Utility.getMatches(expression, "(\\S+)");
 		// Recollect expression
 		StringBuilder newExpression = new StringBuilder();
 		for (String str : matches) {
@@ -357,9 +357,10 @@ public class Utility {
 		if (isOperator(expressionList.get(0)))
 			return false;
 		// last element in list is numeric not operator
-		if ( isOperator(expressionList.get(expressionList.size() - 1)))
+		if (isOperator(expressionList.get(expressionList.size() - 1)))
 			return false;
-		// No consecutive operands => impossible to have consecutive operands due to split algorithm
+		// No consecutive operands => impossible to have consecutive operands due to
+		// split algorithm
 		// No consecutive operators => # of operators = # of numbers - 1
 		int numbers = 0;
 		int operators = 0;
@@ -369,7 +370,7 @@ public class Utility {
 			else
 				numbers++;
 		}
-		//noinspection RedundantIfStatement
+		// noinspection RedundantIfStatement
 		if (operators >= numbers)
 			return false;
 		return true;
@@ -387,16 +388,16 @@ public class Utility {
 
 	private static boolean isOperator(String string) {
 		switch (string) {
-			case "*":
-			case "/":
-			case "-":
-			case "+":
-			case "(":
-			case ")":
-				return true;
+		case "*":
+		case "/":
+		case "-":
+		case "+":
+		case "(":
+		case ")":
+			return true;
 
-			default:
-				return false;
+		default:
+			return false;
 		}
 	}
 
@@ -405,50 +406,50 @@ public class Utility {
 		// If operand is not an expression, size after splitting will be 1
 		if (operandComponents.size() == 1)
 			return false;
-		//noinspection RedundantIfStatement
+		// noinspection RedundantIfStatement
 		if (verifyExpression(operandComponents)) {
 			return true;
 		}
 		return false;
 	}
 
-	public static String evaluateExpression(String expression){
+	public static String evaluateExpression(String expression) {
 		MyGenericsStack<String> stack = new MyGenericsStack<>(expression.length());
 		// break the expression into tokens
 		StringTokenizer tokens = new StringTokenizer(expression, "{}()*/+-", true);
-		while(tokens.hasMoreTokens()){
+		while (tokens.hasMoreTokens()) {
 			String token = tokens.nextToken();
 			// read each token and take action
-			if(token.equals("(") || token.matches("[0-9]+") || token.equals("*")
-				|| token.equals("/") || token.equals("+") || token.equals("-")) {
+			if (token.equals("(") || token.matches("[0-9]+") || token.equals("*") || token.equals("/")
+					|| token.equals("+") || token.equals("-")) {
 				// push token to the stack
 				stack.push(token);
-			} else if(token.equals("}") || token.equals(")")) {
+			} else if (token.equals("}") || token.equals(")")) {
 				try {
 					int op2 = Integer.parseInt(stack.pop());
 					String operand = stack.pop();
 					int op1 = Integer.parseInt(stack.pop());
 					// Below pop removes either } or ) from stack
-					if(!stack.isStackEmpty()) {
+					if (!stack.isStackEmpty()) {
 						stack.pop();
 					}
 					int result = 0;
 					switch (operand) {
-						case "*":
-							result = op1 * op2;
-							break;
-						case "/":
-							result = op1 / op2;
-							break;
-						case "+":
-							result = op1 + op2;
-							break;
-						case "-":
-							result = op1 - op2;
-							break;
+					case "*":
+						result = op1 * op2;
+						break;
+					case "/":
+						result = op1 / op2;
+						break;
+					case "+":
+						result = op1 + op2;
+						break;
+					case "-":
+						result = op1 - op2;
+						break;
 					}
 					// push the result to the stack
-					stack.push(result+"");
+					stack.push(result + "");
 				} catch (Exception e) {
 					e.printStackTrace();
 					break;

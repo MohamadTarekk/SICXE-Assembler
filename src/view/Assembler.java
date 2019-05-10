@@ -98,7 +98,27 @@ public class Assembler {
 		}
 		textArea.setText(append);
 	}
-
+	
+	public void showSymbolTable() {
+		ArrayList<String> arr = SourceReader.getInstance().readFile("res/LIST/symTable.txt");
+		String append = "";
+		for (String s : arr) {
+			// noinspection StringConcatenationInLoop
+			append += s + "\n";
+		}
+		textArea.setText(append);
+	}
+	
+	public void showObjectFile() {
+		ArrayList<String> arr = SourceReader.getInstance().readFile("res/LIST/objFile.o");
+		String append = "";
+		for (String s : arr) {
+			// noinspection StringConcatenationInLoop
+			append += s + "\n";
+		}
+		textArea.setText(append);
+	}
+	
 	public void setRestrictedMsg() {
 
 		restrictedMsgLabel.setVisible(!restricted.isSelected());
