@@ -6,6 +6,7 @@ public class MyGenericsStack<T> {
 	private T[] stackArr;
 	private int top;
 
+	@SuppressWarnings("unchecked")
 	public MyGenericsStack(int size) {
 		this.stackSize = size;
 		// noinspection unchecked
@@ -27,7 +28,6 @@ public class MyGenericsStack<T> {
 		return this.stackArr[top--];
 	}
 
-	@SuppressWarnings("unused")
 	public T getTop() {
 		return stackArr[top];
 	}
@@ -35,6 +35,7 @@ public class MyGenericsStack<T> {
 	private void increaseStackCapacity() {
 
 		// noinspection unchecked
+		@SuppressWarnings("unchecked")
 		T[] newStack = (T[]) new Object[this.stackSize * 2];
 		if (stackSize >= 0)
 			System.arraycopy(this.stackArr, 0, newStack, 0, stackSize);
@@ -46,7 +47,6 @@ public class MyGenericsStack<T> {
 		return (top == -1);
 	}
 
-	@SuppressWarnings("WeakerAccess")
 	public boolean isStackFull() {
 		return (top == stackSize - 1);
 	}

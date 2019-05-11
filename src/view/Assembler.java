@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import controller.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,8 +16,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import controller.Controller;
 import model.SourceReader;
+import model.utility.Utility;
 
 public class Assembler {
 
@@ -33,6 +34,7 @@ public class Assembler {
 	public TextArea textArea;
 
 	private Controller controller = new Controller();
+	String path;
 
 	public void initialize(Stage primaryStage) {
 
@@ -84,7 +86,7 @@ public class Assembler {
 		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showOpenDialog(window);
 		if (file != null) {
-			String path = file.getAbsolutePath();
+			path = file.getAbsolutePath();
 			textArea.setText(controller.loadFile(path));
 		}
 	}
@@ -118,6 +120,25 @@ public class Assembler {
 		}
 		textArea.setText(append);
 	}
+	
+	public void saveAsOnAction() {
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+		fileChooser.getExtensionFilters().add(extFilter);
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/SIC files";
+		fileChooser.setInitialDirectory(new File(currentPath));
+		File file = fileChooser.showSaveDialog(window);
+		if (file != null) {
+			path = file.getAbsolutePath();
+			Utility.writeFile(textArea.getText(), path);
+			textArea.clear();
+		}
+	}
+	
+	public void saveOnAction() {
+		Utility.writeFile(textArea.getText(), path);
+	}
+
 	
 	public void setRestrictedMsg() {
 

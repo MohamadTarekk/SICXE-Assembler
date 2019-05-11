@@ -19,8 +19,8 @@
               <MenuItem fx:id="loadFile" mnemonicParsing="false" onAction="#loadFileOnAction" text="Load..." />
                   <MenuItem fx:id="clearResult" mnemonicParsing="false" onAction="#clearResultOnAction" text="Clear Result" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save As..." />
+                  <MenuItem mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveAsOnAction" text="Save As..." />
             </items>
           </Menu>
           <Menu fx:id="assemble" mnemonicParsing="false" text="Assemble">
