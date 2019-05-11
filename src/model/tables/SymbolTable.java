@@ -16,5 +16,7 @@ public class SymbolTable {
 		}
 		return table.toString();
 	}
+	
+	
 
 }

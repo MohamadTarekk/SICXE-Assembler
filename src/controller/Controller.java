@@ -83,7 +83,6 @@ public class Controller {
 		// textArea.setText(toBePrintedInTextArea);
 
 		Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
-		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
 	}
 
 	private void fillSymbolTable() {
@@ -94,6 +93,7 @@ public class Controller {
 				SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 			}
 		}
+		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
 	}
 
 	private void fillLiteralsTable() {
@@ -128,7 +128,6 @@ public class Controller {
 					format = DirectiveTable.directiveTable.get(line.getMnemonic()).getFormat();
 				}
 				// Only if formats 3 & 4
-					|| line.getMnemonic().equals("ORG") || line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")	) {
 				if (format == Format.THREE || format == Format.FOUR || line.getMnemonic().equals("ORG")
 						|| line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")) {
 					// ONLY if addressing mode is direct with/without indexing
