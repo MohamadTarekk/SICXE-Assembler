@@ -96,8 +96,15 @@ public class Controller {
 		Symbol symbol;
 		for (Line line : lineList) {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
-				symbol = new Symbol(line.getLabel(), line.getLocation());
-				SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
+				if (line.getMnemonic().equalsIgnoreCase("EQU"))
+				{
+					symbol = new Symbol(line.getLabel(), line.getFirstOperand());
+					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
+				}
+				else {
+					symbol = new Symbol(line.getLabel(), line.getLocation());
+					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
+				}
 			}
 		}
 		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
