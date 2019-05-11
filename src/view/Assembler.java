@@ -100,7 +100,7 @@ public class Assembler {
 		}
 		textArea.setText(append);
 	}
-	
+
 	public void showSymbolTable() {
 		ArrayList<String> arr = SourceReader.getInstance().readFile("res/LIST/symTable.txt");
 		String append = "";
@@ -110,7 +110,7 @@ public class Assembler {
 		}
 		textArea.setText(append);
 	}
-	
+
 	public void showObjectFile() {
 		ArrayList<String> arr = SourceReader.getInstance().readFile("res/LIST/objFile.o");
 		String append = "";
@@ -120,7 +120,7 @@ public class Assembler {
 		}
 		textArea.setText(append);
 	}
-	
+
 	public void saveAsOnAction() {
 		FileChooser fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -131,15 +131,13 @@ public class Assembler {
 		if (file != null) {
 			path = file.getAbsolutePath();
 			Utility.writeFile(textArea.getText(), path);
-			textArea.clear();
 		}
 	}
-	
+
 	public void saveOnAction() {
 		Utility.writeFile(textArea.getText(), path);
 	}
 
-	
 	public void setRestrictedMsg() {
 
 		restrictedMsgLabel.setVisible(!restricted.isSelected());

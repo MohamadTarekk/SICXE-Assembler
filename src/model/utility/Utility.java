@@ -80,7 +80,7 @@ public class Utility {
 	}
 
 	public static boolean isLabel(String labelName) {
-		if (CommandInfo.labelList.contains(labelName))
+		if (CommandInfo.labelList.contains(labelName.toUpperCase()))
 			return true;
 		return false;
 
