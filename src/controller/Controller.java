@@ -2,11 +2,21 @@ package controller;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import model.*;
+import model.CommandInfo;
+import model.Instruction;
+import model.Line;
+import model.Literal;
+import model.ProgramCounter;
+import model.SourceReader;
+import model.Symbol;
 import model.enums.Format;
-import model.tables.*;
+import model.tables.DirectiveTable;
+import model.tables.ErrorTable;
+import model.tables.InstructionTable;
+import model.tables.LiteralTable;
+import model.tables.RegisterTable;
+import model.tables.SymbolTable;
 import model.utility.Utility;
 
 public class Controller {
@@ -15,9 +25,6 @@ public class Controller {
 
 	private ArrayList<Line> lineList;
 	private ArrayList<Integer> recordLengths = new ArrayList<>();
-
-	@SuppressWarnings("unused")
-	HashMap<String, Instruction> instructionTable;
 
 	private String path;
 	private String base;
