@@ -98,12 +98,7 @@ public class Controller {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
 				if (line.getMnemonic().equalsIgnoreCase("EQU"))
 				{
-				    if (Utility.isLabel(line.getFirstOperand()))
-                    {
-                        symbol=new Symbol(line.getLabel(),SymbolTable.symbolTable.get(line.getFirstOperand()).getAddress());
-                    }else {
                         symbol = new Symbol(line.getLabel(), line.getFirstOperand());
-                    }
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
 				else {
