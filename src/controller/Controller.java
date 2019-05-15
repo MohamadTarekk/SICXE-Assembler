@@ -97,9 +97,7 @@ public class Controller {
 		String value;
 		for (Line line : lineList) {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
-
 				if (line.getMnemonic().equalsIgnoreCase("EQU")) {
-					symbol = new Symbol(line.getLabel(), line.getFirstOperand());
 					if (line.getMnemonic().equalsIgnoreCase("EQU")) {
 						if (Utility.isLabel(line.getFirstOperand())) {
 							// if operand is label => get its address
@@ -116,11 +114,10 @@ public class Controller {
 							value = line.getFirstOperand();
 						}
 						symbol = new Symbol(line.getLabel(), value);
-						SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 					} else {
 						symbol = new Symbol(line.getLabel(), line.getLocation());
-						SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 					}
+					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
 			}
 		}
