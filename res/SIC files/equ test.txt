@@ -1,0 +1,17 @@
+.2345678_0123456_8901234567890123456
+prog1    START   1000              comment
+Q1       LDA     BETA              comment
+         LDS     GAMMA
+SSSS     ADDR    A,S               comment
+         STA     ALPHA+45
+SSS      MULR    A,S
+         LDA     BETA+12
+         SUBR    S,A
+         STA     DELTA              mmm
+asd      equ     3+sss
+.This is a comment
+BETA     BYTE    x'3'
+GAMMA    WORD    6
+ALPHA    RESW    1
+DELTA    RESW    1
+         END     Q1
