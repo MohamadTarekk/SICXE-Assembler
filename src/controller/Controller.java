@@ -98,7 +98,7 @@ public class Controller {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
 				if (line.getMnemonic().equalsIgnoreCase("EQU"))
 				{
-                        symbol = new Symbol(line.getLabel(), line.getFirstOperand());
+             	    symbol = new Symbol(line.getLabel(), line.getFirstOperand());
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
 				else {
