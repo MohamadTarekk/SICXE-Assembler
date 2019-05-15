@@ -94,12 +94,25 @@ public class Controller {
 
 	private void fillSymbolTable() {
 		Symbol symbol;
+		String value;
 		for (Line line : lineList) {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
-				if (line.getMnemonic().equalsIgnoreCase("EQU"))
-				{
-
-					symbol = new Symbol(line.getLabel(), line.getFirstOperand());
+				if (line.getMnemonic().equalsIgnoreCase("EQU")) {
+					if (Utility.isLabel(line.getFirstOperand())){
+						// if operand is label 		=>		get its address
+						value = SymbolTable.symbolTable.get(line.getFirstOperand()).getAddress();
+					} else {
+						// if operand is expression		=>		evaluate it
+						if (Utility.isExpression(line.getFirstOperand())) {
+							evaluateLineExpressions(line);
+						}
+						// reaching this line means operand is not a label
+						// if it is an expression then it is evaluated a replaced by the final result
+						// if not	=>	it is a numeric value already
+						// in both cases, the needed value is the operand itself
+						value = line.getFirstOperand();
+					}
+					symbol = new Symbol(line.getLabel(), value);
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
 				else {
@@ -149,32 +162,39 @@ public class Controller {
 						|| line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")) {
 					// ONLY if addressing mode is direct with/without indexing
 					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
-						ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
-						// If operand is not an expression, size after splitting will be 1
-						if (expressionList.size() == 1)
-							continue;
-						// Verify labels in the expression
-						if (Utility.verifyExpression(expressionList)) {
-							// Replace labels by the numeric value of their addresses
-							Utility.evaluateLabels(expressionList);
-							// Check syntax of arithmetic expression
-							if (Utility.validateNumericExpression(expressionList)) {
-								// Evaluate the expression
-								String expression = Utility.getNumericExpression(expressionList);
-								String operand = Utility.evaluateExpression(expression);
-								System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand
-										+ "\t\t\t" + expression);
-								line.setFirstOperand(operand);
-							} else {
-								// Wrong Arithmetic expression format
-								line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
-							}
-						} else {
-							line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
-						}
+						if (Utility.isExpression(line.getFirstOperand()))
+							evaluateLineExpressions(line);
 					}
 				}
 			}
+		}
+	}
+
+	private void evaluateLineExpressions(Line line) {
+		ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
+		/*
+		// If operand is not an expression, size after splitting will be 1
+		if (expressionList.size() == 1)
+			return;
+		*/
+		// Verify labels in the expression
+		if (Utility.verifyExpression(expressionList)) {
+			// Replace labels by the numeric value of their addresses
+			Utility.evaluateLabels(expressionList);
+			// Check syntax of arithmetic expression
+			if (Utility.validateNumericExpression(expressionList)) {
+				// Evaluate the expression
+				String expression = Utility.getNumericExpression(expressionList);
+				String operand = Utility.evaluateExpression(expression);
+				System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand
+						+ "\t\t\t" + expression);
+				line.setFirstOperand(operand);
+			} else {
+				// Wrong Arithmetic expression format
+				line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
+			}
+		} else {
+			line.setError(ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE]);
 		}
 	}
 
