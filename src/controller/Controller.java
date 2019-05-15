@@ -98,25 +98,25 @@ public class Controller {
 		for (Line line : lineList) {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
 				if (line.getMnemonic().equalsIgnoreCase("EQU")) {
-					if (line.getMnemonic().equalsIgnoreCase("EQU")) {
-						if (Utility.isLabel(line.getFirstOperand())) {
-							// if operand is label => get its address
-							value = SymbolTable.symbolTable.get(line.getFirstOperand()).getAddress();
-						} else {
-							// if operand is expression => evaluate it
-							if (Utility.isExpression(line.getFirstOperand())) {
-								evaluateLineExpressions(line);
-							}
-							// reaching this line means operand is not a label
-							// if it is an expression then it is evaluated a replaced by the final result
-							// if not => it is a numeric value already
-							// in both cases, the needed value is the operand itself
-							value = line.getFirstOperand();
-						}
-						symbol = new Symbol(line.getLabel(), value);
+					if (Utility.isLabel(line.getFirstOperand())){
+						// if operand is label 		=>		get its address
+						value = SymbolTable.symbolTable.get(line.getFirstOperand()).getAddress();
 					} else {
-						symbol = new Symbol(line.getLabel(), line.getLocation());
+						// if operand is expression		=>		evaluate it
+						if (Utility.isExpression(line.getFirstOperand())) {
+							evaluateLineExpressions(line);
+						}
+						// reaching this line means operand is not a label
+						// if it is an expression then it is evaluated a replaced by the final result
+						// if not	=>	it is a numeric value already
+						// in both cases, the needed value is the operand itself
+						value = line.getFirstOperand();
 					}
+					symbol = new Symbol(line.getLabel(), value);
+					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
+				}
+				else {
+					symbol = new Symbol(line.getLabel(), line.getLocation());
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
 			}
@@ -126,11 +126,9 @@ public class Controller {
 
 	public static void fillLiteralsTable(ArrayList<Line> lineList) {
 		Literal literal;
-		// In case LTORG was encountered in the code, all literals before it are
-		// evaluated and added.
+		// In case LTORG was encountered in the code, all literals before it are evaluated and added.
 		// Then, "literalsStartIndex" is set to the index of the first line after LTORG
-		// So that, when this function s called at the end of the program, it doesn't
-		// add already added literals
+		// So that, when this function s called at the end of the program, it doesn't add already added literals
 		int index = ProgramCounter.getInstance().getLiteralsStartIndex();
 		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
 		int i = 0;
@@ -179,9 +177,10 @@ public class Controller {
 	private void evaluateLineExpressions(Line line) {
 		ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
 		/*
-		 * // If operand is not an expression, size after splitting will be 1 if
-		 * (expressionList.size() == 1) return;
-		 */
+		// If operand is not an expression, size after splitting will be 1
+		if (expressionList.size() == 1)
+			return;
+		*/
 		// Verify labels in the expression
 		if (Utility.verifyExpression(expressionList)) {
 			// Replace labels by the numeric value of their addresses
@@ -191,8 +190,8 @@ public class Controller {
 				// Evaluate the expression
 				String expression = Utility.getNumericExpression(expressionList);
 				String operand = Utility.evaluateExpression(expression);
-				System.out.println(
-						"Done evaluating! " + line.getFirstOperand() + " = " + operand + "\t\t\t" + expression);
+				System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand
+						+ "\t\t\t" + expression);
 				line.setFirstOperand(operand);
 			} else {
 				// Wrong Arithmetic expression format
