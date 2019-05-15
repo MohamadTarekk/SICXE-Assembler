@@ -98,7 +98,8 @@ public class Controller {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
 				if (line.getMnemonic().equalsIgnoreCase("EQU"))
 				{
-                        symbol = new Symbol(line.getLabel(), line.getFirstOperand());
+
+					symbol = new Symbol(line.getLabel(), line.getFirstOperand());
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
 				else {
@@ -116,10 +117,12 @@ public class Controller {
 		for (Line line : lineList) {
 			if (!line.getFirstOperand().equals("")) {
 				if (line.getMnemonic().equalsIgnoreCase("LTORG")) {
-					if (Utility.isNumeric(line.getFirstOperand())) {
+					startingAddress = (int) Long.parseLong(line.getLocation());
+					continue;
+					/*if (Utility.isNumeric(line.getFirstOperand())) {
 						startingAddress = (int) Long.parseLong(line.getFirstOperand());
 						continue;
-					}
+					}*/
 				}
 			}
 			if (!line.getFirstOperand().equals("")) {
