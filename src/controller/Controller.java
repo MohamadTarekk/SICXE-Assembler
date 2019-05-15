@@ -124,22 +124,32 @@ public class Controller {
 		Utility.writeFile(SymbolTable.getString(), "res/LIST/symTable.txt");
 	}
 
-	private void fillLiteralsTable() {
+	public static void fillLiteralsTable(ArrayList<Line> lineList) {
 		Literal literal;
+		// In case LTORG was encountered in the code, all literals before it are evaluated and added.
+		// Then, "literalsStartIndex" is set to the index of the first line after LTORG
+		// So that, when this function s called at the end of the program, it doesn't add already added literals
+		int index = ProgramCounter.getInstance().getLiteralsStartIndex();
 		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
+		int i = 0;
 		for (Line line : lineList) {
+			// to skip iterations before the last encountered LTORG in the program
+			if (i <= index) {
+				i++;
+				continue;
+			}
+			// to add literals after the last LTORG to the pole (i.e. after END directive)
 			if (!line.getFirstOperand().equals("")) {
-				if (line.getMnemonic().equalsIgnoreCase("LTORG")) {
-					startingAddress = (int) Long.parseLong(line.getLocation());
-					continue;
-				}
 				if (line.getFirstOperand().charAt(0) == '=') {
 					literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
 					startingAddress += literal.calculateLength();
 					LiteralTable.literalTable.put(literal.getOperand(), literal);
 				}
 			}
+			index++;
 		}
+		ProgramCounter.getInstance().setLiteralsStartIndex(index);
+		ProgramCounter.getInstance().setLocationCounter(startingAddress);
 	}
 
 	private void processArithmeticExpressions() {
@@ -204,7 +214,7 @@ public class Controller {
 			prepareListFile();
 			fillSymbolTable();
 			processArithmeticExpressions();
-			fillLiteralsTable();
+			fillLiteralsTable(lineList);
 		}
 		noErrorsInPassOne = CI.checkForErrors();
 	}
