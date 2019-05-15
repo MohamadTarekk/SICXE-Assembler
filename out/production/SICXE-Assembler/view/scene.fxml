@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
@@ -14,7 +10,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Assembler">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="438.0" prefWidth="617.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.Assembler">
    <children>
       <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -23,14 +19,16 @@
               <MenuItem fx:id="loadFile" mnemonicParsing="false" onAction="#loadFileOnAction" text="Load..." />
                   <MenuItem fx:id="clearResult" mnemonicParsing="false" onAction="#clearResultOnAction" text="Clear Result" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save As..." />
+                  <MenuItem mnemonicParsing="false" onAction="#saveOnAction" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveAsOnAction" text="Save As..." />
             </items>
           </Menu>
           <Menu fx:id="assemble" mnemonicParsing="false" text="Assemble">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#assembleOnAction" text="Assemble" />
                   <MenuItem mnemonicParsing="false" onAction="#showListFile" text="List File" />
+                  <MenuItem mnemonicParsing="false" onAction="#showObjectFile" text="Object File" />
+                  <MenuItem mnemonicParsing="false" onAction="#showSymbolTable" text="Symbol Table" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Mode">

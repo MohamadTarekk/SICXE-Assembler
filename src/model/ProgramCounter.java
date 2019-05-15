@@ -1,8 +1,11 @@
 package model;
 
+import controller.Controller;
 import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.utility.Utility;
+
+import java.util.ArrayList;
 
 public class ProgramCounter {
 
@@ -18,16 +21,29 @@ public class ProgramCounter {
 	}
 
 	private int locationCounter = 0;
+	private int literalsStartIndex = 0;
 
 	public int getProgramCounter() {
 		return locationCounter;
+	}
+
+	public void setLocationCounter(int locationCounter) {
+		this.locationCounter = locationCounter;
+	}
+
+	public int getLiteralsStartIndex() {
+		return literalsStartIndex;
+	}
+
+	public void setLiteralsStartIndex(int literalsStartIndex) {
+		this.literalsStartIndex = literalsStartIndex;
 	}
 
 	public void resetAddresses() {
 		locationCounter = 0;
 	}
 
-	public void updateCounters(Line line) {
+	public void updateCounters(Line line, ArrayList<Line> lineList) {
 		String mnemonic = line.getMnemonic();
 		String hexaValue = Utility.convertToHexa(locationCounter);
 		line.setLocation(hexaValue);
@@ -41,6 +57,9 @@ public class ProgramCounter {
 
 		if (mnemonic.equals("Org".toUpperCase())) {
 			locationCounter = Utility.hexToDecimal(line.getFirstOperand());
+		}
+		if (mnemonic.equalsIgnoreCase("LTORG")) {
+			Controller.fillLiteralsTable(lineList);
 		}
 
 		if (Utility.isDirective(mnemonic)) {

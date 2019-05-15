@@ -233,18 +233,22 @@ public class ErrorChecker {
                 }
                 break;
             case "EQU":
-                if (line.getAddressingMode().equals("#")) {
+                if (!line.getAddressingMode().equals("")){
+                    error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
+                    return true;
+                }
+                /*if (line.getAddressingMode().equals("#")) {
                     if (!isNumeric(line.getFirstOperand()) && !Utility.isLabel(line.getFirstOperand())) {
                         error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
                         return true;
                     }
-                }
+                }*/
                 if (line.getFirstOperand().equals("")) {
                     error = ErrorTable.errorList[ErrorTable.MISSING_FIRST_OPERAND];
                     return true;
                 }
                 if ( !Utility.isLabel(line.getFirstOperand()) && !isNumeric(line.getFirstOperand()) &&
-                        !Utility.isLiteral(line.getFirstOperand()) && !Utility.isExpression(line.getFirstOperand())) {
+                     !Utility.isExpression(line.getFirstOperand())) {
                     error = ErrorTable.errorList[ErrorTable.WRONG_OPERAND_TYPE];
                     return true;
                 }

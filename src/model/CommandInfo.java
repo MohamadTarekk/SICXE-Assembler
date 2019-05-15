@@ -41,7 +41,7 @@ public class CommandInfo {
 			line = new Line(labelList.get(i), mnemonicList.get(i).toUpperCase(), addressingModeList.get(i),
 					operand1List.get(i), operand2List.get(i), commentList.get(i));
 			ErrorChecker.getInstance().verifyLine(line);
-			pc.updateCounters(line);
+			pc.updateCounters(line, linesList);
 			linesList.add(line);
 		}
 		verifyEndAndStartStatements();
