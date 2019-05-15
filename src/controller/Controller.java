@@ -2,6 +2,7 @@ package controller;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
 
 import model.CommandInfo;
 import model.Instruction;
@@ -31,9 +32,10 @@ public class Controller {
 	private String displacement;
 	private String BASE_ERROR = "Base Error";
 	private boolean noErrorsInPassOne = false;
+	private boolean noErrorsInPassTwo = false;
 
 	public boolean isNoErrors() {
-		return noErrorsInPassOne;
+		return noErrorsInPassOne && noErrorsInPassTwo;
 	}
 
 	@SuppressWarnings("unused")
@@ -85,7 +87,7 @@ public class Controller {
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length())
-					+ CI.getLinesList().get(i).toString() + "\n";
+			+ CI.getLinesList().get(i).toString() + "\n";
 		}
 		// textArea.setText(toBePrintedInTextArea);
 
@@ -180,7 +182,7 @@ public class Controller {
 		// If operand is not an expression, size after splitting will be 1
 		if (expressionList.size() == 1)
 			return;
-		*/
+		 */
 		// Verify labels in the expression
 		if (Utility.verifyExpression(expressionList)) {
 			// Replace labels by the numeric value of their addresses
@@ -350,14 +352,39 @@ public class Controller {
 					return BASE_ERROR;
 				}
 			}
-		} else {
-			disp = Utility.hexToDecimal(firstOperand);
-			bp = "00";
+		} else { // copied and pasted code
+			// immediate
+			if (firstOperand.charAt(0) == '#') {
+				disp = Utility.hexToDecimal(firstOperand.substring(1));
+				bp = "00";
+			} else { // address
+				disp = Integer.parseInt(firstOperand) - pc;
+				if (disp >= -2048 && disp < 2048) {
+					// bpe = 010
+					bp = "01";
+				} else { // try base relative
+					if (checkBase()) { // check if base register is available
+						int base = getBase();
+						disp = Utility.hexToDecimal(firstOperand) - base;
+						if (disp >= 0 && disp <= 4 * 1024 - 1) {
+							// bpe = 100
+							bp = "10";
+						} else {
+							// error
+							return BASE_ERROR;
+						}
+					} else {
+						// error
+						return BASE_ERROR;
+					}
+				}
+			}
 		}
 		/*
 		 * TODO!!! the literals caused an exception in calculating disp test example
 		 * operand: W'123' when the following was added the error was gone and
-		 * successful assembly if (firstOperand.charAt(0) == '=') disp =
+		 * successful assembly 
+		 * if (firstOperand.charAt(0) == '=') disp =
 		 * Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
 		 * else disp = Utility.hexToDecimal(firstOperand);
 		 */
@@ -405,8 +432,32 @@ public class Controller {
 		return res;
 	}
 
-	private String formatTextRecord(String textRecord) {
+	private String addLiteralsToObjectCode() {
+		String literals = "";
+		String temp;
+		for (Map.Entry<String, Literal> n : LiteralTable.literalTable.entrySet()) {
+			temp = n.getValue().getOperand().substring(3, n.getValue().getOperand().length() - 1);
+			switch (n.getValue().getType()) {
+			case "W":
+				literals += convertToAscii(temp);
+				recordLengths.add(3);
+				break;
+			case "C":
+				literals += convertToAscii(temp);
+				recordLengths.add(temp.length());
+				break;
+			case "X":
+				literals += temp;
+				recordLengths.add(literals.length());
+				break;
+			default:
+				break;
+			}
+		}
+		return literals;
+	}
 
+	private String formatTextRecord(String textRecord) {
 		ArrayList<String> lengths = new ArrayList<>();
 		String start = getStartOfProgram();
 		String result = "T^" + start + "^^";
@@ -555,12 +606,14 @@ public class Controller {
 						}
 					}
 					break;
+				case "LTORG":
+					break;
 				default:
 					break;
 				}
 			}
 		}
-		return formatTextRecord(textRecord);
+		return formatTextRecord(textRecord + addLiteralsToObjectCode());
 	}
 
 	private String getAddressOfFirstExecutableInstruction() {
@@ -597,13 +650,15 @@ public class Controller {
 		return headerRecord + "\n" + textRecord + "\n" + endRecord; // Return objectCode
 	}
 
-	private boolean passTwo() {
+	private void passTwo() {
 
 		String objectCode = getObjectCode();
-		if (objectCode.equals(BASE_ERROR))
-			return false;
+		if (objectCode.equals(BASE_ERROR)) {
+			noErrorsInPassTwo =  false;
+			return;
+		}
 		Utility.writeFile(objectCode, "res/LIST/objFile.o");
-		return true;
+		noErrorsInPassTwo =  true;
 	}
 
 	public void assemble(String program, boolean restricted) {
@@ -611,6 +666,7 @@ public class Controller {
 		passOne(program, restricted);
 		if (noErrorsInPassOne)
 			passTwo();
+		addLiteralsToObjectCode();
 		Utility.clearAll();
 	}
 

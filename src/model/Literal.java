@@ -1,7 +1,5 @@
 package model;
 
-import model.utility.Utility;
-
 public class Literal {
 
 	private String type;
@@ -52,7 +50,7 @@ public class Literal {
 
 	@Override
 	public String toString() {
-		return operand + Utility.getSpaces(12 - operand.length()) + address + "\n";
+		return type + "\t" + operand + "\t" + address + "\n";
 	}
 
 	public String getType() {
