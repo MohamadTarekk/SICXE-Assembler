@@ -132,13 +132,7 @@ public class Controller {
 				if (line.getMnemonic().equalsIgnoreCase("LTORG")) {
 					startingAddress = (int) Long.parseLong(line.getLocation());
 					continue;
-					/*if (Utility.isNumeric(line.getFirstOperand())) {
-						startingAddress = (int) Long.parseLong(line.getFirstOperand());
-						continue;
-					}*/
 				}
-			}
-			if (!line.getFirstOperand().equals("")) {
 				if (line.getFirstOperand().charAt(0) == '=') {
 					literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
 					startingAddress += literal.calculateLength();
