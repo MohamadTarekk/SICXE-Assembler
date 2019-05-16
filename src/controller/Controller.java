@@ -197,6 +197,8 @@ public class Controller {
 				// Evaluate the expression
 				String expression = Utility.getNumericExpression(expressionList);
 				String operand = Utility.evaluateExpression(expression);
+				if (operand.equals("error"))
+					line.setError(String.valueOf(ErrorTable.WRONG_OPERAND_TYPE));
 				System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand
 						+ "\t\t\t" + expression);
 				line.setFirstOperand(operand);

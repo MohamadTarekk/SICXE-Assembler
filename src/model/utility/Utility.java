@@ -13,10 +13,13 @@ import java.util.regex.Pattern;
 import controller.Controller;
 import model.CommandInfo;
 import model.ErrorChecker;
-import model.MyGenericsStack;
 import model.ProgramCounter;
 import model.enums.Format;
 import model.tables.*;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 public class Utility {
 
@@ -416,54 +419,13 @@ public class Utility {
 	}
 
 	public static String evaluateExpression(String expression) {
-		MyGenericsStack<String> stack = new MyGenericsStack<>(expression.length());
-		// break the expression into tokens
-		StringTokenizer tokens = new StringTokenizer(expression, "{}()*/+-", true);
-		while (tokens.hasMoreTokens()) {
-			String token = tokens.nextToken();
-			// read each token and take action
-			if (token.equals("(") || token.matches("[0-9]+") || token.equals("*") || token.equals("/")
-					|| token.equals("+") || token.equals("-")) {
-				// push token to the stack
-				stack.push(token);
-			} else if (token.equals("}") || token.equals(")")) {
-				try {
-					int op2 = Integer.parseInt(stack.pop());
-					String operand = stack.pop();
-					int op1 = Integer.parseInt(stack.pop());
-					// Below pop removes either } or ) from stack
-					if (!stack.isStackEmpty()) {
-						stack.pop();
-					}
-					int result = 0;
-					switch (operand) {
-					case "*":
-						result = op1 * op2;
-						break;
-					case "/":
-						result = op1 / op2;
-						break;
-					case "+":
-						result = op1 + op2;
-						break;
-					case "-":
-						result = op1 - op2;
-						break;
-					}
-					// push the result to the stack
-					stack.push(result + "");
-				} catch (Exception e) {
-					e.printStackTrace();
-					break;
-				}
-			}
-		}
-		String finalResult = "";
+		ScriptEngineManager mgr = new ScriptEngineManager();
+		ScriptEngine engine = mgr.getEngineByName("JavaScript");
 		try {
-			finalResult = stack.pop();
-		} catch (Exception e) {
-			System.out.println("Stack is empty");
+			return String.valueOf(engine.eval(expression));
+		} catch (ScriptException e) {
+			System.out.println("Expression evaluation failed!!!");
+			return "error";
 		}
-		return finalResult;
 	}
 }
