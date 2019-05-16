@@ -41,6 +41,7 @@ public class ProgramCounter {
 
 	public void resetAddresses() {
 		locationCounter = 0;
+		literalsStartIndex = 0;
 	}
 
 	public void updateCounters(Line line, ArrayList<Line> lineList) {
