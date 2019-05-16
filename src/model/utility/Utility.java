@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import controller.Controller;
 import model.CommandInfo;
 import model.ErrorChecker;
 import model.MyGenericsStack;
@@ -59,6 +60,7 @@ public class Utility {
 		CommandInfo.labelList.clear();
 		SymbolTable.symbolTable.clear();
 		LiteralTable.literalTable.clear();
+		Controller.clear();
 	}
 
 	public static boolean isDirective(String directiveMnemonic) {

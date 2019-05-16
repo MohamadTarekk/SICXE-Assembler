@@ -24,8 +24,8 @@ public class Controller {
 
 	private CommandInfo CI;
 
-	private ArrayList<Line> lineList;
-	private ArrayList<Integer> recordLengths = new ArrayList<>();
+	private static ArrayList<Line> lineList;
+	private static ArrayList<Integer> recordLengths = new ArrayList<>();
 
 	private String path;
 	private String base;
@@ -36,6 +36,11 @@ public class Controller {
 
 	public boolean isNoErrors() {
 		return noErrorsInPassOne && noErrorsInPassTwo;
+	}
+	
+	public static void clear() {
+		lineList.clear();
+		recordLengths.clear();
 	}
 
 	@SuppressWarnings("unused")
