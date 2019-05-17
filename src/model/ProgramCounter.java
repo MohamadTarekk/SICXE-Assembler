@@ -6,6 +6,7 @@ import model.tables.InstructionTable;
 import model.utility.Utility;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ProgramCounter {
 
@@ -57,7 +58,16 @@ public class ProgramCounter {
 		}
 
 		if (mnemonic.equals("Org".toUpperCase())) {
-			locationCounter = Utility.hexToDecimal(line.getFirstOperand());
+			if(Utility.isNumeric(line.getFirstOperand())) {
+				System.out.println("test");
+				locationCounter = Utility.hexToDecimal(line.getFirstOperand());
+			}else {
+				for (Line line2 : lineList) {
+					if(line2.getLabel().equals(line.getFirstOperand())) {
+						locationCounter = Utility.hexToDecimal((line2.getLocation()));
+					}
+				}
+			}
 		}
 		if (mnemonic.equalsIgnoreCase("LTORG")) {
 			Controller.fillLiteralsTable(lineList);
