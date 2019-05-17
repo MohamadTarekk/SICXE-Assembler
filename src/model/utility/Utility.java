@@ -6,20 +6,23 @@ import java.io.FileWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import controller.Controller;
 import model.CommandInfo;
 import model.ErrorChecker;
 import model.ProgramCounter;
 import model.enums.Format;
-import model.tables.*;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import model.tables.DirectiveTable;
+import model.tables.InstructionTable;
+import model.tables.LiteralTable;
+import model.tables.RegisterTable;
+import model.tables.SymbolTable;
 
 public class Utility {
 

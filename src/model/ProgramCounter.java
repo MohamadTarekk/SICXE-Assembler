@@ -1,12 +1,11 @@
 package model;
 
+import java.util.ArrayList;
+
 import controller.Controller;
 import model.tables.DirectiveTable;
 import model.tables.InstructionTable;
 import model.utility.Utility;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ProgramCounter {
 
