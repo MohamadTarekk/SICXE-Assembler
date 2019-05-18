@@ -720,7 +720,7 @@ public class Controller {
 		String append = getListFile();
 
 		final String lineSeparator = "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
-		final String startPassTwo = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   2 -_-_-_-_-_-_-_-_-_-_-\n";
+		final String startPassTwo = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   2 -_-_-_-_-_-_-_-_-_-_-\n\n";
 		ArrayList<String> codeInstToBePrinted = codeForInstListFile();
 		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "Code" + Utility.getSpaces(5) + "LC"
 				+ Utility.getSpaces(7) + "Source Statement\n\n" ;
@@ -731,7 +731,10 @@ public class Controller {
 			// noinspection StringConcatenationInLoop
 			String instructionTobeWritten=CI.getLinesList().get(i).toString();
 			Instruction currentInstruction=InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()) && (currentInstruction.getFormat() == Format.THREE || currentInstruction.getFormat() == Format.FOUR ))
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()) &&
+                    (currentInstruction.getFormat() == Format.THREE ||
+                            currentInstruction.getFormat() == Format.FOUR ) &&
+                    lineList.get(i).getError().equalsIgnoreCase(""))
 			{
 				String NIX=getNIX(lineList.get(i));
 				String BPE=getBPE(lineList.get(i),currentInstruction.getFormat());
