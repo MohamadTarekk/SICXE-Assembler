@@ -721,29 +721,74 @@ public class Controller {
 
 		final String lineSeparator = "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
 		final String startPassTwo = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   2 -_-_-_-_-_-_-_-_-_-_-\n\n";
-		ArrayList<String> codeInstToBePrinted = codeForInstListFile();
-		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "Code" + Utility.getSpaces(5) + "LC"
+
+		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "Code" + Utility.getSpaces(5) + " LC"
 				+ Utility.getSpaces(7) + "Source Statement\n\n" ;
 		append=append+lineSeparator+startPassTwo+TABLE_FORM;
 		int len = CI.getLinesList().size();
-		for (int i = 0; i < len; i++) {
+        ArrayList<String> codeInstToBePrinted = new ArrayList<>();
+
+        for (int i=0; i<len ;i++)
+        {
+            codeInstToBePrinted.add(Utility.getSpaces(6));
+        }
+
+        boolean displacementError=false;
+        ArrayList<String> buffer= new ArrayList<>();
+        for (int i = 0; i < len; i++) {
+            buffer.add("");
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			String instructionTobeWritten=CI.getLinesList().get(i).toString();
 			Instruction currentInstruction=InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
+
+
+
+
 			if (Utility.isInstruction(lineList.get(i).getMnemonic()) &&
                     (currentInstruction.getFormat() == Format.THREE ||
-                            currentInstruction.getFormat() == Format.FOUR ) &&
-                    lineList.get(i).getError().equalsIgnoreCase(""))
+                            currentInstruction.getFormat() == Format.FOUR ))
 			{
+
 				String NIX=getNIX(lineList.get(i));
 				String BPE=getBPE(lineList.get(i),currentInstruction.getFormat());
-				append += nixBpeToString(NIX,BPE);
+				if (BPE.equals(BASE_ERROR))
+                {
+                    displacementError=true;
+                }else {
+                    buffer .set(i, nixBpeToString(NIX, BPE));
+                }
 			}
-			append += lineCount + Utility.getSpaces(12 - lineCount.length())+ codeInstToBePrinted.get(i)+
+
+
+
+			buffer .set(i,buffer.get(i)+ lineCount + Utility.getSpaces(12 - lineCount.length())+ codeInstToBePrinted.get(i)+
 					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
-					instructionTobeWritten + "\n";
+					instructionTobeWritten + "\n");
 		}
+        if (!displacementError) {
+            codeInstToBePrinted = codeForInstListFile();
+        }
+
+        for (int i = 0; i < len; i++)
+        {
+            String firstPart = "";
+            String secondPart = "";
+            if (codeInstToBePrinted.get(i).equals(""))
+               codeInstToBePrinted.set(i,Utility.getSpaces(6));
+
+            if (Character.isDigit(buffer.get(i).charAt(0)))
+            {
+                firstPart = buffer.get(i).substring(0,14-Integer.toString(i).length()) + codeInstToBePrinted.get(i);
+                secondPart = buffer.get(i).substring(18);
+            }else {
+                firstPart = buffer.get(i).substring(0,81+(12-Integer.toString(i).length())) +codeInstToBePrinted.get(i);
+                secondPart = buffer.get(i).substring(97);
+            }
+            append += firstPart+secondPart;
+        }
+
+
 
         System.out.println(append);
         Utility.writeFile(append,"res/LIST/listFile.txt");
@@ -757,16 +802,14 @@ public class Controller {
 			codeToBePrinted.add("");
 		int j=0;
 		for (int i = 0; i<lineList.size() ; i++ ) {
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()) )
+            Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()))
 			{
-				Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
 				switch (currentInstruction.getFormat())
 				{
 					case FOUR:
 					case THREE:
-						if (!getBPE(lineList.get(i),currentInstruction.getFormat()).equals(BASE_ERROR)) {
-							codeToBePrinted.set(i, objCodeForInst.get(j));
-						}
+						codeToBePrinted.set(i,objCodeForInst.get(j));
 						j++;
 						break;
 					case TWO:
@@ -778,7 +821,7 @@ public class Controller {
 						j++;
 						break;
 				}
-			}else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE")) && !BASE_ERROR.equalsIgnoreCase("Base Error"))
+			}else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE")))
 			{
 				codeToBePrinted.set(i,objCodeForInst.get(j));
 				j++;
@@ -791,17 +834,17 @@ public class Controller {
 
 	private String nixBpeToString(String NIX,String BPE)
 	{
-		return "\n\t\t\t\t\t\t\t\t\tn=" +
+		return  "\n" + Utility.getSpaces(40)+"n=" +
 				NIX.charAt(0) +
-				"\ti=" +
+				Utility.getSpaces(4) + "i=" +
 				NIX.charAt(1) +
-				"\tx=" +
+                Utility.getSpaces(4) + "x=" +
 				NIX.charAt(2) +
-				"\tb=" +
+                Utility.getSpaces(4) + "b=" +
 				BPE.charAt(0) +
-				"\tp=" +
+                Utility.getSpaces(4) + "p=" +
 				BPE.charAt(1) +
-				"\te=" +
+                Utility.getSpaces(4) + "e=" +
 				BPE.charAt(2) +
 				"\n";
 	}
