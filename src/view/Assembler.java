@@ -67,9 +67,21 @@ public class Assembler {
 	}
 
 	public void assembleOnAction() {
+		if (textArea.getText()==null) {
+			controller.assemble(textArea.getText(), restricted.isSelected());
+			showAssembleMsgDialog(controller.isNoErrors());
+		}else emptyTextAreaError();
+	}
 
-		controller.assemble(textArea.getText(), restricted.isSelected());
-		showAssembleMsgDialog(controller.isNoErrors());
+	private void emptyTextAreaError()
+	{
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Error");
+		alert.setHeaderText(null);
+		String msg;
+		msg = "Text field is empty!";
+		alert.setContentText(msg);
+		alert.showAndWait();
 	}
 
 	public void showListFile() {
