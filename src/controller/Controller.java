@@ -730,13 +730,13 @@ public class Controller {
 					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
 					instructionTobeWritten + "\n";
 		}
-		System.out.println(append);
+
 
 
 		Utility.writeFile(append,"res/LIST/habd.txt");
 		String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/LIST/habd.txt";
 		append=loadFile(path);
-
+        System.out.println(append);
 
 	}
 
