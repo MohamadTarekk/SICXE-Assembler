@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import model.CommandInfo;
 import model.Instruction;
 import model.Line;
@@ -33,6 +34,7 @@ public class Controller {
 	private String BASE_ERROR = "Base Error";
 	private boolean noErrorsInPassOne = false;
 	private boolean noErrorsInPassTwo = false;
+	private ArrayList<String> objCodeForInst=new ArrayList<>();
 
 	public boolean isNoErrors() {
 		return noErrorsInPassOne && noErrorsInPassTwo;
@@ -480,6 +482,7 @@ public class Controller {
 					// noinspection StringConcatenationInLoop
 					result += temp[i];
 				}
+				objCodeForInst.add(result.substring(result.length()-6));
 				tempSize = sum;
 				index = i;
 			} else {
@@ -660,6 +663,7 @@ public class Controller {
 	private void passTwo() {
 
 		String objectCode = getObjectCode();
+		reportEndPassTwo();
 		if (objectCode.equals(BASE_ERROR)) {
 			noErrorsInPassTwo =  false;
 			return;
@@ -699,6 +703,71 @@ public class Controller {
 			append += s + "\n";
 		}
 		return append;
+	}
+
+	private void reportEndPassTwo()
+	{
+		String append = getListFile();
+
+		final String lineSeparator = "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
+		final String startPassTwo = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   2 -_-_-_-_-_-_-_-_-_-_-\n";
+		ArrayList<String> codeInstToBePrinted = codeForInstListFile();
+		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "Code" + Utility.getSpaces(5) + "LC"
+				+ Utility.getSpaces(7) + "Source Statement\n\n" ;
+		append=append+lineSeparator+startPassTwo+TABLE_FORM;
+		int len = CI.getLinesList().size();
+		for (int i = 0; i < len; i++) {
+			String lineCount = String.valueOf(i);
+			// noinspection StringConcatenationInLoop
+			String instructionTobeWritten=CI.getLinesList().get(i).toString();
+
+			append += lineCount + Utility.getSpaces(12 - lineCount.length())+ codeInstToBePrinted.get(i)+
+					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
+					instructionTobeWritten + "\n";
+		}
+		System.out.println(append);
+
+
+		Utility.writeFile(append,"res/LIST/habd.txt");
+		String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/LIST/habd.txt";
+		append=loadFile(path);
+
+
+	}
+
+	private ArrayList<String> codeForInstListFile()
+	{
+		ArrayList<String> codeToBePrinted = new ArrayList<>();
+		for(int i = 0; i<lineList.size() ; i++)
+			codeToBePrinted.add("");
+		int j=0;
+		for (int i = 0; i<lineList.size() ; i++ ) {
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()))
+			{
+				Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
+				switch (currentInstruction.getFormat())
+				{
+					case FOUR:
+					case THREE:
+						codeToBePrinted.set(i,objCodeForInst.get(j));
+						j++;
+						break;
+					case TWO:
+						codeToBePrinted.set(i,objCodeForInst.get(j).substring(2)+Utility.getSpaces(2));
+						j++;
+						break;
+					case ONE:
+						codeToBePrinted.set(i,objCodeForInst.get(j).substring(4)+Utility.getSpaces(4));
+						j++;
+						break;
+				}
+			}else if (lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE"))
+			{
+				codeToBePrinted.set(i,objCodeForInst.get(j));
+				j++;
+			}else codeToBePrinted.set(i,Utility.getSpaces(6));
+		}
+		return codeToBePrinted;
 	}
 
 }
