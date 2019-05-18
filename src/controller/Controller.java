@@ -2,6 +2,7 @@ package controller;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.sun.org.apache.bcel.internal.classfile.Code;
@@ -354,10 +355,12 @@ public class Controller {
 						bp = "10";
 					} else {
 						// error
+						line.setError(ErrorTable.errorList[ErrorTable.DISPLACEMENT_OVERFLOW]);
 						return BASE_ERROR;
 					}
 				} else {
 					// error
+					line.setError(ErrorTable.errorList[ErrorTable.DISPLACEMENT_OVERFLOW]);
 					return BASE_ERROR;
 				}
 			}
@@ -380,10 +383,12 @@ public class Controller {
 							bp = "10";
 						} else {
 							// error
+							line.setError(ErrorTable.errorList[ErrorTable.DISPLACEMENT_OVERFLOW]);
 							return BASE_ERROR;
 						}
 					} else {
 						// error
+						line.setError(ErrorTable.errorList[ErrorTable.DISPLACEMENT_OVERFLOW]);
 						return BASE_ERROR;
 					}
 				}
@@ -725,18 +730,20 @@ public class Controller {
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			String instructionTobeWritten=CI.getLinesList().get(i).toString();
-
+			Instruction currentInstruction=InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()) && (currentInstruction.getFormat() == Format.THREE || currentInstruction.getFormat() == Format.FOUR ))
+			{
+				String NIX=getNIX(lineList.get(i));
+				String BPE=getBPE(lineList.get(i),currentInstruction.getFormat());
+				append += nixBpeToString(NIX,BPE);
+			}
 			append += lineCount + Utility.getSpaces(12 - lineCount.length())+ codeInstToBePrinted.get(i)+
 					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
 					instructionTobeWritten + "\n";
 		}
 
-
-
-		Utility.writeFile(append,"res/LIST/habd.txt");
-		String path = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/LIST/habd.txt";
-		append=loadFile(path);
         System.out.println(append);
+        Utility.writeFile(append,"res/LIST/listFile.txt");
 
 	}
 
@@ -747,7 +754,7 @@ public class Controller {
 			codeToBePrinted.add("");
 		int j=0;
 		for (int i = 0; i<lineList.size() ; i++ ) {
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()))
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()) && !BASE_ERROR.equalsIgnoreCase("Base Error"))
 			{
 				Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
 				switch (currentInstruction.getFormat())
@@ -766,13 +773,32 @@ public class Controller {
 						j++;
 						break;
 				}
-			}else if (lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE"))
+			}else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE")) && !BASE_ERROR.equalsIgnoreCase("Base Error"))
 			{
 				codeToBePrinted.set(i,objCodeForInst.get(j));
 				j++;
-			}else codeToBePrinted.set(i,Utility.getSpaces(6));
+			}else {
+				codeToBePrinted.set(i, Utility.getSpaces(6));
+			}
 		}
 		return codeToBePrinted;
+	}
+
+	private String nixBpeToString(String NIX,String BPE)
+	{
+		return "\n\t\t\t\t\t\t\t\t\tn=" +
+				NIX.charAt(0) +
+				"\ti=" +
+				NIX.charAt(1) +
+				"\tx=" +
+				NIX.charAt(2) +
+				"\tb=" +
+				BPE.charAt(0) +
+				"\tp=" +
+				BPE.charAt(1) +
+				"\te=" +
+				BPE.charAt(2) +
+				"\n";
 	}
 
 }

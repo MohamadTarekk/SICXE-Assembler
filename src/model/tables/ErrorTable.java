@@ -26,7 +26,8 @@ public class ErrorTable {
 	public static final int MORE_THAN_ONE_START = 21;
 	public static final int INCORRECT_OPERAND_FORMAT = 22;
 	public static final int OPERAND_EXCEEDED_NUMBER_OF_DECIMAL_DIGITS = 23;
-	public static final int STATEMENT_MUST_HAVE_LABEL= 24;
+	public static final int STATEMENT_MUST_HAVE_LABEL = 24;
+	public static final int DISPLACEMENT_OVERFLOW = 25;
 
 	public static final int NO_ERROR = 90;
 
@@ -57,7 +58,8 @@ public class ErrorTable {
 		errorList[MORE_THAN_ONE_START] = "ERROR: More that one START encountered";
 		errorList[INCORRECT_OPERAND_FORMAT] = "ERROR: Incorrect Operand";
 		errorList[OPERAND_EXCEEDED_NUMBER_OF_DECIMAL_DIGITS] = "ERROR: Operand exceeded number of decimal digits allowed";
-		errorList[STATEMENT_MUST_HAVE_LABEL]="ERROR: this statement requires a label";
+		errorList[STATEMENT_MUST_HAVE_LABEL] = "ERROR: This statement requires a label";
+		errorList[DISPLACEMENT_OVERFLOW] = "ERROR: Displacement overflow!";
 
 		errorList[NO_ERROR] = "";
 	}

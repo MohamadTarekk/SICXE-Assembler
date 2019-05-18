@@ -67,7 +67,7 @@ public class Assembler {
 	}
 
 	public void assembleOnAction() {
-		if (textArea.getText()!=null) {
+		if (!textArea.getText().equalsIgnoreCase("")) {
 			controller.assemble(textArea.getText(), restricted.isSelected());
 			showAssembleMsgDialog(controller.isNoErrors());
 		}else emptyTextAreaError();
