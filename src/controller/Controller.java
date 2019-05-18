@@ -670,10 +670,15 @@ public class Controller {
 
 	public void assemble(String program, boolean restricted) {
 
-		passOne(program, restricted);
-		if (noErrorsInPassOne)
-			passTwo();
-		addLiteralsToObjectCode();
+		try {
+			passOne(program, restricted);
+			if (noErrorsInPassOne)
+				passTwo();
+			addLiteralsToObjectCode();
+		} catch (Exception e) {
+			System.out.println("=================\nERROR IN ASSEMBLY\n=================");
+			e.printStackTrace();
+		}
 		Utility.clearAll();
 	}
 

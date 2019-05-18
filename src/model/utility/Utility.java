@@ -109,14 +109,14 @@ public class Utility {
 
 	private static boolean validateWordFormat(String operand) {
 		if (operand.length() == 5) {
-			if (!isNumeric(operand.substring(3, 3)))
+			if (!isNumeric(operand.substring(3, 4)))
 				return false;
 		}
 		if (operand.charAt(3) == '-') {
-			if (!isNumeric(operand.substring(4, operand.length() - 2)))
+			if (!isNumeric(operand.substring(4, operand.length() - 1)))
 				return false;
 		} else {
-			if (!isNumeric(operand.substring(3, operand.length() - 2)))
+			if (!isNumeric(operand.substring(3, operand.length() - 1)))
 				return false;
 		}
 		return true;
@@ -133,7 +133,7 @@ public class Utility {
 
 	private static boolean validateHexFormat(String operand) {
 		for (int i = 3; i < operand.length() - 1; i++) {
-			if (!isHex(operand.substring(i, i)))
+			if (!isHex(operand.substring(i, i+1)))
 				return false;
 		}
 		return true;
