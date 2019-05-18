@@ -757,14 +757,16 @@ public class Controller {
 			codeToBePrinted.add("");
 		int j=0;
 		for (int i = 0; i<lineList.size() ; i++ ) {
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()) && !BASE_ERROR.equalsIgnoreCase("Base Error"))
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()) )
 			{
 				Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
 				switch (currentInstruction.getFormat())
 				{
 					case FOUR:
 					case THREE:
-						codeToBePrinted.set(i,objCodeForInst.get(j));
+						if (!getBPE(lineList.get(i),currentInstruction.getFormat()).equals(BASE_ERROR)) {
+							codeToBePrinted.set(i, objCodeForInst.get(j));
+						}
 						j++;
 						break;
 					case TWO:
