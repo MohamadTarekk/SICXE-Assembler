@@ -1,8 +1,5 @@
-
+.idea/
 *.class
 res/LIST/listFile.txt
 res/functionality/ASSEMBLING
-.idea/workspace.xml
-.idea/*.*
-*.class
-.idea/workspace.xml
+
