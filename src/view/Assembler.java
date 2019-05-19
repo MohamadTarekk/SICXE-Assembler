@@ -68,9 +68,9 @@ public class Assembler {
 
 	public void assembleOnAction() {
 		if (!textArea.getText().equalsIgnoreCase("")) {
-			Utility.writeFile("","res/LIST/listFile.txt");
-			Utility.writeFile("","res/LIST/symTable.txt");
-			Utility.writeFile("","res/LIST/objFile.o");
+			Utility.writeFile("", "res/LIST/listFile.txt");
+			Utility.writeFile("", "res/LIST/symTable.txt");
+			Utility.writeFile("", "res/LIST/objFile.o");
 			controller.assemble(textArea.getText(), restricted.isSelected());
 			showAssembleMsgDialog(controller.isNoErrors());
 		} else {

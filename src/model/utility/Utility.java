@@ -133,7 +133,7 @@ public class Utility {
 
 	private static boolean validateHexFormat(String operand) {
 		for (int i = 3; i < operand.length() - 1; i++) {
-			if (!isHex(operand.substring(i, i+1)))
+			if (!isHex(operand.substring(i, i + 1)))
 				return false;
 		}
 		return true;
