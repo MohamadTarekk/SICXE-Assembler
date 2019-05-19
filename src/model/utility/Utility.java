@@ -34,8 +34,8 @@ public class Utility {
 
 	public static String binToHex(String bin, Format format) {
 
-		int decimal = Integer.parseInt(bin, 2);
-		String res = convertToHexa(decimal);
+		long decimal = Long.parseLong(bin, 2);
+		String res = convertToHexa((int) decimal);
 		String zeros;
 		if (format == Format.THREE)
 			zeros = getZeros(6 - res.length());

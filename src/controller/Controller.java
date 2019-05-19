@@ -2,10 +2,8 @@ package controller;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.bcel.internal.classfile.Code;
 import model.CommandInfo;
 import model.Instruction;
 import model.Line;
@@ -28,7 +26,8 @@ public class Controller {
 
 	private static ArrayList<Line> lineList;
 	private static ArrayList<Integer> recordLengths = new ArrayList<>();
-
+	private static ArrayList<Integer> reserves = new ArrayList<>();
+	
 	private String path;
 	private String base;
 	private String displacement;
@@ -247,22 +246,28 @@ public class Controller {
 		return startOfProgram;
 	}
 
-	private String getEndOfProgram() {
+//	private String getEndOfProgram() {
+//
+//		String endOfProgram = null;
+//		for (Line line : lineList) {
+//			if (line.getMnemonic().equalsIgnoreCase("END")) {
+//				endOfProgram = "00" + line.getLocation();
+//				break;
+//			}
+//		}
+//		return endOfProgram;
+//	}
 
-		String endOfProgram = null;
-		for (Line line : lineList) {
-			if (line.getMnemonic().equalsIgnoreCase("END")) {
-				endOfProgram = "00" + line.getLocation();
-				break;
-			}
+	private String getSizeOfProgram() {
+		int sum = 0;
+		for (int n : recordLengths) {
+			sum += n;
 		}
-		return endOfProgram;
-	}
-
-	private String getSizeOfProgram(String startOfProgram, String endOfProgram) {
-
-		return "00"
-				+ Utility.convertToHexa(Utility.hexToDecimal(endOfProgram) - Utility.hexToDecimal(startOfProgram) - 1);
+		for (int n : reserves) {
+			sum += n;
+		}
+		String res = Utility.convertToHexa(sum - 1);
+		return "00" + res;
 	}
 
 	private String getProgramName() {
@@ -285,8 +290,7 @@ public class Controller {
 	private String getHeaderRecord() {
 
 		String startOfProgram = getStartOfProgram();
-		String endOfProgram = getEndOfProgram();
-		String sizeOfProgram = getSizeOfProgram(startOfProgram, endOfProgram);
+		String sizeOfProgram = getSizeOfProgram();
 		String programName = getProgramName();
 		return "H^" + programName + "^" + startOfProgram + "^" + sizeOfProgram; // Return header Record
 	}
@@ -625,6 +629,14 @@ public class Controller {
 						}
 					}
 					break;
+				case "RESW":
+					firstOperand = line.getFirstOperand();
+					reserves.add(3 * Integer.parseInt(firstOperand));
+					break;
+				case "RESB":
+					firstOperand = line.getFirstOperand();
+					reserves.add(Integer.parseInt(firstOperand));
+					break;
 				case "LTORG":
 					break;
 				default:
@@ -661,10 +673,10 @@ public class Controller {
 
 	private String getObjectCode() {
 
-		String headerRecord = getHeaderRecord();
 		String textRecord = getTextRecord();
 		if (textRecord.equals(BASE_ERROR))
 			return BASE_ERROR;
+		String headerRecord = getHeaderRecord();
 		String endRecord = getEndRecord();
 		return headerRecord + "\n" + textRecord + "\n" + endRecord; // Return objectCode
 	}
@@ -824,6 +836,8 @@ public class Controller {
 						codeToBePrinted.set(i,objCodeForInst.get(j).substring(4)+Utility.getSpaces(4));
 						j++;
 						break;
+				default:
+					break;
 				}
 			}else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE")))
 			{

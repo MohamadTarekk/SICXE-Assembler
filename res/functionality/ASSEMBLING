@@ -3,11 +3,9 @@ prog1    START   1000              comment
 Q1       LDA     BETA              comment
          LDS     GAMMA
 SSSS     ADDR    A,S               comment
-         STA     =X'a3'
 SSS      MULR    A,S
-         LDA     =C'abnsgs'
+         ORG     900
          SUBR    S,A
-         LTORG
          STA     DELTA              mmm
 .This is a comment
 BETA     BYTE    x'3'
