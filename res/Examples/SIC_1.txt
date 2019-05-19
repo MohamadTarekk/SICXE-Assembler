@@ -4,7 +4,7 @@ Q1       LDA     BETA              comment
          LDS     GAMMA
 SSSS     ADDR    A,S               comment
 SSS      MULR    A,S
-         ORG     200
+         ORG     900
          SUBR    S,A
          STA     DELTA              mmm
 .This is a comment

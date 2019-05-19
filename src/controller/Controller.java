@@ -45,7 +45,6 @@ public class Controller {
 		recordLengths.clear();
 	}
 
-	@SuppressWarnings("unused")
 	public void setNoErrors(boolean noErrors) {
 		this.noErrorsInPassOne = noErrors;
 	}
@@ -96,7 +95,6 @@ public class Controller {
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length())
 			+ CI.getLinesList().get(i).toString() + "\n";
 		}
-		// textArea.setText(toBePrintedInTextArea);
 
 		Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
 	}
@@ -189,11 +187,6 @@ public class Controller {
 
 	private void evaluateLineExpressions(Line line) {
 		ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
-		/*
-		// If operand is not an expression, size after splitting will be 1
-		if (expressionList.size() == 1)
-			return;
-		 */
 		// Verify labels in the expression
 		if (Utility.verifyExpression(expressionList)) {
 			// Replace labels by the numeric value of their addresses
@@ -402,14 +395,6 @@ public class Controller {
 				}
 			}
 		}
-		/*
-		 * TODO!!! the literals caused an exception in calculating disp test example
-		 * operand: W'123' when the following was added the error was gone and
-		 * successful assembly 
-		 * if (firstOperand.charAt(0) == '=') disp =
-		 * Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
-		 * else disp = Utility.hexToDecimal(firstOperand);
-		 */
 		displacement = format == Format.THREE ? String.format("%1$04X", disp) : String.format("%1$05X", disp);
 		e = format == Format.THREE ? "0" : "1";
 		bpe = bp + e;
@@ -584,63 +569,63 @@ public class Controller {
 				String[] operands = data.split(",");
 				char type;
 				switch (mnemonic) {
-				case "WORD":
-					for (String operand : operands) {
-						type = operand.charAt(0);
-						switch (type) {
-						case 'X':
-							// textRecord += Utility.getZeros(6 - operand.length()) +
-							// extractOperand(operand);
-							break;
-						case 'C':
-							// textRecord += convertToAscii(extractOperand(operand));
-							break;
-						default:
-							// noinspection StringConcatenationInLoop
-							textRecord += String.format("%1$06X", Integer.parseInt(operand));
-							recordLengths.add(3);
-							break;
+					case "WORD":
+						for (String operand : operands) {
+							type = operand.charAt(0);
+							switch (type) {
+							case 'X':
+								// textRecord += Utility.getZeros(6 - operand.length()) +
+								// extractOperand(operand);
+								break;
+							case 'C':
+								// textRecord += convertToAscii(extractOperand(operand));
+								break;
+							default:
+								// noinspection StringConcatenationInLoop
+								textRecord += String.format("%1$06X", Integer.parseInt(operand));
+								recordLengths.add(3);
+								break;
+							}
 						}
-					}
-					break;
-				case "BYTE":
-					for (String operand : operands) {
-						type = operand.charAt(0);
-						switch (type) {
-						case 'X':
-							operand = extractOperand(operand);
-							textRecordTemp = Utility.getZeros(
-									(int) Math.ceil((double) (operand.length()) / 2) * 2 - operand.length()) + operand;
-							// noinspection StringConcatenationInLoop
-							textRecord += textRecordTemp;
-							recordLengths.add(textRecordTemp.length() / 2);
-							break;
-						case 'C':
-							operand = extractOperand(operand);
-							// noinspection StringConcatenationInLoop
-							textRecord += convertToAscii(operand);
-							recordLengths.add(operand.length());
-							break;
-						default:
-							// noinspection StringConcatenationInLoop
-							textRecord += String.format("%1$02X", Integer.parseInt(operand));
-							recordLengths.add(1);
-							break;
+						break;
+					case "BYTE":
+						for (String operand : operands) {
+							type = operand.charAt(0);
+							switch (type) {
+							case 'X':
+								operand = extractOperand(operand);
+								textRecordTemp = Utility.getZeros(
+										(int) Math.ceil((double) (operand.length()) / 2) * 2 - operand.length()) + operand;
+								// noinspection StringConcatenationInLoop
+								textRecord += textRecordTemp;
+								recordLengths.add(textRecordTemp.length() / 2);
+								break;
+							case 'C':
+								operand = extractOperand(operand);
+								// noinspection StringConcatenationInLoop
+								textRecord += convertToAscii(operand);
+								recordLengths.add(operand.length());
+								break;
+							default:
+								// noinspection StringConcatenationInLoop
+								textRecord += String.format("%1$02X", Integer.parseInt(operand));
+								recordLengths.add(1);
+								break;
+							}
 						}
-					}
-					break;
-				case "RESW":
-					firstOperand = line.getFirstOperand();
-					reserves.add(3 * Integer.parseInt(firstOperand));
-					break;
-				case "RESB":
-					firstOperand = line.getFirstOperand();
-					reserves.add(Integer.parseInt(firstOperand));
-					break;
-				case "LTORG":
-					break;
-				default:
-					break;
+						break;
+					case "RESW":
+						firstOperand = line.getFirstOperand();
+						reserves.add(3 * Integer.parseInt(firstOperand));
+						break;
+					case "RESB":
+						firstOperand = line.getFirstOperand();
+						reserves.add(Integer.parseInt(firstOperand));
+						break;
+					//case "LTORG":
+					//	break;
+					default:
+						break;
 				}
 			}
 		}
@@ -754,30 +739,18 @@ public class Controller {
         for (int i = 0; i < len; i++) {
             buffer.add("");
 			String lineCount = String.valueOf(i);
-			// noinspection StringConcatenationInLoop
 			String instructionTobeWritten=CI.getLinesList().get(i).toString();
 			Instruction currentInstruction=InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
-
-
-
-
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()) &&
-                    (currentInstruction.getFormat() == Format.THREE ||
-                            currentInstruction.getFormat() == Format.FOUR ))
-			{
-
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()) && (currentInstruction.getFormat() == Format.THREE
+					|| currentInstruction.getFormat() == Format.FOUR )) {
 				String NIX=getNIX(lineList.get(i));
 				String BPE=getBPE(lineList.get(i),currentInstruction.getFormat());
-				if (BPE.equals(BASE_ERROR))
-                {
+				if (BPE.equals(BASE_ERROR)) {
                     displacementError=true;
-                }else {
+                } else {
                     buffer .set(i, nixBpeToString(NIX, BPE));
                 }
 			}
-
-
-
 			buffer .set(i,buffer.get(i)+ lineCount + Utility.getSpaces(12 - lineCount.length())+ codeInstToBePrinted.get(i)+
 					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
 					instructionTobeWritten + "\n");
@@ -786,43 +759,35 @@ public class Controller {
             codeInstToBePrinted = codeForInstListFile();
         }
 
-        for (int i = 0; i < len; i++)
-        {
+        for (int i = 0; i < len; i++) {
             String firstPart = "";
             String secondPart = "";
-            if (codeInstToBePrinted.get(i).equals(""))
-               codeInstToBePrinted.set(i,Utility.getSpaces(6));
 
-            if (Character.isDigit(buffer.get(i).charAt(0)))
-            {
+            if (codeInstToBePrinted.get(i).equals("")) {
+				codeInstToBePrinted.set(i, Utility.getSpaces(6));
+			}
+
+            if (Character.isDigit(buffer.get(i).charAt(0))) {
                 firstPart = buffer.get(i).substring(0,14-Integer.toString(i).length()) + codeInstToBePrinted.get(i);
                 secondPart = buffer.get(i).substring(18);
-            }else {
+            } else {
                 firstPart = buffer.get(i).substring(0,81+(12-Integer.toString(i).length())) +codeInstToBePrinted.get(i);
                 secondPart = buffer.get(i).substring(97);
             }
             append += firstPart+secondPart;
         }
-
-
-
-        System.out.println(append);
         Utility.writeFile(append,"res/LIST/listFile.txt");
-
 	}
 
-	private ArrayList<String> codeForInstListFile()
-	{
+	private ArrayList<String> codeForInstListFile() {
 		ArrayList<String> codeToBePrinted = new ArrayList<>();
 		for(int i = 0; i<lineList.size() ; i++)
 			codeToBePrinted.add("");
 		int j=0;
 		for (int i = 0; i<lineList.size() ; i++ ) {
             Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()))
-			{
-				switch (currentInstruction.getFormat())
-				{
+			if (Utility.isInstruction(lineList.get(i).getMnemonic())) {
+				switch (currentInstruction.getFormat()) {
 					case FOUR:
 					case THREE:
 						codeToBePrinted.set(i,objCodeForInst.get(j));
@@ -836,22 +801,21 @@ public class Controller {
 						codeToBePrinted.set(i,objCodeForInst.get(j).substring(4)+Utility.getSpaces(4));
 						j++;
 						break;
-				default:
-					break;
+					default:
+						break;
 				}
-			}else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE")))
-			{
+			} else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD")
+					|| lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE"))) {
 				codeToBePrinted.set(i,objCodeForInst.get(j));
 				j++;
-			}else {
+			} else {
 				codeToBePrinted.set(i, Utility.getSpaces(6));
 			}
 		}
 		return codeToBePrinted;
 	}
 
-	private String nixBpeToString(String NIX,String BPE)
-	{
+	private String nixBpeToString(String NIX,String BPE) {
 		return  "\n" + Utility.getSpaces(40)+"n=" +
 				NIX.charAt(0) +
 				Utility.getSpaces(4) + "i=" +
@@ -866,5 +830,4 @@ public class Controller {
 				BPE.charAt(2) +
 				"\n";
 	}
-
 }

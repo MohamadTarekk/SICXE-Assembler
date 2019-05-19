@@ -34,7 +34,7 @@ public class Assembler {
 	public TextArea textArea;
 
 	private Controller controller = new Controller();
-	String path;
+	private String path;
 
 	public void initialize(Stage primaryStage) {
 
@@ -73,11 +73,12 @@ public class Assembler {
 			Utility.writeFile("","res/LIST/objFile.o");
 			controller.assemble(textArea.getText(), restricted.isSelected());
 			showAssembleMsgDialog(controller.isNoErrors());
-		}else emptyTextAreaError();
+		} else {
+			emptyTextAreaError();
+		}
 	}
 
-	private void emptyTextAreaError()
-	{
+	private void emptyTextAreaError() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Error");
 		alert.setHeaderText(null);
@@ -97,7 +98,7 @@ public class Assembler {
 		FileChooser fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
 		fileChooser.getExtensionFilters().add(extFilter);
-		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/SIC files";
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/Examples";
 		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showOpenDialog(window);
 		if (file != null) {
@@ -140,7 +141,7 @@ public class Assembler {
 		FileChooser fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
 		fileChooser.getExtensionFilters().add(extFilter);
-		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/SIC files";
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/res/Examples";
 		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showSaveDialog(window);
 		if (file != null) {
