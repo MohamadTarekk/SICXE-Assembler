@@ -58,7 +58,6 @@ public class ProgramCounter {
 
 		if (mnemonic.equals("Org".toUpperCase())) {
 			if(Utility.isNumeric(line.getFirstOperand())) {
-				System.out.println("test");
 				locationCounter = Utility.hexToDecimal(line.getFirstOperand());
 			}else {
 				for (Line line2 : lineList) {
