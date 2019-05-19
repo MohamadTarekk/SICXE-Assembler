@@ -357,12 +357,33 @@ public class Controller {
 				}
 			}
 		} else { // copied and pasted code
-			bp = "00";
 			// immediate
 			if (firstOperand.charAt(0) == '#') {
 				disp = Utility.hexToDecimal(firstOperand.substring(1));
+				bp = "00";
 			} else { // address
-				disp = Utility.hexToDecimal(firstOperand);
+				disp = Integer.parseInt(firstOperand) - pc;
+				if (disp >= -2048 && disp < 2048) {
+					// bpe = 010
+					bp = "01";
+				} else { // try base relative
+					if (checkBase()) { // check if base register is available
+						int base = getBase();
+						disp = Utility.hexToDecimal(firstOperand) - base;
+						if (disp >= 0 && disp <= 4 * 1024 - 1) {
+							// bpe = 100
+							bp = "10";
+						} else {
+							// error
+							line.setError(ErrorTable.errorList[ErrorTable.DISPLACEMENT_OVERFLOW]);
+							return BASE_ERROR;
+						}
+					} else {
+						// error
+						line.setError(ErrorTable.errorList[ErrorTable.DISPLACEMENT_OVERFLOW]);
+						return BASE_ERROR;
+					}
+				}
 			}
 		}
 		displacement = format == Format.THREE ? String.format("%1$04X", disp) : String.format("%1$05X", disp);
