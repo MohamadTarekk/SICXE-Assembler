@@ -2,7 +2,6 @@ package controller;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Map;
 
 import model.CommandInfo;
 import model.Instruction;
@@ -27,7 +26,8 @@ public class Controller {
 	private static ArrayList<Line> lineList;
 	private static ArrayList<Integer> recordLengths = new ArrayList<>();
 	private static ArrayList<Integer> reserves = new ArrayList<>();
-	
+	private static ArrayList<String> literals = new ArrayList<>();
+
 	private String path;
 	private String base;
 	private String displacement;
@@ -39,10 +39,12 @@ public class Controller {
 	public boolean isNoErrors() {
 		return noErrorsInPassOne && noErrorsInPassTwo;
 	}
-	
+
 	public static void clear() {
 		lineList.clear();
 		recordLengths.clear();
+		reserves.clear();
+		literals.clear();
 	}
 
 	@SuppressWarnings("unused")
@@ -246,18 +248,6 @@ public class Controller {
 		return startOfProgram;
 	}
 
-//	private String getEndOfProgram() {
-//
-//		String endOfProgram = null;
-//		for (Line line : lineList) {
-//			if (line.getMnemonic().equalsIgnoreCase("END")) {
-//				endOfProgram = "00" + line.getLocation();
-//				break;
-//			}
-//		}
-//		return endOfProgram;
-//	}
-
 	private String getSizeOfProgram() {
 		int sum = 0;
 		for (int n : recordLengths) {
@@ -454,29 +444,34 @@ public class Controller {
 		return res;
 	}
 
-	private String addLiteralsToObjectCode() {
-		String literals = "";
-		String temp;
-		for (Map.Entry<String, Literal> n : LiteralTable.literalTable.entrySet()) {
-			temp = n.getValue().getOperand().substring(3, n.getValue().getOperand().length() - 1);
-			switch (n.getValue().getType()) {
-			case "W":
-				literals += convertToAscii(temp);
-				recordLengths.add(3);
-				break;
-			case "C":
-				literals += convertToAscii(temp);
-				recordLengths.add(temp.length());
-				break;
-			case "X":
-				literals += temp;
-				recordLengths.add(literals.length());
-				break;
-			default:
-				break;
-			}
+	private String extractLiteral(String literal) {
+		return literal.substring(3, literal.length()-1);
+	}
+
+	private String getLiteralHexValue(Literal literal) {
+		String temp = extractLiteral(literal.getOperand());
+		switch (literal.getType()) {
+		case "W":
+			recordLengths.add(3);
+			return Utility.getZeros(6 - convertToAscii(temp).length()) + convertToAscii(temp);
+		case "C":
+			recordLengths.add(temp.length());
+			return convertToAscii(temp);
+		case "X":
+			recordLengths.add((int)Math.ceil(temp.length() / 2));
+			return temp;
+		default:
+			return null; 
 		}
-		return literals;
+	}
+
+	private String ltorgOccured() {
+		String record = "";
+		while (!literals.isEmpty()) {
+			record += getLiteralHexValue(LiteralTable.literalTable.get(literals.get(0)));
+			literals.remove(0);
+		}
+		return record;
 	}
 
 	private String formatTextRecord(String textRecord) {
@@ -484,6 +479,7 @@ public class Controller {
 		String start = getStartOfProgram();
 		String result = "T^" + start + "^^";
 		char[] temp = textRecord.toCharArray();
+		int count = 0;
 		int sum = 0;
 		int index = 0;
 		int tempSize = 0;
@@ -494,6 +490,7 @@ public class Controller {
 				for (i = index; i < index + n * 2; i++) {
 					// noinspection StringConcatenationInLoop
 					result += temp[i];
+					count++;
 				}
 				objCodeForInst.add(result.substring(result.length()-6));
 				tempSize = sum;
@@ -510,6 +507,16 @@ public class Controller {
 			}
 		}
 		lengths.add(String.format("%1$02X", tempSize));
+		int diff = temp.length - count;
+		if (count < temp.length) {
+			while (count < temp.length) {
+				result += temp[count++];
+			}
+			String lastSize = Integer.toString(Utility.hexToDecimal(lengths.get(lengths.size() - 1)) + diff / 2);
+			if (Integer.parseInt(lastSize) > 30) { lastSize = Integer.toString(Integer.parseInt(lastSize) - 28); }
+			lastSize = String.format("%1$02X", Integer.parseInt(lastSize));
+			lengths.set(lengths.size() - 1, lastSize);
+		}
 		int size = result.length();
 		index = 0;
 		for (int i = 0; i < size; i++) {
@@ -535,6 +542,10 @@ public class Controller {
 			currentInstruction = InstructionTable.instructionTable.get(mnemonic);
 			if (currentInstruction != null) {
 				textRecordTemp = String.format("%1$02X", currentInstruction.getOpcode());
+				firstOperand = line.getFirstOperand();
+				if (LiteralTable.literalTable.get(firstOperand) != null) {
+					literals.add(firstOperand);
+				}
 				switch (currentInstruction.getFormat()) {
 				case ONE:
 					// noinspection StringConcatenationInLoop
@@ -638,13 +649,14 @@ public class Controller {
 					reserves.add(Integer.parseInt(firstOperand));
 					break;
 				case "LTORG":
+					textRecord += ltorgOccured();
 					break;
 				default:
 					break;
 				}
 			}
 		}
-		return formatTextRecord(textRecord + addLiteralsToObjectCode());
+		return formatTextRecord(textRecord + ltorgOccured());
 	}
 
 	private String getAddressOfFirstExecutableInstruction() {
@@ -699,7 +711,6 @@ public class Controller {
 			passOne(program, restricted);
 			if (noErrorsInPassOne)
 				passTwo();
-			addLiteralsToObjectCode();
 		} catch (Exception e) {
 			System.out.println("=================\nERROR IN ASSEMBLY\n=================");
 			e.printStackTrace();
@@ -742,17 +753,17 @@ public class Controller {
 				+ Utility.getSpaces(7) + "Source Statement\n\n" ;
 		append=append+lineSeparator+startPassTwo+TABLE_FORM;
 		int len = CI.getLinesList().size();
-        ArrayList<String> codeInstToBePrinted = new ArrayList<>();
+		ArrayList<String> codeInstToBePrinted = new ArrayList<>();
 
-        for (int i=0; i<len ;i++)
-        {
-            codeInstToBePrinted.add(Utility.getSpaces(6));
-        }
+		for (int i=0; i<len ;i++)
+		{
+			codeInstToBePrinted.add(Utility.getSpaces(6));
+		}
 
-        boolean displacementError=false;
-        ArrayList<String> buffer= new ArrayList<>();
-        for (int i = 0; i < len; i++) {
-            buffer.add("");
+		boolean displacementError=false;
+		ArrayList<String> buffer= new ArrayList<>();
+		for (int i = 0; i < len; i++) {
+			buffer.add("");
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			String instructionTobeWritten=CI.getLinesList().get(i).toString();
@@ -762,18 +773,18 @@ public class Controller {
 
 
 			if (Utility.isInstruction(lineList.get(i).getMnemonic()) &&
-                    (currentInstruction.getFormat() == Format.THREE ||
-                            currentInstruction.getFormat() == Format.FOUR ))
+					(currentInstruction.getFormat() == Format.THREE ||
+					currentInstruction.getFormat() == Format.FOUR ))
 			{
 
 				String NIX=getNIX(lineList.get(i));
 				String BPE=getBPE(lineList.get(i),currentInstruction.getFormat());
 				if (BPE.equals(BASE_ERROR))
-                {
-                    displacementError=true;
-                }else {
-                    buffer .set(i, nixBpeToString(NIX, BPE));
-                }
+				{
+					displacementError=true;
+				}else {
+					buffer .set(i, nixBpeToString(NIX, BPE));
+				}
 			}
 
 
@@ -782,32 +793,28 @@ public class Controller {
 					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
 					instructionTobeWritten + "\n");
 		}
-        if (!displacementError) {
-            codeInstToBePrinted = codeForInstListFile();
-        }
+		if (!displacementError) {
+			codeInstToBePrinted = codeForInstListFile();
+		}
 
-        for (int i = 0; i < len; i++)
-        {
-            String firstPart = "";
-            String secondPart = "";
-            if (codeInstToBePrinted.get(i).equals(""))
-               codeInstToBePrinted.set(i,Utility.getSpaces(6));
+		for (int i = 0; i < len; i++)
+		{
+			String firstPart = "";
+			String secondPart = "";
+			if (codeInstToBePrinted.get(i).equals(""))
+				codeInstToBePrinted.set(i,Utility.getSpaces(6));
 
-            if (Character.isDigit(buffer.get(i).charAt(0)))
-            {
-                firstPart = buffer.get(i).substring(0,14-Integer.toString(i).length()) + codeInstToBePrinted.get(i);
-                secondPart = buffer.get(i).substring(18);
-            }else {
-                firstPart = buffer.get(i).substring(0,81+(12-Integer.toString(i).length())) +codeInstToBePrinted.get(i);
-                secondPart = buffer.get(i).substring(97);
-            }
-            append += firstPart+secondPart;
-        }
-
-
-
-        System.out.println(append);
-        Utility.writeFile(append,"res/LIST/listFile.txt");
+			if (Character.isDigit(buffer.get(i).charAt(0)))
+			{
+				firstPart = buffer.get(i).substring(0,14-Integer.toString(i).length()) + codeInstToBePrinted.get(i);
+				secondPart = buffer.get(i).substring(18);
+			}else {
+				firstPart = buffer.get(i).substring(0,81+(12-Integer.toString(i).length())) +codeInstToBePrinted.get(i);
+				secondPart = buffer.get(i).substring(97);
+			}
+			append += firstPart+secondPart;
+		}
+		Utility.writeFile(append,"res/LIST/listFile.txt");
 
 	}
 
@@ -818,24 +825,24 @@ public class Controller {
 			codeToBePrinted.add("");
 		int j=0;
 		for (int i = 0; i<lineList.size() ; i++ ) {
-            Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
+			Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
 			if (Utility.isInstruction(lineList.get(i).getMnemonic()))
 			{
 				switch (currentInstruction.getFormat())
 				{
-					case FOUR:
-					case THREE:
-						codeToBePrinted.set(i,objCodeForInst.get(j));
-						j++;
-						break;
-					case TWO:
-						codeToBePrinted.set(i,objCodeForInst.get(j).substring(2)+Utility.getSpaces(2));
-						j++;
-						break;
-					case ONE:
-						codeToBePrinted.set(i,objCodeForInst.get(j).substring(4)+Utility.getSpaces(4));
-						j++;
-						break;
+				case FOUR:
+				case THREE:
+					codeToBePrinted.set(i,objCodeForInst.get(j));
+					j++;
+					break;
+				case TWO:
+					codeToBePrinted.set(i,objCodeForInst.get(j).substring(2)+Utility.getSpaces(2));
+					j++;
+					break;
+				case ONE:
+					codeToBePrinted.set(i,objCodeForInst.get(j).substring(4)+Utility.getSpaces(4));
+					j++;
+					break;
 				default:
 					break;
 				}
@@ -856,13 +863,13 @@ public class Controller {
 				NIX.charAt(0) +
 				Utility.getSpaces(4) + "i=" +
 				NIX.charAt(1) +
-                Utility.getSpaces(4) + "x=" +
+				Utility.getSpaces(4) + "x=" +
 				NIX.charAt(2) +
-                Utility.getSpaces(4) + "b=" +
+				Utility.getSpaces(4) + "b=" +
 				BPE.charAt(0) +
-                Utility.getSpaces(4) + "p=" +
+				Utility.getSpaces(4) + "p=" +
 				BPE.charAt(1) +
-                Utility.getSpaces(4) + "e=" +
+				Utility.getSpaces(4) + "e=" +
 				BPE.charAt(2) +
 				"\n";
 	}
