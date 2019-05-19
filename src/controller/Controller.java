@@ -143,20 +143,22 @@ public class Controller {
 		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
 		int i = 0;
 		for (Line line : lineList) {
-			// to skip iterations before the last encountered LTORG in the program
-			if (i <= index) {
-				i++;
-				continue;
-			}
-			// to add literals after the last LTORG to the pole (i.e. after END directive)
-			if (!line.getFirstOperand().equals("")) {
-				if (line.getFirstOperand().charAt(0) == '=') {
-					literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
-					startingAddress += literal.calculateLength();
-					LiteralTable.literalTable.put(literal.getOperand(), literal);
+			if (line.getError().equals("")) {
+				// to skip iterations before the last encountered LTORG in the program
+				if (i <= index) {
+					i++;
+					continue;
 				}
+				// to add literals after the last LTORG to the pole (i.e. after END directive)
+				if (!line.getFirstOperand().equals("")) {
+					if (line.getFirstOperand().charAt(0) == '=') {
+						literal = new Literal(line.getFirstOperand(), Utility.convertToHexa(startingAddress));
+						startingAddress += literal.calculateLength();
+						LiteralTable.literalTable.put(literal.getOperand(), literal);
+					}
+				}
+				index++;
 			}
-			index++;
 		}
 		ProgramCounter.getInstance().setLiteralsStartIndex(index);
 		ProgramCounter.getInstance().setLocationCounter(startingAddress);
@@ -164,20 +166,22 @@ public class Controller {
 
 	private void processArithmeticExpressions() {
 		for (Line line : lineList) {
-			if (!line.getMnemonic().equals("NOP")) {
-				Format format;
-				if (Utility.isInstruction(line.getMnemonic())) {
-					format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
-				} else { // Directive
-					format = DirectiveTable.directiveTable.get(line.getMnemonic()).getFormat();
-				}
-				// Only if formats 3 & 4
-				if (format == Format.THREE || format == Format.FOUR || line.getMnemonic().equals("ORG")
-						|| line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")) {
-					// ONLY if addressing mode is direct with/without indexing
-					if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
-						if (Utility.isExpression(line.getFirstOperand()))
-							evaluateLineExpressions(line);
+			if (line.getError().equalsIgnoreCase("")) {
+				if (!line.getMnemonic().equals("NOP")) {
+					Format format;
+					if (Utility.isInstruction(line.getMnemonic())) {
+						format = InstructionTable.instructionTable.get(line.getMnemonic()).getFormat();
+					} else { // Directive
+						format = DirectiveTable.directiveTable.get(line.getMnemonic()).getFormat();
+					}
+					// Only if formats 3 & 4
+					if (format == Format.THREE || format == Format.FOUR || line.getMnemonic().equals("ORG")
+							|| line.getMnemonic().equals("EQU") || line.getMnemonic().equals("LTORG")) {
+						// ONLY if addressing mode is direct with/without indexing
+						if (!line.getAddressingMode().equals("#") && !line.getAddressingMode().equals("@")) {
+							if (Utility.isExpression(line.getFirstOperand()))
+								evaluateLineExpressions(line);
+						}
 					}
 				}
 			}
