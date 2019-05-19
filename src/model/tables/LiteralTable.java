@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class LiteralTable {
 
-    public static HashMap<String, Literal> literalTable = new HashMap<>();
+	public static HashMap<String, Literal> literalTable = new HashMap<>();
 
 	public static String getString() {
 		StringBuilder listAsString = new StringBuilder();

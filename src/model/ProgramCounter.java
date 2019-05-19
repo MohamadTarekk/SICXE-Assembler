@@ -57,11 +57,11 @@ public class ProgramCounter {
 		}
 
 		if (mnemonic.equals("Org".toUpperCase())) {
-			if(Utility.isNumeric(line.getFirstOperand())) {
+			if (Utility.isNumeric(line.getFirstOperand())) {
 				locationCounter = Utility.hexToDecimal(line.getFirstOperand());
-			}else {
+			} else {
 				for (Line line2 : lineList) {
-					if(line2.getLabel().equals(line.getFirstOperand())) {
+					if (line2.getLabel().equals(line.getFirstOperand())) {
 						locationCounter = Utility.hexToDecimal((line2.getLocation()));
 					}
 				}

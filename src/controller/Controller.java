@@ -34,7 +34,7 @@ public class Controller {
 	private String BASE_ERROR = "Base Error";
 	private boolean noErrorsInPassOne = false;
 	private boolean noErrorsInPassTwo = false;
-	private ArrayList<String> objCodeForInst=new ArrayList<>();
+	private ArrayList<String> objCodeForInst = new ArrayList<>();
 
 	public boolean isNoErrors() {
 		return noErrorsInPassOne && noErrorsInPassTwo;
@@ -47,7 +47,6 @@ public class Controller {
 		literals.clear();
 	}
 
-	@SuppressWarnings("unused")
 	public void setNoErrors(boolean noErrors) {
 		this.noErrorsInPassOne = noErrors;
 	}
@@ -96,9 +95,8 @@ public class Controller {
 			String lineCount = String.valueOf(i);
 			// noinspection StringConcatenationInLoop
 			toBePrintedInListFile += lineCount + Utility.getSpaces(12 - lineCount.length())
-			+ CI.getLinesList().get(i).toString() + "\n";
+					+ CI.getLinesList().get(i).toString() + "\n";
 		}
-		// textArea.setText(toBePrintedInTextArea);
 
 		Utility.writeFile(toBePrintedInListFile, "res/LIST/listFile.txt");
 	}
@@ -109,24 +107,23 @@ public class Controller {
 		for (Line line : lineList) {
 			if (!line.getLabel().equals("") && !line.getLabel().equals("(~)")) {
 				if (line.getMnemonic().equalsIgnoreCase("EQU")) {
-					if (Utility.isLabel(line.getFirstOperand())){
-						// if operand is label 		=>		get its address
+					if (Utility.isLabel(line.getFirstOperand())) {
+						// if operand is label => get its address
 						value = SymbolTable.symbolTable.get(line.getFirstOperand()).getAddress();
 					} else {
-						// if operand is expression		=>		evaluate it
+						// if operand is expression => evaluate it
 						if (Utility.isExpression(line.getFirstOperand())) {
 							evaluateLineExpressions(line);
 						}
 						// reaching this line means operand is not a label
 						// if it is an expression then it is evaluated a replaced by the final result
-						// if not	=>	it is a numeric value already
+						// if not => it is a numeric value already
 						// in both cases, the needed value is the operand itself
 						value = line.getFirstOperand();
 					}
 					symbol = new Symbol(line.getLabel(), value);
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
-				}
-				else {
+				} else {
 					symbol = new Symbol(line.getLabel(), line.getLocation());
 					SymbolTable.symbolTable.put(symbol.getSymbol(), symbol);
 				}
@@ -137,9 +134,11 @@ public class Controller {
 
 	public static void fillLiteralsTable(ArrayList<Line> lineList) {
 		Literal literal;
-		// In case LTORG was encountered in the code, all literals before it are evaluated and added.
+		// In case LTORG was encountered in the code, all literals before it are
+		// evaluated and added.
 		// Then, "literalsStartIndex" is set to the index of the first line after LTORG
-		// So that, when this function s called at the end of the program, it doesn't add already added literals
+		// So that, when this function s called at the end of the program, it doesn't
+		// add already added literals
 		int index = ProgramCounter.getInstance().getLiteralsStartIndex();
 		int startingAddress = ProgramCounter.getInstance().getProgramCounter();
 		int i = 0;
@@ -191,11 +190,6 @@ public class Controller {
 
 	private void evaluateLineExpressions(Line line) {
 		ArrayList<String> expressionList = Utility.splitExpression(line.getFirstOperand());
-		/*
-		// If operand is not an expression, size after splitting will be 1
-		if (expressionList.size() == 1)
-			return;
-		 */
 		// Verify labels in the expression
 		if (Utility.verifyExpression(expressionList)) {
 			// Replace labels by the numeric value of their addresses
@@ -207,8 +201,8 @@ public class Controller {
 				String operand = Utility.evaluateExpression(expression);
 				if (operand.equals("error"))
 					line.setError(String.valueOf(ErrorTable.WRONG_OPERAND_TYPE));
-				System.out.println("Done evaluating! " + line.getFirstOperand() + " = " + operand
-						+ "\t\t\t" + expression);
+				System.out.println(
+						"Done evaluating! " + line.getFirstOperand() + " = " + operand + "\t\t\t" + expression);
 				line.setFirstOperand(operand);
 			} else {
 				// Wrong Arithmetic expression format
@@ -392,14 +386,6 @@ public class Controller {
 				}
 			}
 		}
-		/*
-		 * TODO!!! the literals caused an exception in calculating disp test example
-		 * operand: W'123' when the following was added the error was gone and
-		 * successful assembly 
-		 * if (firstOperand.charAt(0) == '=') disp =
-		 * Utility.hexToDecimal(firstOperand.substring(3, firstOperand.length()-2));
-		 * else disp = Utility.hexToDecimal(firstOperand);
-		 */
 		displacement = format == Format.THREE ? String.format("%1$04X", disp) : String.format("%1$05X", disp);
 		e = format == Format.THREE ? "0" : "1";
 		bpe = bp + e;
@@ -492,7 +478,7 @@ public class Controller {
 					result += temp[i];
 					count++;
 				}
-				objCodeForInst.add(result.substring(result.length()-6));
+				objCodeForInst.add(result.substring(result.length() - 6));
 				tempSize = sum;
 				index = i;
 			} else {
@@ -698,11 +684,11 @@ public class Controller {
 		String objectCode = getObjectCode();
 		reportEndPassTwo();
 		if (objectCode.equals(BASE_ERROR)) {
-			noErrorsInPassTwo =  false;
+			noErrorsInPassTwo = false;
 			return;
 		}
 		Utility.writeFile(objectCode, "res/LIST/objFile.o");
-		noErrorsInPassTwo =  true;
+		noErrorsInPassTwo = true;
 	}
 
 	public void assemble(String program, boolean restricted) {
@@ -742,136 +728,107 @@ public class Controller {
 		return append;
 	}
 
-	private void reportEndPassTwo()
-	{
+	private void reportEndPassTwo() {
 		String append = getListFile();
 
 		final String lineSeparator = "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-";
 		final String startPassTwo = "\n-_-_-_-_-_-_-_-_-_- S   T   A   R   T      O   F      P   A   S   S   2 -_-_-_-_-_-_-_-_-_-_-\n\n";
 
 		final String TABLE_FORM = "LINES" + Utility.getSpaces(7) + "Code" + Utility.getSpaces(5) + " LC"
-				+ Utility.getSpaces(7) + "Source Statement\n\n" ;
-		append=append+lineSeparator+startPassTwo+TABLE_FORM;
+				+ Utility.getSpaces(7) + "Source Statement\n\n";
+		append = append + lineSeparator + startPassTwo + TABLE_FORM;
 		int len = CI.getLinesList().size();
 		ArrayList<String> codeInstToBePrinted = new ArrayList<>();
-
-		for (int i=0; i<len ;i++)
-		{
+		for (int i = 0; i < len; i++) {
 			codeInstToBePrinted.add(Utility.getSpaces(6));
 		}
 
-		boolean displacementError=false;
-		ArrayList<String> buffer= new ArrayList<>();
+		boolean displacementError = false;
+		ArrayList<String> buffer = new ArrayList<>();
 		for (int i = 0; i < len; i++) {
 			buffer.add("");
 			String lineCount = String.valueOf(i);
-			// noinspection StringConcatenationInLoop
-			String instructionTobeWritten=CI.getLinesList().get(i).toString();
-			Instruction currentInstruction=InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
-
-
-
-
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()) &&
-					(currentInstruction.getFormat() == Format.THREE ||
-					currentInstruction.getFormat() == Format.FOUR ))
-			{
-
-				String NIX=getNIX(lineList.get(i));
-				String BPE=getBPE(lineList.get(i),currentInstruction.getFormat());
-				if (BPE.equals(BASE_ERROR))
-				{
-					displacementError=true;
-				}else {
-					buffer .set(i, nixBpeToString(NIX, BPE));
+			String instructionTobeWritten = CI.getLinesList().get(i).toString();
+			Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
+			if (Utility.isInstruction(lineList.get(i).getMnemonic()) && (currentInstruction.getFormat() == Format.THREE
+					|| currentInstruction.getFormat() == Format.FOUR)) {
+				String NIX = getNIX(lineList.get(i));
+				String BPE = getBPE(lineList.get(i), currentInstruction.getFormat());
+				if (BPE.equals(BASE_ERROR)) {
+					displacementError = true;
+				} else {
+					buffer.set(i, nixBpeToString(NIX, BPE));
 				}
 			}
-
-
-
-			buffer .set(i,buffer.get(i)+ lineCount + Utility.getSpaces(12 - lineCount.length())+ codeInstToBePrinted.get(i)+
-					Utility.getSpaces(20-(codeInstToBePrinted.get(i).length()+(12-lineCount.length())))+
-					instructionTobeWritten + "\n");
+			buffer.set(i,
+					buffer.get(i) + lineCount + Utility.getSpaces(12 - lineCount.length()) + codeInstToBePrinted.get(i)
+							+ Utility.getSpaces(20 - (codeInstToBePrinted.get(i).length() + (12 - lineCount.length())))
+							+ instructionTobeWritten + "\n");
 		}
 		if (!displacementError) {
 			codeInstToBePrinted = codeForInstListFile();
 		}
-
-		for (int i = 0; i < len; i++)
-		{
+		for (int i = 0; i < len; i++) {
 			String firstPart = "";
 			String secondPart = "";
-			if (codeInstToBePrinted.get(i).equals(""))
-				codeInstToBePrinted.set(i,Utility.getSpaces(6));
 
-			if (Character.isDigit(buffer.get(i).charAt(0)))
-			{
-				firstPart = buffer.get(i).substring(0,14-Integer.toString(i).length()) + codeInstToBePrinted.get(i);
+			if (codeInstToBePrinted.get(i).equals("")) {
+				codeInstToBePrinted.set(i, Utility.getSpaces(6));
+			}
+
+			if (Character.isDigit(buffer.get(i).charAt(0))) {
+				firstPart = buffer.get(i).substring(0, 14 - Integer.toString(i).length()) + codeInstToBePrinted.get(i);
 				secondPart = buffer.get(i).substring(18);
-			}else {
-				firstPart = buffer.get(i).substring(0,81+(12-Integer.toString(i).length())) +codeInstToBePrinted.get(i);
+			} else {
+				firstPart = buffer.get(i).substring(0, 81 + (12 - Integer.toString(i).length()))
+						+ codeInstToBePrinted.get(i);
 				secondPart = buffer.get(i).substring(97);
 			}
-			append += firstPart+secondPart;
+			append += firstPart + secondPart;
 		}
-		Utility.writeFile(append,"res/LIST/listFile.txt");
-
+		Utility.writeFile(append, "res/LIST/listFile.txt");
 	}
 
-	private ArrayList<String> codeForInstListFile()
-	{
+	private ArrayList<String> codeForInstListFile() {
 		ArrayList<String> codeToBePrinted = new ArrayList<>();
-		for(int i = 0; i<lineList.size() ; i++)
+		for (int i = 0; i < lineList.size(); i++)
 			codeToBePrinted.add("");
-		int j=0;
-		for (int i = 0; i<lineList.size() ; i++ ) {
+
+		int j = 0;
+		for (int i = 0; i < lineList.size(); i++) {
 			Instruction currentInstruction = InstructionTable.instructionTable.get(lineList.get(i).getMnemonic());
-			if (Utility.isInstruction(lineList.get(i).getMnemonic()))
-			{
-				switch (currentInstruction.getFormat())
-				{
+			if (Utility.isInstruction(lineList.get(i).getMnemonic())) {
+				switch (currentInstruction.getFormat()) {
 				case FOUR:
 				case THREE:
-					codeToBePrinted.set(i,objCodeForInst.get(j));
+					codeToBePrinted.set(i, objCodeForInst.get(j));
 					j++;
 					break;
 				case TWO:
-					codeToBePrinted.set(i,objCodeForInst.get(j).substring(2)+Utility.getSpaces(2));
+					codeToBePrinted.set(i, objCodeForInst.get(j).substring(2) + Utility.getSpaces(2));
 					j++;
 					break;
 				case ONE:
-					codeToBePrinted.set(i,objCodeForInst.get(j).substring(4)+Utility.getSpaces(4));
+					codeToBePrinted.set(i, objCodeForInst.get(j).substring(4) + Utility.getSpaces(4));
 					j++;
 					break;
 				default:
 					break;
 				}
-			}else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD") || lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE")))
-			{
-				codeToBePrinted.set(i,objCodeForInst.get(j));
+			} else if ((lineList.get(i).getMnemonic().equalsIgnoreCase("WORD")
+					|| lineList.get(i).getMnemonic().equalsIgnoreCase("BYTE"))) {
+				codeToBePrinted.set(i, objCodeForInst.get(j));
 				j++;
-			}else {
+			} else {
 				codeToBePrinted.set(i, Utility.getSpaces(6));
 			}
 		}
 		return codeToBePrinted;
 	}
 
-	private String nixBpeToString(String NIX,String BPE)
-	{
-		return  "\n" + Utility.getSpaces(40)+"n=" +
-				NIX.charAt(0) +
-				Utility.getSpaces(4) + "i=" +
-				NIX.charAt(1) +
-				Utility.getSpaces(4) + "x=" +
-				NIX.charAt(2) +
-				Utility.getSpaces(4) + "b=" +
-				BPE.charAt(0) +
-				Utility.getSpaces(4) + "p=" +
-				BPE.charAt(1) +
-				Utility.getSpaces(4) + "e=" +
-				BPE.charAt(2) +
-				"\n";
+	private String nixBpeToString(String NIX, String BPE) {
+		return "\n" + Utility.getSpaces(40) + "n=" + NIX.charAt(0) + Utility.getSpaces(4) + "i=" + NIX.charAt(1)
+				+ Utility.getSpaces(4) + "x=" + NIX.charAt(2) + Utility.getSpaces(4) + "b=" + BPE.charAt(0)
+				+ Utility.getSpaces(4) + "p=" + BPE.charAt(1) + Utility.getSpaces(4) + "e=" + BPE.charAt(2) + "\n";
 	}
-
 }
