@@ -373,7 +373,7 @@ public class Controller {
 
 	private void setBase(String base) {
 
-		this.base = base;
+		this.base = SymbolTable.symbolTable.get(base).getAddress();
 	}
 
 	private int getBase() {
